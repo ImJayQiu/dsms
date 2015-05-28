@@ -1,10 +1,19 @@
 class ApplicationController < ActionController::Base
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
-	layout :layout_by_resource
+
+	layout "index"  
+
+	rescue_from CanCan::AccessDenied do |exception|
+		redirect_to root_url, :alert => exception.message
+	end
 
 	def after_sign_out_path_for(resource_or_scope)
 		root_path
+	end
+
+	def after_sign_in_path_for(resource_or_scope)
+		home_site_index_path
 	end
 
 
@@ -15,13 +24,5 @@ class ApplicationController < ActionController::Base
 		devise_parameter_sanitizer.for(:account_update) << :username
 	end
 
-	def layout_by_resource
-		if devise_controller? and user_signed_in?
-			'login'
-		else
-			'login'
-		#	'index'
-		end
-	end
 
 end

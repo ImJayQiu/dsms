@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<%= render "layouts/partials/head"%>
+
+<body>
+
+<!-- Page Wrapper -->
+<div id="page-wrapper">
+
+	<!-- Header -->
+
+	<%= render "layouts/partials/header"%>
+
+	<!-- Main -->
+	<article id="main">
+		<header>
+			<h2>DSMS.RIMES</h2>
+			<p>Data Sharing & Management System @ RIMES</p>
+		</header>
+		<section class="wrapper style5">
+			<div class="inner">
+
+				<p class="notice"><%= notice %></p>  
+				<p class="alert"><%= alert %></p>
+
+				<section>
+					<div class="table-wrapper">
+						<%= yield %>
+					</div>
+				</section>
+
+			</div>
+		</section>
+	</article>
+
+	<!-- Footer -->
+	<%= render "layouts/partials/footer" %>
+
+</div>
+
+<!-- Scripts -->
+<%= render "layouts/partials/scripts" %>
+
+</body>
+</html>

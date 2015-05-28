@@ -3,10 +3,10 @@ Rails.application.routes.draw do
 	resources :site do
 		collection do
 			get 'index'
-			get 'login' 
+			get 'home' 
 		end
 	end
-	devise_for :users, controllers: { sessions: "users/sessions" }
+	devise_for :users #, controllers: { sessions: "users/sessions" }
 	resources :users
 
 	# The priority is based upon order of creation: first created -> highest priority.

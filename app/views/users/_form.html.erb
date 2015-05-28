@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :Role %><br />
-    <%= f.text_field :role %>
+	<%= f.collection_select :role, Common::ROLES, :to_s, :humanize %>
   </div>
   <div class="field">
     <%= f.label :password, "New password" %><br />

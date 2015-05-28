@@ -1,21 +1,21 @@
-<h2>USER LOGIN</h2>
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-	<form>
-	<div>
-		<span>Email Address<label>*</label></span>
-		<%= f.email_field :email, autofocus: true, size: 20 %>
+
+<div class="inner">
+	<h2>DSMS.RIMES<br/>User Login</h2>
+	<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+		<div align=center>
+		<div class="6u 12u$(xsmall)">
+			<%= f.email_field :email, autofocus: true, size: 5, placeholder: "Email" %>
+		</div>
+		<p/>
+		<div class="6u$ 12u$(xsmall)">
+			<%= f.password_field :password, autocomplete: "off", placeholder: "Password" %>
+		</div>
+		<p/>
+		<div class="6u$ 12u$(xsmall)">
+			<%= f.submit "Log in" %>
+		</div>
 	</div>
-	<div>
-		<span>Password<label>*</label></span>
-		<%= f.password_field :password, autocomplete: "off", size: 20 %>
-	</div>
-	<% if devise_mapping.rememberable? -%>
-		<div class="field">
-		<%= f.check_box :remember_me %>
-		<%= f.label :remember_me %>
-	</div>
-<% end -%>
-	<%= f.submit "Log in" %>
-</form>
-			<% end %>
-<%= render "users/shared/links" %>
+<% end %>
+	<%= render "users/shared/links" %>
+</div>
+
