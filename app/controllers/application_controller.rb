@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
 
-	layout "index"  
+	layout "main"
+
 
 	rescue_from CanCan::AccessDenied do |exception|
 		redirect_to root_url, :alert => exception.message
@@ -23,6 +24,5 @@ class ApplicationController < ActionController::Base
 		devise_parameter_sanitizer.for(:sign_up) << :username
 		devise_parameter_sanitizer.for(:account_update) << :username
 	end
-
 
 end

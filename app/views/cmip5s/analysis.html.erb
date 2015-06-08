@@ -1,0 +1,35 @@
+
+<p id="notice"><%= notice %></p>
+<h2>CMIP5 Data Analysis - Test Version</h2>
+mean: <%= @dataset.mean %>
+<p></p>
+
+
+<%= render "cmip5s/graphs/area", area: @area %>
+
+
+
+<table>
+	<thead>
+		<tr>
+			<th>Index</th>
+			<th>Data Set</th>
+			<th colspan="3"></th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @test.each_with_index do |text,i| %>
+		<tr>
+		<td><%= i+1 %></td>
+		<td><%= text %></td>
+		<td><%#= link_to 'Show', cmip5 %></td>
+		<td><%#= link_to 'Edit', edit_cmip5_path(cmip5) %></td>
+		<td><%#= link_to 'Destroy', cmip5, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	</tr>
+<% end %>
+	</tbody>
+</table>
+
+<br>
+
+<%= link_to 'Back', cmip5s_path %>

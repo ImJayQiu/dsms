@@ -1,7 +1,35 @@
-<script src="/assets/js/jquery.min.js"></script>
+
+<script src="/assets/jquery/jquery.min.js"></script>
+<!-- script src="/assets/jquery/jquery.js"></script -->
+<script src="/assets/jquery/jquery-ui.js"></script>
 <script src="/assets/js/jquery.scrollex.min.js"></script>
 <script src="/assets/js/jquery.scrolly.min.js"></script>
 <script src="/assets/js/skel.min.js"></script>
 <script src="/assets/js/util.js"></script>
 <!--[if lte IE 8]><script src="/assets/js/ie/respond.min.js"></script><![endif]-->
 <script src="/assets/js/main.js"></script>
+
+<script>
+$(function() {
+		$( "#s_date" ).datepicker({
+dateFormat: "yy-mm-dd",
+defaultDate: "2006-01-01",
+changeMonth: true,
+changeYear: true,
+numberOfMonths: 1,
+onClose: function( selectedDate ) {
+$( "#e_date" ).datepicker( "option", "minDate", selectedDate );
+}
+});
+		$( "#e_date" ).datepicker({
+dateFormat: "yy-mm-dd",
+defaultDate: "2006-01-01",
+changeMonth: true,
+changeYear: true,
+numberOfMonths: 1,
+onClose: function( selectedDate ) {
+$( "#s_date" ).datepicker( "option", "maxDate", selectedDate );
+}
+});
+});
+</script>

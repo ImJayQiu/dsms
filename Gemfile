@@ -1,5 +1,17 @@
 source 'https://rubygems.org'
 
+gem 'd3-rails', '~> 3.5.5'
+gem 'gdk_pixbuf2', '~> 2.2.5'
+gem 'pkg-config', '~> 1.1.6'
+gem 'glib2', '~> 2.2.5'
+gem 'atk', '~> 2.2.5'
+gem 'cairo', '~> 1.14.1'
+gem 'pango', '~> 2.2.5'
+gem 'ruby-netcdf', '~> 0.7.1.1'
+gem 'ruby-fftw3', '~> 0.4.2'
+#gem 'gtk2', '~> 2.2.5'
+gem 'ruby-dcl', '~> 1.7.1'
+gem 'gphys', '~> 1.4.3.2'
 # Use devise as user management module
 gem 'devise'
 gem 'cancan'

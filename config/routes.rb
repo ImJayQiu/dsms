@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+	resources :cmip5s do
+		collection do
+			get :analysis
+		end
+	end
+
 	resources :site do
 		collection do
 			get 'index'

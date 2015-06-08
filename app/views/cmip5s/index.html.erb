@@ -1,0 +1,84 @@
+
+<p id="notice"><%= notice %></p>
+
+<h2>CMIP5 Data Analysis - Test Version</h2>
+
+<%= form_tag({:controller=>"cmip5s", :action=>"analysis" }, :method => "get") do  %>  
+
+	<table>
+
+	<thead>
+		<tr>
+			<th>1.Select Dataset</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select :file_name, params[:file_name], Common::FILE_NAME, :to_s, :humanize, prompt: "- Select -" %></td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th colspan=2>2.Select Location</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>Longtitude Range:</td>
+		<td>
+			<%= text_field :s_lon, params[:s_lon], placeholder: "Longtitude Begin" %>
+		</td>
+		<td>---</td>
+		<td>
+			<%= text_field :e_lon, params[:e_lon], placeholder: "Longtitude End" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=4></td>
+	</tr>
+	<tr>
+		<td>Latitude Range:</td>
+		<td>
+			<%= text_field :s_lat, params[:s_lat], placeholder: "Latitude Begin" %>
+		</td>
+		<td>---</td>
+		<td>
+			<%= text_field :e_lat, params[:e_lat], placeholder: "Latitude End" %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th colspan=2>3.Select Date</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>Date Range:</td>
+		<td>
+			<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Date From" %>
+		</td>
+		<td>---</td>
+		<td>
+			<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "Date To" %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Operation</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= submit_tag "Submit", :class => "submit" %></td>
+	</tr>
+</table>
+	<% end %>
+
+
+<br>
+
+<%#= link_to 'New Cmip5', new_cmip5_path %>
