@@ -1,13 +1,12 @@
 
 <p id="notice"><%= notice %></p>
 <h2>CMIP5 Data Analysis - Test Version</h2>
-mean: <%= @dataset.mean %>
+mean: <%=  @dataset_v.mean %>
 <p></p>
 
-
-<%= render "cmip5s/graphs/area", area: @area %>
-
-
+<%= @edate.yday + (@edate.strftime("%Y").to_i-1850)*365%>
+<%#= render "cmip5s/graphs/area", area: @area %>
+<%= render "cmip5s/graphs/dataset", area: @area %>
 
 <table>
 	<thead>
@@ -31,5 +30,9 @@ mean: <%= @dataset.mean %>
 </table>
 
 <br>
-
+<ul>
+<% @dataset_t.to_a.each_with_index do |t,i| %>
+	<li><%= i+1 %> | <%= t %></li>
+<% end %>
+</ul>
 <%= link_to 'Back', cmip5s_path %>

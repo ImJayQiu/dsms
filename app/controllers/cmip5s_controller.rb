@@ -14,14 +14,30 @@ class Cmip5sController < ApplicationController
 
 	def analysis
 
-		@sdate = params[:s_date].first.to_date
-		@edate = params[:e_date].first.to_date
+		@sdate = params[:s_date].first.to_date.at_beginning_of_month
+		@edate = params[:e_date].first.to_date.end_of_month
 
+		# number of days between start date and end date 
+		se_days = (@edate-@sdate).to_i
+
+		# days a year 
+		y_day = 365
+
+		# date range
+		s_days = (@sdate.strftime("%Y").to_i-1850) * y_day + @sdate.yday 
+		e_days = s_days + se_days 
+		r_days = s_days..e_days
+
+
+		# file name
 		file_name = params[:file_name].first.to_s
+
+		# lat & lon range
 		s_lat = params[:s_lat].first.to_i
 		e_lat = params[:e_lat].first.to_i
 		s_lon = params[:s_lon].first.to_i
 		e_lon = params[:e_lon].first.to_i
+
 		r_lat = s_lat..e_lat
 		r_lon = s_lon..e_lon
 
@@ -36,8 +52,11 @@ class Cmip5sController < ApplicationController
 		date = @sdate..@edate
 		var = file_name.split('_').first.to_s
 		file = NetCDF.open("public/CanCM4/#{file_name}.nc")
-		@dataset = GPhys::NetCDF_IO.open(file, var).cut("lat"=>r_lat,"lon"=>r_lon)
-		@test = @dataset.to_a
+		@dataset_t = GPhys::NetCDF_IO.open(file, 'time_bnds').cut("time"=>r_days)
+		@dataset_v = GPhys::NetCDF_IO.open(file, var).cut("lat"=>r_lat,"lon"=>r_lon, "time"=>r_days)
+		@test = @dataset_v.to_a
+
+
 	end
 
 	# GET /cmip5s/1

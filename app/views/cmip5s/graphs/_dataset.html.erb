@@ -1,0 +1,86 @@
+
+<style>
+
+.graticule {
+	fill: none;
+	stroke: #777;
+	stroke-width: .5px;
+	stroke-opacity: .5;
+}
+
+.land {
+	fill: #666;
+}
+
+.boundary {
+	fill: none;
+	stroke: #fff;
+	stroke-width: .5px;
+}
+
+.geojson {
+	fill: none;
+	stroke: red;
+	stroke-width: 2;
+}
+
+</style>
+
+<div id='js-geojson-example_2'></div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+var width = 480,
+	height = 274;
+
+	var projection = d3.geo.patterson()
+	.scale(80)
+.translate([width / 2, height / 2])
+	.precision(.1);
+
+var path = d3.geo.path()
+	.projection(projection);
+
+	var graticule = d3.geo.graticule();
+
+	var svg = d3.select("#js-geojson-example_2").append("svg")
+	.attr("width", width)
+	.attr("height", height);
+
+	svg.append("path")
+.datum(graticule)
+	.attr("class", "graticule")
+	.attr("d", path);
+
+	d3.json("/geo_json/world-50m.json", function(error, world) {
+			svg.insert("path", ".graticule")
+			.datum(topojson.feature(world, world.objects.land))
+			.attr("class", "land")
+			.attr("d", path);
+
+			svg.insert("path", ".graticule")
+			.datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+			.attr("class", "boundary")
+			.attr("d", path);
+			});
+
+d3.select(self.frameElement).style("height", height + "px");
+
+cook = {"type": "LineString", "coordinates": <%= area %> }
+
+	svg.selectAll(".geojson").data([cook])
+.enter()
+	.append("path")
+	.attr("class","geojson")
+	.attr("d", path);
+
+	var myLocation = projection([121.3997, 31.0456]);
+	svg.append('circle').attr('r', 5)
+	  .attr('fill', 'rgba(255,0,0,0.61)')
+	    .attr('transform', 'translate(' + myLocation[0] + ', ' + myLocation[1] + ')');
+
+</script>
+

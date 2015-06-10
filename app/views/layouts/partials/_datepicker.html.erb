@@ -1,0 +1,27 @@
+<script>
+$(function() {
+		$( "#s_date" ).datepicker({
+dateFormat: "yy-mm-dd",
+yearRange: "1990:2100",
+defaultDate: "2006-01-01",
+changeMonth: true,
+changeYear: true,
+numberOfMonths: 1,
+onClose: function( selectedDate ) {
+$( "#e_date" ).datepicker( "option", "minDate", selectedDate );
+}
+});
+		$( "#e_date" ).datepicker({
+dateFormat: "yy-mm-dd",
+yearRange: "1990:2100",
+defaultDate: "2006-01-01",
+changeMonth: true,
+changeYear: true,
+numberOfMonths: 1,
+onClose: function( selectedDate ) {
+$( "#s_date" ).datepicker( "option", "maxDate", selectedDate );
+}
+});
+});
+</script>
+

@@ -34,7 +34,7 @@
 .geojson {
 	fill: none;
 	stroke: red;
-	stroke-width: 5;
+	stroke-width: 2;
 }
 
 .boundary {
@@ -47,16 +47,15 @@
 
 <script>
 
-//var width = $(window).width(),
-	var width = "480",
-		height = "250";
-//	height = $(window).height();
+var width = $(window).width(),
+	height = $(window).height();
 
 //var sc = Math.min(width,height) * 0.1  
 
 	var projection = d3.geo.equirectangular()
-	.scale(80)
-.translate([width/2,height/2])
+	.center([105, 65])
+	.scale(100)
+.translate([width/4,height/4])
 	.rotate([-180,0]);
 
 var path = d3.geo.path()
