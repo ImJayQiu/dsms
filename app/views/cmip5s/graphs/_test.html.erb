@@ -1,3 +1,6 @@
+<%# git version control test %>
+
+
 <style>
 
 .graticule {
@@ -69,17 +72,17 @@ var path = d3.geo.path()
 d3.select(self.frameElement).style("height", height + "px");
 
 
+var a = d3.rgb(0,0,255);
+var b = d3.rgb(0,255,0);
+var c = d3.rgb(255,0,0);
 
 var max_value = <%= dataset_v.max.to_f %>;
 var mean_value = <%= dataset_v.mean.to_f %>;
 var min_value = <%= dataset_v.min.to_f %>;
-	var p_color = d3.scale.linear()
+	var linear = d3.scale.linear()
 .domain([min_value,mean_value,max_value])
 	.range([0,0.5,1]);
 
-	var a = d3.rgb(0,0,255);
-	var b = d3.rgb(0,255,0);
-	var c = d3.rgb(255,0,0);
 	var p_color = d3.interpolate(a,c);
 
 
