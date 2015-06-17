@@ -1,12 +1,22 @@
 
 <p id="notice"><%= notice %></p>
 <h2>CMIP5 Data Analysis - Test Version</h2>
-mean: <%=  @dataset_v.mean %>
+Mean:<%= @dataset_v.mean %>
+<p></p>
+Max:<%= @dataset_v.max.to_f %>
+<p></p>
+Min:<%= @dataset_v.min %>
 <p></p>
 
-<%= @edate.yday + (@edate.strftime("%Y").to_i-1850)*365%>
-<%#= render "cmip5s/graphs/area", area: @area %>
-<%= render "cmip5s/graphs/dataset", area: @area %>
+<%= render "cmip5s/graphs/test", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_scale: @map_scale %>
+<p/>
+
+<%#= @edate.yday + (@edate.strftime("%Y").to_i-1850)*365%>
+<p/>
+
+<%#= render "cmip5s/graphs/test" %>
+all:<%#= render @dataset_v.grid %>
+<p/>
 
 <table>
 	<thead>
@@ -17,22 +27,26 @@ mean: <%=  @dataset_v.mean %>
 		</tr>
 	</thead>
 	<tbody>
-	<% @test.each_with_index do |text,i| %>
+	<%# @dataset_v.to_a.each_with_index do |d,i| %>
+		<%# @lon.each_with_index do |lon,x| %>
+		<%# @lat.each_with_index do |lat,y| %>
 		<tr>
-		<td><%= i+1 %></td>
-		<td><%= text %></td>
+		<td><%#= lon %>,<%#= lat %></td>
+		<td><%#= d[x][y] rescue nil %></td>
 		<td><%#= link_to 'Show', cmip5 %></td>
 		<td><%#= link_to 'Edit', edit_cmip5_path(cmip5) %></td>
 		<td><%#= link_to 'Destroy', cmip5, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 	</tr>
-<% end %>
+<%# end %>
+<%# end %>
+<%# end %>
 	</tbody>
 </table>
 
 <br>
 <ul>
-<% @dataset_t.to_a.each_with_index do |t,i| %>
-	<li><%= i+1 %> | <%= t %></li>
-<% end %>
+	<%# @dataset_t.to_a.each_with_index do |t,i| %>
+		<li><%#= i+1 %> | <%#= t %></li>
+<%# end %>
 </ul>
 <%= link_to 'Back', cmip5s_path %>

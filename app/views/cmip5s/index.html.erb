@@ -5,7 +5,6 @@
 <%= form_tag({:controller=>"cmip5s", :action=>"analysis" }, :method => "get") do  %>  
 
 	<table>
-
 	<thead>
 		<tr>
 			<th>1.Select Dataset</th>
@@ -66,6 +65,16 @@
 	</tr>
 </table>
 
+	<table>
+	<thead>
+		<tr>
+			<th>4.Map Size</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select :map_scale, params[:map_scale], Common::MAP_SCALE, :to_s, :humanize, prompt: "- Select -" %></td>
+	</tr>
+</table>
 <%= submit_tag "Submit", :class => "submit" %>
 	<% end %>
 

@@ -1,7 +1,10 @@
 require "numru/gphys"
 require "numru/ggraph"
+require "narray"
+require "numru/dcl"
 include NumRu
 include GGraph
+include Math
 
 class Cmip5sController < ApplicationController
 
@@ -13,6 +16,8 @@ class Cmip5sController < ApplicationController
 	end
 
 	def analysis
+
+		@map_scale = params[:map_scale].first.to_i*100
 
 		@sdate = params[:s_date].first.to_date.at_beginning_of_month
 		@edate = params[:e_date].first.to_date.end_of_month
@@ -38,6 +43,11 @@ class Cmip5sController < ApplicationController
 		s_lon = params[:s_lon].first.to_i
 		e_lon = params[:e_lon].first.to_i
 
+
+		c_lon = (e_lon - s_lon)/2 + s_lon
+		c_lat = (e_lat - s_lat)/2 + s_lat
+		@c_point = [c_lon,c_lat]
+
 		r_lat = s_lat..e_lat
 		r_lon = s_lon..e_lon
 
@@ -52,9 +62,16 @@ class Cmip5sController < ApplicationController
 		date = @sdate..@edate
 		var = file_name.split('_').first.to_s
 		file = NetCDF.open("public/CanCM4/#{file_name}.nc")
-		@dataset_t = GPhys::NetCDF_IO.open(file, 'time_bnds').cut("time"=>r_days)
+		
 		@dataset_v = GPhys::NetCDF_IO.open(file, var).cut("lat"=>r_lat,"lon"=>r_lon, "time"=>r_days)
-		@test = @dataset_v.to_a
+
+		@lon = @dataset_v.axis("lon").pos.to_a 
+
+		@lat = @dataset_v.grid.axis("lat").pos.to_a 
+
+		@time = @dataset_v.grid.axis("time").pos.to_a 
+
+		@dataset_t = GPhys::NetCDF_IO.open(file, 'time_bnds').cut("time"=>r_days)
 
 
 	end

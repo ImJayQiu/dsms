@@ -1,4 +1,8 @@
 
+<script src="/d3/d3.v3.min.js"></script>
+<script src="/d3/d3.geo.projection.v0.min.js"></script>
+<script src="/d3/topojson.v1.min.js"></script>
+
 <style>
 
 .graticule {
@@ -9,7 +13,7 @@
 }
 
 .land {
-	fill: #666;
+	fill: #ccc;
 }
 
 .boundary {
@@ -21,32 +25,35 @@
 .geojson {
 	fill: none;
 	stroke: red;
-	stroke-width: 2;
+	stroke-width: 0.5;
 }
 
 </style>
 
-<div id='js-geojson-example_2'></div>
+<div id='area_dataset'></div>
 
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
 <script>
 
-var width = 480,
-	height = 274;
+var width = 360*2,
+	height = 300*2;
+
+//var width = $(window).width(),
+//	height = $(window).height();
+
+//var sc = Math.min(width,height) * 0.1
 
 	var projection = d3.geo.patterson()
-	.scale(80)
-.translate([width / 2, height / 2])
-	.precision(.1);
+//	.scale(<%= map_scale %>)
+.center(<%= c_point %>)
+//.translate([512,512])
+.precision(.1);
 
 var path = d3.geo.path()
 	.projection(projection);
 
 	var graticule = d3.geo.graticule();
 
-	var svg = d3.select("#js-geojson-example_2").append("svg")
+	var svg = d3.select("#area_dataset").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
@@ -69,18 +76,98 @@ var path = d3.geo.path()
 
 d3.select(self.frameElement).style("height", height + "px");
 
-cook = {"type": "LineString", "coordinates": <%= area %> }
+//  cook = {"type": "LineString", "coordinates": <%= area %> }
 
-	svg.selectAll(".geojson").data([cook])
-.enter()
-	.append("path")
-	.attr("class","geojson")
-	.attr("d", path);
+//	svg.selectAll(".geojson").data([cook])
+// .enter()
+//	.append("path")
+//	.attr("class","geojson")
+//	.attr("d", path);
 
-	var myLocation = projection([121.3997, 31.0456]);
-	svg.append('circle').attr('r', 5)
-	  .attr('fill', 'rgba(255,0,0,0.61)')
-	    .attr('transform', 'translate(' + myLocation[0] + ', ' + myLocation[1] + ')');
+var dataset = [
+<% @g_color = "%06x" % (rand * 0xffffff) %>
+<% dataset_v.to_a.each_with_index do |d,i| %>
+	<% lon.each_with_index do |lon,x| %>
+		<% lat.each_with_index do |lat,y| %>
+			<% pd = d[y][x].to_f rescue nil %>
+			<% pd_max = d.max_by(&:max).max.to_f rescue nil %>
+			<% if pd.nil? then opacity = 0 else opacity = pd/pd_max end  %>
 
+	{
+value: <%= pd %>,
+		   opacity: <%= opacity+0.3 %>,
+		   location: {
+latitude: <%= lat  %>,
+		  longitude: <%= lon %>
+	   }
+	},
+	<% end end end  %>
+	]
+	svg.selectAll(".pin")
+.data(dataset)
+//	.enter().append("circle", ".pin")
+//	.attr("r", 4)
+//	.attr({fill: "red" })
+//	.attr('opacity', function(d){return d.opacity;} )
+	.enter().append("rect", ".pin")
+	.attr('width', width/360 )
+	.attr('height', height/180)
+	.attr("transform", function(d) {
+			return "translate(" + projection([
+					d.location.longitude,
+					d.location.latitude
+					]) + ")"
+			});
+
+<%# @g_color = "%06x" % (rand * 0xffffff) %>
+<%# dataset_v.to_a.each_with_index do |d,i| %>
+	<%# lon.each_with_index do |lon,x| %>
+		<%# lat.each_with_index do |lat,y| %>
+			<%# pd = d[y][x].to_f rescue nil %>
+			<%# pd_max = d.max_by(&:max).max.to_f rescue nil %>
+			<%# if pd.nil? then pd_alpha = 0 else pd_alpha = pd/pd_max end  %>
+			//	var myLocation = projection([<%=lon%>, <%=lat%>]);
+			//	svg.append('circle').attr('r', '5')
+			//	.attr({fill: "<%= '#'+@g_color %>" })
+			//	.attr({fill: "red" })
+			//	.attr('opacity', <%#= pd_alpha %> )
+			//	.attr('transform', 'translate(' + myLocation[0] + ', ' + myLocation[1] + ')');
+			<%#end%>
+			<%#end%>
+			<%#end%>
+
+	var xAxisScale = d3.scale.ordinal()  
+.domain(d3.range(dataset.length))  
+	.rangeRoundBands([0,500]);  
+
+	var yAxisScale = d3.scale.linear()  
+.domain([0,d3.max(dataset)])  
+	.range([500,0]);  
+
+	var xAxis = d3.svg.axis()  
+.scale(xAxisScale)  
+	.orient("bottom");  
+
+	var yAxis = d3.svg.axis()  
+.scale(yAxisScale)  
+	.orient("left");  
+
+	var xScale = d3.scale.ordinal()  
+.domain(d3.range(dataset.length))  
+	.rangeRoundBands([0,500],0.05);  
+
+	var yScale = d3.scale.linear()  
+.domain([0,d3.max(dataset)])  
+	.range([0,500]);  
+
+	svg.append("g")  
+	.attr("class","axis")  
+//	.attr("transform","translate(30,550)")  
+	.call(xAxis);  
+
+	svg.append("g")  
+	.attr("class","axis")  
+//	.attr("transform","translate(30,50)")  
+	.call(yAxis); 
 </script>
 
