@@ -6,77 +6,70 @@
 
 	<table>
 	<thead>
-		<tr>
-			<th>1.Select Dataset</th>
-		</tr>
+	<tr>
+	<th>1.Select Dataset</th>
+	</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select :file_name, params[:file_name], Common::FILE_NAME, :to_s, :humanize, prompt: "- Select -" %></td>
+	<td><%= collection_select :file_name, params[:file_name], Common::FILE_NAME, :to_s, :humanize, prompt: "- Select -" %></td>
 	</tr>
-</table>
+	</table>
 
-<table>
+	<%= render "layouts/partials/slider_lon"%>
+	<%= render "layouts/partials/slider_lat"%>
+
+	<table>
 	<thead>
-		<tr>
-			<th colspan=2>2.Select Location</th>
-		</tr>
+	<tr>
+	<th colspan=4>2.Select Location</th>
+	</tr>
 	</thead>
+
 	<tr>
-		<td>Longtitude Range:</td>
-		<td>
-			<%= text_field :s_lon, params[:s_lon], placeholder: "Longtitude Begin" %>
-		</td>
-		<td>---</td>
-		<td>
-			<%= text_field :e_lon, params[:e_lon], placeholder: "Longtitude End" %>
-		</td>
+	<td width = 15%>Longitude:</td>
+	<td width = 15%><%= text_field :s_lon, params[:s_lon], id: "s_lon" %></td>
+	<td width = 15%><%= text_field :e_lon, params[:e_lon], id: "e_lon" %></td>
+	<td><div id="lon_range"></div></td>
 	</tr>
 	<tr>
-		<td colspan=4></td>
-	</tr>
-	<tr>
-		<td>Latitude Range:</td>
-		<td>
-			<%= text_field :s_lat, params[:s_lat], placeholder: "Latitude Begin" %>
-		</td>
-		<td>---</td>
-		<td>
-			<%= text_field :e_lat, params[:e_lat], placeholder: "Latitude End" %>
-		</td>
-	</tr>
+	<td width = 15%>Latitude:</td>
+	<td width = 15%><%= text_field :s_lat, params[:s_lat], id: "s_lat" %></td>
+	<td width = 15%><%= text_field :e_lat, params[:e_lat], id: "e_lat" %></td>
+	<td><div id="lat_range"></div></td>
+</tr>
 </table>
 
 <%= render "layouts/partials/datepicker"%>
 <table>
-	<thead>
-		<tr>
-			<th colspan=2>3.Select Date</th>
-		</tr>
-	</thead>
+<thead>
 	<tr>
-		<td>Date Range:</td>
-		<td>
-			<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Date From" %>
-		</td>
-		<td>---</td>
-		<td>
-			<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "Date To" %>
-		</td>
+		<th colspan=2>3.Select Date</th>
 	</tr>
+</thead>
+<tr>
+	<td>Date Range:</td>
+	<td>
+		<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Date From" %>
+	</td>
+	<td>---</td>
+	<td>
+		<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "Date To" %>
+	</td>
+</tr>
 </table>
 
-	<table>
-	<thead>
-		<tr>
-			<th>4.Map Size</th>
-		</tr>
-	</thead>
+<table>
+<thead>
 	<tr>
-		<td><%= collection_select :map_scale, params[:map_scale], Common::MAP_SCALE, :to_s, :humanize, prompt: "- Select -" %></td>
+		<th>4.Map Size</th>
 	</tr>
+</thead>
+<tr>
+	<td><%= collection_select :map_size, params[:map_size], Common::MAP_SIZE, :to_s, :humanize, prompt: "- Auto -" %></td>
+</tr>
 </table>
 <%= submit_tag "Submit", :class => "submit" %>
-	<% end %>
+<% end %>
 
 
 <br>

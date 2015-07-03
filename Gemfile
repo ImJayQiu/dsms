@@ -1,5 +1,12 @@
 source 'https://rubygems.org'
 
+gem "chartkick"
+# Climate data operator
+gem 'cdo', '~> 1.2.5'
+gem 'rb-gsl', '~> 1.16.0.4'
+#gem 'gsl', '~> 1.15.3'
+
+# D3 js
 gem 'd3-rails', '~> 3.5.5'
 gem 'gdk_pixbuf2', '~> 2.2.5'
 gem 'pkg-config', '~> 1.1.6'

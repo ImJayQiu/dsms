@@ -1,0 +1,89 @@
+<table>
+<thead>
+<tr>
+<th>Control Panel</th>
+<th>
+<div class="buttons">
+<input type="button" class="cp" value="Show"/>
+</div>
+</th>
+</tr>
+</thead>
+</table>
+
+<div class="content_cp" style="display:none" >
+
+	<%= form_tag({:controller=>"cmip5s", :action=>"analysis" }, :method => "get") do |f| %>  
+
+		<table>
+		<thead>
+		<tr>
+		<th>1.Select Dataset</th>
+		</tr>
+		</thead>
+		<tr>
+		<td><%= f.collection_select :file_name, params[:file_name], Common::FILE_NAME, :to_s, :humanize, prompt: "- Select -" rescue nil %></td>
+		</tr>
+		</table>
+
+		<%= render "layouts/partials/slider_lon"%>
+		<%= render "layouts/partials/slider_lat"%>
+
+		<table>
+		<thead>
+		<tr>
+		<th colspan=4>2.Select Location</th>
+		</tr>
+		</thead>
+
+		<tr>
+		<td width = 15%>Longitude:</td>
+		<td width = 15%><%= f.text_field :s_lon, params[:s_lon], id: "s_lon" rescue nil %></td>
+		<td width = 15%><%= f.text_field :e_lon, params[:e_lon], id: "e_lon" rescue nil %></td>
+		<td><div id="lon_range"></div></td>
+		</tr>
+		<tr>
+		<td width = 15%>Latitude:</td>
+		<td width = 15%><%= f.text_field :s_lat, params[:s_lat], id: "s_lat" rescue nil %></td>
+		<td width = 15%><%= f.text_field :e_lat, params[:e_lat], id: "e_lat" rescue nil %></td>
+		<td><div id="lat_range"></div></td>
+	</tr>
+</table>
+
+<%= render "layouts/partials/datepicker"%>
+<table>
+	<thead>
+		<tr>
+			<th colspan=2>3.Select Date</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>Date Range:</td>
+		<td>
+			<%= f.text_field :s_date, params[:s_date], id: "s_date", placeholder: "Date From" rescue nil %>
+		</td>
+		<td>---</td>
+		<td>
+			<%= f.text_field :e_date, params[:e_date], id: "e_date", placeholder: "Date To" rescue nil %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>4.Map Size</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= f.collection_select :map_size, params[:map_size], Common::MAP_SIZE, :to_s, :humanize, prompt: "- Auto -" rescue nil %></td>
+	</tr>
+</table>
+<%= f.submit_tag "Submit", :class => "submit" rescue nil %>
+<% end %>
+
+
+<div class="buttons">
+	<input type="button" class="cp" value="Hide"/>
+</div>
+</div>

@@ -1,10 +1,11 @@
 require "numru/gphys"
 require "numru/ggraph"
-require "narray"
-require "numru/dcl"
+require "numru/ganalysis"
+require "cdo"
+require "gsl"
 include NumRu
 include GGraph
-include Math
+include GSL
 
 class Cmip5sController < ApplicationController
 
@@ -17,8 +18,7 @@ class Cmip5sController < ApplicationController
 
 	def analysis
 
-		@map_scale = params[:map_scale].first.to_i*100
-
+		################################################################
 		@sdate = params[:s_date].first.to_date.at_beginning_of_month
 		@edate = params[:e_date].first.to_date.end_of_month
 
@@ -36,18 +36,34 @@ class Cmip5sController < ApplicationController
 
 		# file name
 		file_name = params[:file_name].first.to_s
-
+		@file_name = file_name
 		# lat & lon range
-		s_lat = params[:s_lat].first.to_i
-		e_lat = params[:e_lat].first.to_i
-		s_lon = params[:s_lon].first.to_i
-		e_lon = params[:e_lon].first.to_i
+		s_lat = params[:s_lat].first.to_f
+		e_lat = params[:e_lat].first.to_f
+		s_lon = params[:s_lon].first.to_f
+		e_lon = params[:e_lon].first.to_f
+        @lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
+        @lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
+		############### auto map size #################################
+		if params[:map_size].first.blank?
+			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
+			if map_size < 1
+				@map_size = 1
+			else
+				@map_size = map_size
+			end
+		else
+			@map_size = params[:map_size].first.to_i
+		end
+		################################################################
 
-
+		################## find centre point ###########################
 		c_lon = (e_lon - s_lon)/2 + s_lon
 		c_lat = (e_lat - s_lat)/2 + s_lat
 		@c_point = [c_lon,c_lat]
+		##############################################################
 
+		################ range of lon & lat ###########################
 		r_lat = s_lat..e_lat
 		r_lon = s_lon..e_lon
 
@@ -58,20 +74,63 @@ class Cmip5sController < ApplicationController
 			[s_lon,e_lat],
 			[s_lon,s_lat]
 		]
+		############################################################
 
+		#################### date period ###########################
 		date = @sdate..@edate
+		@months = date.map(&:beginning_of_month).uniq.map {|d| d.strftime "%Y-%m" } 
+		###########################################################
+
 		var = file_name.split('_').first.to_s
-		file = NetCDF.open("public/CanCM4/#{file_name}.nc")
-		
+		#file = NetCDF.open("public/CanCM4/#{file_name}.nc")
+
+		file = "public/CanCM4/#{file_name}.nc"
 		@dataset_v = GPhys::NetCDF_IO.open(file, var).cut("lat"=>r_lat,"lon"=>r_lon, "time"=>r_days)
 
 		@lon = @dataset_v.axis("lon").pos.to_a 
 
 		@lat = @dataset_v.grid.axis("lat").pos.to_a 
 
-		@time = @dataset_v.grid.axis("time").pos.to_a 
+		@timesteps = @dataset_v.grid.axis("time").pos.to_a 
 
-		@dataset_t = GPhys::NetCDF_IO.open(file, 'time_bnds').cut("time"=>r_days)
+		@max = @dataset_v.max("lat","lon").val.to_a
+		@max_h = Hash[@months.zip(@max)]  
+
+		@min = @dataset_v.min("lat","lon").val.to_a
+		@min_h = Hash[@months.zip(@min)]  
+
+		@mean = @dataset_v.mean("lat","lon").val.to_a
+		@mean_h = Hash[@months.zip(@mean)]  
+
+		################## data re-organize #######################
+
+		@dataset_h = []
+		@dataset_v.to_a.each_with_index do |d,i|
+			@timesteps.each_with_index do |date,t|
+				@lon.each_with_index do |lon,x|
+					@lat.each_with_index do |lat,y|
+						pd = d[y][x].to_f rescue nil
+
+
+						@dataset_h << {date: date,
+					 value: pd.to_f,
+					 lon: lon.to_f, 
+					 lat: lat.to_f}
+
+
+					end
+				end
+			end
+		end
+
+		#################### CDO testing ###########################
+
+		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc')
+		@sel_date  = Cdo.seldate([@sdate.to_datetime,@edate.to_datetime], input: sel_lonlat, output: "sel_date.nc", :options => '-f nc4')
+		@cdo_data = Cdo.infon(input: @sel_date)
+		@cdo_var_name = Cdo.showstdname(input: @sel_date).first.humanize
+
+
 
 
 	end
