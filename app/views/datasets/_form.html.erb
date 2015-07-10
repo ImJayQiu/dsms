@@ -1,3 +1,4 @@
+<%if can? :manage, :dataset%>
 <%= form_for(@dataset) do |f| %>
 	<% if @dataset.errors.any? %>
 	<div id="error_explanation">
@@ -88,4 +89,4 @@ Upload New Dataset
 		</tr>
 	</thead>
 </table>
-
+<% end %>

@@ -1,7 +1,7 @@
 class Dataset < ActiveRecord::Base
 
 	has_attached_file :file,
-		url: "/public/datasets/:id/:basename.:extension",
+		url: "/datasets/:id/:basename.:extension",
 		path: ":rails_root/public/datasets/:id/:basename.:extension"
 
 

@@ -25,7 +25,7 @@
 
 <br>
 
-<%= link_to('New User', new_registration_path(:user)) %>
+<%#= button_to 'New User', new_registration_path(:user), method: :get %>
 <% else %>
-	Permission Denied !
+	Access Denied !
 <% end %>

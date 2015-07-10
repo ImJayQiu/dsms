@@ -9,6 +9,15 @@ class CdoanalysisesController < ApplicationController
 		@info = Cdo.info(input: @file)
 	end
 
+	### multi_year monthly analysis
+	def mym
+		@file = params[:dataset]
+		@ymonmin_f = Cdo.ymonmin(input: @file)
+		@ymonmin = Cdo.info(input: @ymonmin_f)
+	end
+	
+
+	### Seasonal analysis 
 	def season
 		@file = params[:dataset]
 		@var_std_name = params[:var_std_name]

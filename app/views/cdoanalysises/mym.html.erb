@@ -1,0 +1,30 @@
+<%# Multi-year monthly analysis %>
+<h2>Seasonal Data Analysis</h2>
+
+<%= @ymonmin %>
+
+<%#= line_chart [
+	{name: "Max", data: @max_min_h },
+	{name: "Min", data: @min_min_h },
+	{name: "Mean", data: @mean_min_h }
+], 
+discrete: true, 
+library: {
+	title: {text: "Seasonal Minimum Data Analysis"},
+	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
+} %>
+
+<p/>
+
+<%#= line_chart [
+	{name: "Max", data: @max_max_h },
+	{name: "Min", data: @min_max_h },
+	{name: "Mean", data: @mean_max_h }
+], 
+discrete: true, 
+library: {
+	title: {text: "Seasonal Maximum Data Analysis"},
+	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
+} %>
+
+<p/>

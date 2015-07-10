@@ -8,10 +8,13 @@
 			<div id="menu">
 				<ul>
 					<li><%= link_to "Home", root_url %></li>
-					<%if can? :manage, :system%>
+					<%if can? :manage, :user%>
 						<li><%= link_to "Users Management", users_path %></li>
+					<% end %>
+					<%if can? :manage, :dataset%>
 						<li><%= link_to "Datasets Management", datasets_path %></li>
 					<% end %>
+
 					<% if user_signed_in? %>
 						<li><%= link_to "CMIP5 Analysis", cmip5s_path %></li>
 						<li><%= link_to "Edit Info.", edit_user_registration_path %></li>

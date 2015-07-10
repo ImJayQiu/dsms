@@ -1,5 +1,6 @@
 <p id="notice"><%= notice %></p>
 
+<%if can? :manage, :dataset%>
 <table>
 	<thead>
 		<tr>
@@ -72,3 +73,6 @@
 		</tr>
 	</thead>
 </table>
+<%else%>
+	Access Denied !
+<%end%>

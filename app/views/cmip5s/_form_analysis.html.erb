@@ -15,5 +15,14 @@
 			<%= submit_tag "Seasonal Analysis", class: "submit"  %>
 		<% end %>
 		</td>
+
+		<td>
+			<%= form_tag({controller: "cdoanalysises", action: "mym" }, target: '_blank' , method: :get) do %>  
+				<%= hidden_field_tag :dataset, @sel_data  %>
+			<%= hidden_field_tag :var_std_name, @var_std_name %>
+			<%= submit_tag "Multi_year Monthly Analysis", class: "submit"  %>
+		<% end %>
+		</td>
+	
 	</tr>
 </table>

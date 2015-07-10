@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 		collection do
 			get :info
 			get :season
+			get :mym
 		end
 	end
 

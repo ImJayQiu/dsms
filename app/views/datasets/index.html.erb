@@ -1,6 +1,7 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Datasets</h1>
+<%if can? :manage, :dataset%>
+	<h2>Listing Datasets</h2>
 
 <table>
 	<thead>
@@ -30,3 +31,6 @@
 <br>
 
 <%= button_to 'Upload Dataset', new_dataset_path, method: :get %>
+<% else %>
+	Access Denied !
+<%end%>
