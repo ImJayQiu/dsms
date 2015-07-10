@@ -1,11 +1,5 @@
-require "numru/gphys"
-require "numru/ggraph"
-require "numru/ganalysis"
 require "cdo"
 require "gsl"
-include NumRu
-include GGraph
-include GSL
 
 class Cmip5sController < ApplicationController
 
@@ -16,34 +10,33 @@ class Cmip5sController < ApplicationController
 	def index
 	end
 
+
 	def analysis
 
-		################################################################
+		################ date range ##################################
+
 		@sdate = params[:s_date].first.to_date.at_beginning_of_month
 		@edate = params[:e_date].first.to_date.end_of_month
 
-		# number of days between start date and end date 
-		se_days = (@edate-@sdate).to_i
-
-		# days a year 
-		y_day = 365
-
-		# date range
-		s_days = (@sdate.strftime("%Y").to_i-1850) * y_day + @sdate.yday 
-		e_days = s_days + se_days 
-		r_days = s_days..e_days
+		##############################################################
 
 
-		# file name
-		file_name = params[:file_name].first.to_s
-		@file_name = file_name
-		# lat & lon range
+		############# File name ######################################
+
+		@dataset = Dataset.find(params[:dataset][:id])
+		@file_name = @dataset.file_file_name
+
+		##############################################################
+
+		############# Selected location  #############################
+
 		s_lat = params[:s_lat].first.to_f
 		e_lat = params[:e_lat].first.to_f
 		s_lon = params[:s_lon].first.to_f
 		e_lon = params[:e_lon].first.to_f
-        @lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
-        @lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
+		@lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
+		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
+
 		############### auto map size #################################
 		if params[:map_size].first.blank?
 			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
@@ -77,61 +70,42 @@ class Cmip5sController < ApplicationController
 		############################################################
 
 		#################### date period ###########################
-		date = @sdate..@edate
-		@months = date.map(&:beginning_of_month).uniq.map {|d| d.strftime "%Y-%m" } 
+
+		days = @sdate..@edate
+
+		#################### CDO operations  #########################
+
+		file = @dataset.file.path # find path of nc file
+
+		############ cut file by selected location ###################
+		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc')
+		###############################################################
+
+		############# cut file by selected date range ##################
+		@sel_data  = Cdo.seldate([@sdate.to_datetime,@edate.to_datetime], input: sel_lonlat)
+		##############################################################
+
+
+		@dataset_infon = Cdo.info(input: @sel_data)
+		@var_name = Cdo.showname(input: @sel_data).first.to_s
+		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
+
 		###########################################################
 
-		var = file_name.split('_').first.to_s
-		#file = NetCDF.open("public/CanCM4/#{file_name}.nc")
-
-		file = "public/CanCM4/#{file_name}.nc"
-		@dataset_v = GPhys::NetCDF_IO.open(file, var).cut("lat"=>r_lat,"lon"=>r_lon, "time"=>r_days)
-
-		@lon = @dataset_v.axis("lon").pos.to_a 
-
-		@lat = @dataset_v.grid.axis("lat").pos.to_a 
-
-		@timesteps = @dataset_v.grid.axis("time").pos.to_a 
-
-		@max = @dataset_v.max("lat","lon").val.to_a
-		@max_h = Hash[@months.zip(@max)]  
-
-		@min = @dataset_v.min("lat","lon").val.to_a
-		@min_h = Hash[@months.zip(@min)]  
-
-		@mean = @dataset_v.mean("lat","lon").val.to_a
-		@mean_h = Hash[@months.zip(@mean)]  
-
-		################## data re-organize #######################
-
-		@dataset_h = []
-		@dataset_v.to_a.each_with_index do |d,i|
-			@timesteps.each_with_index do |date,t|
-				@lon.each_with_index do |lon,x|
-					@lat.each_with_index do |lat,y|
-						pd = d[y][x].to_f rescue nil
-
-
-						@dataset_h << {date: date,
-					 value: pd.to_f,
-					 lon: lon.to_f, 
-					 lat: lat.to_f}
-
-
-					end
-				end
-			end
-		end
-
-		#################### CDO testing ###########################
-
-		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc')
-		@sel_date  = Cdo.seldate([@sdate.to_datetime,@edate.to_datetime], input: sel_lonlat, output: "sel_date.nc", :options => '-f nc4')
-		@cdo_data = Cdo.infon(input: @sel_date)
-		@cdo_var_name = Cdo.showstdname(input: @sel_date).first.humanize
-
-
-
+		date = Cdo.showdate(input: @sel_data)
+		@date = date.first.split(" ").to_a
+		#group max min mean
+		@max_set = [] 
+		@min_set = [] 
+		@mean_set = [] 
+		@dataset_infon.each do |i|
+			@min_set << i.split(" ")[8]
+			@mean_set << i.split(" ")[9] 
+			@max_set << i.split(" ")[10] 
+		end 
+		@max_h = Hash[@date.zip(@max_set[1..-1])]
+		@mean_h = Hash[@date.zip(@mean_set[1..-1])]
+		@min_h = Hash[@date.zip(@min_set[1..-1])]
 
 	end
 

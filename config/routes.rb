@@ -1,8 +1,19 @@
 Rails.application.routes.draw do
 
+	resources :datasets
+
 	resources :cmip5s do
 		collection do
 			get :analysis
+			get :info
+		end
+	end
+
+
+	resources :cdoanalysises do
+		collection do
+			get :info
+			get :season
 		end
 	end
 

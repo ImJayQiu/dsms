@@ -1,0 +1,91 @@
+<%= form_for(@dataset) do |f| %>
+	<% if @dataset.errors.any? %>
+	<div id="error_explanation">
+	<h2><%= pluralize(@dataset.errors.count, "error") %> prohibited this dataset from being saved:</h2>
+
+	<ul>
+		<% @dataset.errors.full_messages.each do |message| %>
+			<li><%= message %></li>
+	<% end %>
+	</ul>
+</div>
+  <% end %>
+
+Upload New Dataset
+
+<table>
+	<thead>
+		<tr>
+			<th>Model Name</th>
+			<th>Category</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= f.text_field :name %>
+		</td>
+		<td>
+			<%= f.text_field :category %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Type 1</th>
+			<th>Type 2</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= f.text_field :type1 %>
+		</td>
+		<td>
+			<%= f.text_field :type2 %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Choose File To Upload</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= f.file_field :file %>* .nc file only !
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Remark</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= f.text_area :remark %>
+		</td>
+	</tr>
+</table>
+
+
+<table>
+	<thead>
+		<tr>
+			<th>
+				<%#= f.submit "Save & Upload", onclick: "return confirm('Are you sure you want to upload ' + document.getElementById('file-field').value + '?')" %>
+				<%= f.submit "Save & Upload" %>
+			</th>
+		<% end %>
+			<th>
+				<%= button_to 'Back', datasets_path, method: :get %>
+			</th>
+		</tr>
+	</thead>
+</table>
+

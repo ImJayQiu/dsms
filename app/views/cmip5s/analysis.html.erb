@@ -1,12 +1,15 @@
 
-<%= javascript_include_tag "highchart", "chartkick" %>
 
 
 <p id="notice"><%= notice %></p>
 <h2>CMIP5 Data Analysis - Initial Version</h2>
 
-
-<%= render "cmip5s/cp"%>
+Map area reserved
+<%#= render "cmip5s/graphs/map", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_size: @map_size, dataset_h: @dataset_h %>
+<p/>
+Central point of the map: <%= @c_point %>
+<%= render "cmip5s/graphs/default" %>
+<p/>
 <table>
 	<thead>
 		<tr>
@@ -20,11 +23,12 @@
 	</thead>
 </table>
 
+<p/>
 <div class="content_data" style="display:none" >
 	<table>
 		<tbody>
 		<tr>
-			<td>Variable: <%= @cdo_var_name %></td>
+			<td>Variable: <%= @var_std_name.humanize %></td>
 			<td>Date Range: <%= @sdate.strftime("%Y-%m") %>--<%= @edate.strftime("%Y-%m") %></td>
 		</tr>
 
@@ -33,8 +37,8 @@
 			<td>Latitude Range: <%= @lat_r %></td>
 		</tr>
 		<tr>
-			<td>Min Value: <%= @dataset_v.min %></td>
-			<td>Max Value: <%= @dataset_v.max %></td>
+			<td>Min Value: <%= @min_set[1..-1].min %></td>
+			<td>Max Value: <%= @max_set[1..-1].max %></td>
 		</tr>
 		<tr>
 			<td colspan=2 align=center>
@@ -48,56 +52,8 @@
 </div>
 
 <p/>
-<%= render "cmip5s/graphs/map", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_size: @map_size, dataset_h: @dataset_h %>
+<%= render "cmip5s/form_hide" %>
 <p/>
 
-<%= line_chart [
-	{name: "Max", data: @max_h },
-	{name: "Min", data: @min_h },
-	{name: "Mean", data: @mean_h }
-], library: {title: {text: "Data Analysis by Month"} } %>
-	<p/>
 
-<%#= @edate.yday + (@edate.strftime("%Y").to_i-1850)*365%>
-<p/>
-
-<%= link_to  "File Download", @sel_date %>
-<p/>
-info:<%= Cdo.info(input: @sel_date) %><p/>
-infon:<%= Cdo.infon(input: @sel_date) %><p/>
-sinfo:<%= Cdo.sinfo(input: @sel_date) %><p/>
-sinfon:<%= Cdo.sinfon(input: @sel_date) %><p/>
-<p/>
-
-<table>
-	<thead>
-		<tr>
-			<th>Index</th>
-			<th>Data Set</th>
-			<th colspan="3"></th>
-		</tr>
-	</thead>
-	<tbody>
-	<%# @dataset_v.to_a.each_with_index do |d,i| %>
-		<%# @lon.each_with_index do |lon,x| %>
-		<%# @lat.each_with_index do |lat,y| %>
-		<tr>
-		<td><%#= i %><%#= lat %></td>
-		<td><%#= d rescue nil %></td>
-		<td><%#= link_to 'Show', cmip5 %></td>
-		<td><%#= link_to 'Edit', edit_cmip5_path(cmip5) %></td>
-		<td><%#= link_to 'Destroy', cmip5, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-	</tr>
-	<%# end %>
-	<%# end %>
-	<%# end %>
-	</tbody>
-</table>
-
-<br>
-<ul>
-	<%# @dataset_t.to_a.each_with_index do |t,i| %>
-		<li><%#= i+1 %> | <%#= t %></li>
-	<%# end %>
-</ul>
-<%= link_to 'Back', cmip5s_path %>
+<%#= button_to 'Back', cmip5s_path, method: :get %>

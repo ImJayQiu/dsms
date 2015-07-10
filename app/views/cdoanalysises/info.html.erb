@@ -1,0 +1,11 @@
+<h2>Information of Dataset</h2>
+<table>
+	<% @info.each do |info| %>
+		<tr>
+			<td><%= info.split(" ")[2] %></td>
+			<td><%= info.split(" ")[8] %></td>
+			<td><%= info.split(" ")[9] %></td>
+			<td><%= info.split(" ")[10] %></td>
+	</tr>
+<% end %>
+</table>

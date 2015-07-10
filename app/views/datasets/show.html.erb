@@ -1,0 +1,74 @@
+<p id="notice"><%= notice %></p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Model Name</th>
+			<th>Category</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= @dataset.name %>
+		</td>
+		<td>
+			<%= @dataset.category %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Type 1</th>
+			<th>Type 2</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= @dataset.type1 %>
+		</td>
+		<td>
+			<%= @dataset.type2 %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>File</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= @dataset.file %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>Remark</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= @dataset.remark %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>
+				<%= button_to 'Edit', edit_dataset_path(@dataset), method: :get %>
+			</th>
+			<th>
+				<%= button_to 'Back', datasets_path, method: :get %>
+			</th>
+		</tr>
+	</thead>
+</table>

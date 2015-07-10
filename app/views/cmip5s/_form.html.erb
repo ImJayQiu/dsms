@@ -1,17 +1,70 @@
-<%= form_for(@cmip5) do |f| %>
-  <% if @cmip5.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@cmip5.errors.count, "error") %> prohibited this cmip5 from being saved:</h2>
+<%= form_tag({controller: "cmip5s", action: "analysis" }, method: :get) do %>  
+	<table>
+	<thead>
+	<tr>
+	<th>1.Select Dataset</th>
+	</tr>
+	</thead>
+	<tr>
+	<td><%= collection_select(:dataset, :id, Dataset.where(category: "cmip5").all, :id, :file_file_name, {include_blank: "- Select Dataset -"} ) rescue nil %></td>
+	</tr>
+	</table>
 
-      <ul>
-      <% @cmip5.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+	<%= render "layouts/partials/slider_lon"%>
+	<%= render "layouts/partials/slider_lat"%>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+	<table>
+	<thead>
+	<tr>
+	<th colspan=4>2.Select Location</th>
+	</tr>
+	</thead>
+
+	<tr>
+	<td width = 15%>Longitude:</td>
+	<td width = 15%><%= text_field :s_lon, params[:s_lon], id: "s_lon" rescue nil %></td>
+	<td width = 15%><%= text_field :e_lon, params[:e_lon], id: "e_lon" rescue nil %></td>
+	<td><div id="lon_range"></div></td>
+	</tr>
+	<tr>
+	<td width = 15%>Latitude:</td>
+	<td width = 15%><%= text_field :s_lat, params[:s_lat], id: "s_lat" rescue nil %></td>
+	<td width = 15%><%= text_field :e_lat, params[:e_lat], id: "e_lat" rescue nil %></td>
+	<td><div id="lat_range"></div></td>
+</tr>
+</table>
+
+<%= render "layouts/partials/datepicker"%>
+
+<table>
+<thead>
+	<tr>
+		<th colspan=2>3.Select Date</th>
+	</tr>
+</thead>
+<tr>
+	<td>Date Range:</td>
+	<td>
+		<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Date From" rescue nil %>
+	</td>
+	<td>---</td>
+	<td>
+		<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "Date To" rescue nil %>
+	</td>
+</tr>
+</table>
+
+<table>
+<thead>
+	<tr>
+		<th>4.Map Size</th>
+	</tr>
+</thead>
+<tr>
+	<td><%= collection_select :map_size, params[:map_size], Common::MAP_SIZE, :to_s, :humanize, prompt: "- Auto -" rescue nil %></td>
+</tr>
+</table>
+
+<%= submit_tag "Submit", class: "submit" rescue nil %>
 <% end %>
+

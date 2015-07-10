@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Datasets</h1>
+
+<table>
+	<thead>
+		<tr>
+			<th>Index</th>
+			<th>Name</th>
+			<th>Category</th>
+			<th colspan="4">Operations</th>
+		</tr>
+	</thead>
+
+	<tbody>
+	<% @datasets.each_with_index do |dataset,i| %>
+		<tr>
+		<td><%= i+1 %></td>
+		<td><%= dataset.name %></td>
+		<td><%= dataset.category %></td>
+		<td><%= button_to "Download", dataset.file.url(:original, false), method: :get %></td>
+		<td><%= button_to 'Show', dataset, method: :get %></td>
+		<td><%= button_to 'Edit', edit_dataset_path(dataset), method: :get %></td>
+		<td><%= button_to 'Del', dataset, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	</tr>
+<% end %>
+	</tbody>
+</table>
+
+<br>
+
+<%= button_to 'Upload Dataset', new_dataset_path, method: :get %>
