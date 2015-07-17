@@ -11,3 +11,5 @@ Rails.application.config.assets.version = '1.0'
  Rails.application.config.assets.precompile += %w( layout.js )
  Rails.application.config.assets.precompile += %w( layout_styles.css )
  Rails.application.config.assets.precompile += %w( highchart.js )
+ Rails.application.config.assets.precompile += %w( leaflet.css )
+ Rails.application.config.assets.precompile += %w( leaflet.js )

@@ -1,0 +1,27 @@
+html,#pagewidth{
+width:100%;
+text-align:left;
+margin:0 auto;
+}
+#leftcol{
+width:40%;
+float:left;
+position:relative;
+}
+#maincol{
+background-color:#FFFFFF;
+position:relative;
+width:60%;
+float:right;
+}
+.clearfix:after{
+content:".";
+display:block;
+height:95%;
+clear:both;
+visibility:hidden;
+}
+.clearfix{
+display:inline-block;
+}
+* html .clearfix{height:90%;}.clearfix{display:block;}@media print{#leftcol{display:none;}#twocols,#maincol{width:98%;float:none;}}

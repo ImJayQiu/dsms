@@ -22,9 +22,15 @@ class Cmip5sController < ApplicationController
 
 
 		############# File name ######################################
-
-		@dataset = Dataset.find(params[:dataset][:id])
-		@file_name = @dataset.file_file_name
+		part1=params[:part1].first.to_s
+		part2=params[:part2].first.to_s
+		part3=params[:part3].first.to_s
+		part4=params[:part4].first.to_s
+		part5=params[:part5].first.to_s
+		part6='200601-203512'.to_s
+		@file_name = part1+'_'+part2+'_'+part3+'_'+part4+'_'+part5+'_'+part6+'.nc'
+		@dataset = Dataset.where(file_file_name: @file_name.to_s).first
+		#	@file_name = @dataset.file_file_name
 
 		##############################################################
 
@@ -38,6 +44,7 @@ class Cmip5sController < ApplicationController
 		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
 
 		############### auto map size #################################
+=begin
 		if params[:map_size].first.blank?
 			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
 			if map_size < 1
@@ -48,6 +55,7 @@ class Cmip5sController < ApplicationController
 		else
 			@map_size = params[:map_size].first.to_i
 		end
+=end
 		################################################################
 
 		################## find centre point ###########################
@@ -77,13 +85,15 @@ class Cmip5sController < ApplicationController
 
 		file = @dataset.file.path # find path of nc file
 
+
 		############ cut file by selected location ###################
 		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc')
 		###############################################################
 
 		############# cut file by selected date range ##################
-		@sel_data  = Cdo.seldate([@sdate.to_datetime,@edate.to_datetime], input: sel_lonlat)
+		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat)
 		##############################################################
+
 
 
 		@dataset_infon = Cdo.info(input: @sel_data)

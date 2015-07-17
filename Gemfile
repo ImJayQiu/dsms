@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+# map library
+#gem "leaflet-rails"
+
 # files upload
 gem "paperclip", "~> 4.3"
 

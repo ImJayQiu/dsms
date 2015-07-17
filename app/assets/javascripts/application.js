@@ -10,6 +10,4 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require d3 
-//= require topojson
-//= require worldtopo
+

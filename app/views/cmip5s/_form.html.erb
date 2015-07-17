@@ -1,69 +1,89 @@
 <%= form_tag({controller: "cmip5s", action: "analysis" }, method: :get) do %>  
-	<table>
+<table>
 	<thead>
-	<tr>
-	<th>1.Select Dataset</th>
-	</tr>
+		<tr>
+			<th>1.Select Part1</th>
+		</tr>
 	</thead>
 	<tr>
-	<td><%= collection_select(:dataset, :id, Dataset.where(category: "cmip5").all, :id, :file_file_name, {include_blank: "- Select Dataset -"} ) rescue nil %></td>
+		<td><%= collection_select :part1, params[:part1], Common::PART1, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
 	</tr>
-	</table>
+</table>
 
-	<%= render "layouts/partials/slider_lon"%>
-	<%= render "layouts/partials/slider_lat"%>
 
-	<table>
+<table>
 	<thead>
-	<tr>
-	<th colspan=4>2.Select Location</th>
-	</tr>
+		<tr>
+			<th>2.Select Part2</th>
+		</tr>
 	</thead>
-
 	<tr>
-	<td width = 15%>Longitude:</td>
-	<td width = 15%><%= text_field :s_lon, params[:s_lon], id: "s_lon" rescue nil %></td>
-	<td width = 15%><%= text_field :e_lon, params[:e_lon], id: "e_lon" rescue nil %></td>
-	<td><div id="lon_range"></div></td>
+		<td><%= collection_select :part2, params[:part2], Common::PART2, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
 	</tr>
+</table>
+
+
+<table>
+	<thead>
+		<tr>
+			<th>3.Select Part3</th>
+		</tr>
+	</thead>
 	<tr>
-	<td width = 15%>Latitude:</td>
-	<td width = 15%><%= text_field :s_lat, params[:s_lat], id: "s_lat" rescue nil %></td>
-	<td width = 15%><%= text_field :e_lat, params[:e_lat], id: "e_lat" rescue nil %></td>
-	<td><div id="lat_range"></div></td>
-</tr>
+		<td><%= collection_select :part3, params[:part3], Common::PART3, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>4.Select Part4</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select :part4, params[:part4], Common::PART4, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>4.Select Part5</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select :part5, params[:part5], Common::PART5, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
+	</tr>
 </table>
 
 <%= render "layouts/partials/datepicker"%>
 
 <table>
-<thead>
+	<thead>
+		<tr>
+			<th colspan=2>3.Select Date</th>
+		</tr>
+	</thead>
 	<tr>
-		<th colspan=2>3.Select Date</th>
+		<td>Date:</td>
+		<td>
+			<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "From" rescue nil %>
+		</td>
+		<td>-</td>
+		<td>
+			<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "To" rescue nil %>
+		</td>
 	</tr>
-</thead>
-<tr>
-	<td>Date Range:</td>
-	<td>
-		<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Date From" rescue nil %>
-	</td>
-	<td>---</td>
-	<td>
-		<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "Date To" rescue nil %>
-	</td>
-</tr>
 </table>
 
-<table>
-<thead>
-	<tr>
-		<th>4.Map Size</th>
-	</tr>
-</thead>
-<tr>
-	<td><%= collection_select :map_size, params[:map_size], Common::MAP_SIZE, :to_s, :humanize, prompt: "- Auto -" rescue nil %></td>
-</tr>
-</table>
+
+<div id="result">
+	<%= hidden_field :s_lon, params[:s_lon], class: "slon" rescue nil %>
+	<%= hidden_field :e_lon, params[:e_lon], class: "elon" rescue nil %>
+	<%= hidden_field :s_lat, params[:s_lat], class: "slat" rescue nil %>
+	<%= hidden_field :e_lat, params[:e_lat], class: "elat" rescue nil %>
+</div>
+
 
 <%= submit_tag "Submit", class: "submit" rescue nil %>
 <% end %>
