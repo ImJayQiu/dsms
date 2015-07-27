@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Listing Ensemble Members</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Fullname</th>
+			<th colspan="3"></th>
+		</tr>
+	</thead>
+
+	<tbody>
+	<% @settings_ensembles.each do |settings_ensemble| %>
+		<tr>
+		<td><%= settings_ensemble.name %></td>
+		<td><%= settings_ensemble.fullname %></td>
+		<td><%= button_to 'Show', settings_ensemble, method: :get %></td>
+		<% if can? :manage, :settings %>
+			<td><%= button_to 'Edit', edit_settings_ensemble_path(settings_ensemble), method: :get %></td>
+		<td><%= button_to 'Del', settings_ensemble, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	<% end %>
+	</tr>
+<% end %>
+	</tbody>
+</table>
+
+<br>
+
+<%= button_to 'Add New Ensemble Member', new_settings_ensemble_path, method: :get %>

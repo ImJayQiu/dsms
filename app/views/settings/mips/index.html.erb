@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Listing Mips</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Fullname</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @settings_mips.each do |settings_mip| %>
+      <tr>
+        <td><%= settings_mip.name %></td>
+        <td><%= settings_mip.fullname %></td>
+        <td><%= button_to 'Show', settings_mip, method: :get %></td>
+		<% if can? :manage, :settings %>
+		<td><%= button_to 'Edit', edit_settings_mip_path(settings_mip), method: :get %></td>
+        <td><%= button_to 'Del', settings_mip, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	<%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= button_to 'New MIP', new_settings_mip_path, method: :get %>

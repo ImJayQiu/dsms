@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @settings_variable.name %>
+</p>
+
+<p>
+  <strong>Fullname:</strong>
+  <%= @settings_variable.fullname %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @settings_variable.description %>
+</p>
+
+<%= button_to 'Back', settings_variables_path, method: :get %>

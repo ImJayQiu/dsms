@@ -1,0 +1,2 @@
+module Settings::EnsemblesHelper
+end

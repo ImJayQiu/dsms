@@ -85,16 +85,16 @@ class Cmip5sController < ApplicationController
 
 		file = @dataset.file.path # find path of nc file
 
+		@file_path = file
+		paramater = Cdo.showname(input: file)
 
 		############ cut file by selected location ###################
-		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc')
+		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
 		###############################################################
 
 		############# cut file by selected date range ##################
-		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat)
+		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/tmp_nc/#{current_user.id}_#{Date.current}_#{paramater[0]}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc", options:'-f nc4')
 		##############################################################
-
-
 
 		@dataset_infon = Cdo.info(input: @sel_data)
 		@var_name = Cdo.showname(input: @sel_data).first.to_s

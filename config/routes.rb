@@ -1,5 +1,20 @@
 Rails.application.routes.draw do
 
+  namespace :settings do
+    resources :ensembles
+  end
+  namespace :settings do
+    resources :experiments
+  end
+  namespace :settings do
+    resources :datamodels
+  end
+  namespace :settings do
+    resources :variables
+  end
+  namespace :settings do
+    resources :mips
+  end
 	resources :datasets
 
 	resources :cmip5s do
@@ -15,6 +30,8 @@ Rails.application.routes.draw do
 			get :info
 			get :season
 			get :mym
+			get :yearly
+			get :map
 		end
 	end
 

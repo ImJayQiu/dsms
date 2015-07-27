@@ -1,0 +1,38 @@
+<% if can? :manage, :settings %>
+	<%= form_for(@settings_datamodel) do |f| %>
+	<% if @settings_datamodel.errors.any? %>
+	<div id="error_explanation">
+	<h2><%= pluralize(@settings_datamodel.errors.count, "error") %> prohibited this settings_datamodel from being saved:</h2>
+
+	<ul>
+		<% @settings_datamodel.errors.full_messages.each do |message| %>
+			<li><%= message %></li>
+	<% end %>
+	</ul>
+</div>
+  <% end %>
+
+<ul>
+	<li>Name: <%= f.text_field :name %></li>
+	<p/>
+	<li>Institute: <%= f.text_field :institute %></li>
+	<p/>
+	<li>Remark: <%= f.text_field :remark %></li>
+	<p/>
+</ul>
+
+<table>
+	<tr>
+		<td>
+			<%= f.submit %>
+		</td>
+		<% end #form %>
+		<td>
+			<%= button_to 'Back', settings_datamodels_path, method: :get %>
+		</td>
+	</tr>
+</table>
+
+<%else%>
+	Access Denied !
+<% end #can %>

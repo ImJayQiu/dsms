@@ -1,0 +1,38 @@
+<% if can? :manage, :settings %>
+
+	<%= form_for(@settings_mip) do |f| %>
+	<% if @settings_mip.errors.any? %>
+	<div id="error_explanation">
+	<h2><%= pluralize(@settings_mip.errors.count, "error") %> prohibited this settings_mip from being saved:</h2>
+
+	<ul>
+		<% @settings_mip.errors.full_messages.each do |message| %>
+			<li><%= message %></li>
+	<% end %>
+	</ul>
+</div>
+  <% end %>
+
+<ul>
+	<li>Name: <%= f.text_field :name %></li>
+	<p/>
+	<li>Full Name: <%= f.text_field :fullname %></li>
+	<p/>
+	<li>Description: <%= f.text_field :description %></li>
+	<p/>
+</ul>
+<table>
+	<tr>
+		<td>
+			<%= f.submit %>
+		</td>
+		<% end #form %>
+		<td>
+			<%= button_to 'Back', settings_mips_path, method: :get %>
+		</td>
+	</tr>
+</table>
+
+<%else%>
+	Access Denied !
+<%end #can%>

@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<table>
+	<tr>
+		<td><strong>Name:</strong></td>
+		<td><%= @settings_datamodel.name %></td>
+	</tr>
+
+	<tr>
+		<td><strong>Institute:</strong></td>
+		<td><%= @settings_datamodel.institute %></td>
+	</tr>
+
+	<tr>
+		<td><strong>Remark:</strong></td>
+		<td><%= @settings_datamodel.remark %></td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<td>
+			<%= button_to 'Back', settings_datamodels_path, method: :get %>
+		</td>
+	</tr>
+</table>
