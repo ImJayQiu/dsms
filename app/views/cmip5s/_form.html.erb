@@ -1,12 +1,12 @@
 <%= form_tag({controller: "cmip5s", action: "analysis" }, method: :get) do %>  
-<table>
+	<table>
 	<thead>
 		<tr>
 			<th>1.Select Variable Name</th>
 		</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select :part1, params[:part1], Common::PART1, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
+		<td><%= collection_select(:part1, params[:part1], Settings::Variable.all, :name, :name, {include_blank: "- Select Variable -"} ) rescue nil %></td>
 	</tr>
 </table>
 
@@ -18,7 +18,7 @@
 		</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select :part2, params[:part2], Common::PART2, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
+		<td><%= collection_select(:part2, params[:part2], Settings::Mip.all, :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></td>
 	</tr>
 </table>
 
@@ -30,7 +30,7 @@
 		</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select :part3, params[:part3], Common::PART3, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
+		<td><%= collection_select(:part3, params[:part3], Settings::Datamodel.all, :name, :name, {include_blank: "- Select Model -"} ) rescue nil %></td>
 	</tr>
 </table>
 
@@ -41,7 +41,7 @@
 		</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select :part4, params[:part4], Common::PART4, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
+		<td><%= collection_select(:part4, params[:part4], Settings::Experiment.all, :name, :fullname, {include_blank: "- Select Experiment -"} ) rescue nil %></td>
 	</tr>
 </table>
 
@@ -52,7 +52,18 @@
 		</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select :part5, params[:part5], Common::PART5, :to_s, :humanize, prompt: "-Select-" rescue nil %></td>
+		<td><%= collection_select(:part5, params[:part5], Settings::Ensemble.all, :name, :name, {include_blank: "- Select Ensemble Member -"} ) rescue nil %></td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>6.Select Ensemble Member</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select(:part6, params[:part6], Settings::Temporal.all, :name, :name, {include_blank: "- Select Temporal Subset -"} ) rescue nil %></td>
 	</tr>
 </table>
 
@@ -61,7 +72,7 @@
 <table>
 	<thead>
 		<tr>
-			<th colspan=2>6.Select Date</th>
+			<th colspan=2>7.Select Date</th>
 		</tr>
 	</thead>
 	<tr>

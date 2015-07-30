@@ -3,11 +3,12 @@
 <h2>CMIP5 Data Analysis - Initial Version</h2>
 
 
-<%= @file_path %>
 <p/>
-<%= @sel_data %>
 <p/>
-Map reserved
+<p/>
+<p/>
+<p/>
+Map will be here.
 <%#= render "cmip5s/graphs/map", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_size: @map_size, dataset_h: @dataset_h %>
 <p/>
 Central point of the map: <%= @c_point %>
@@ -44,7 +45,10 @@ Central point of the map: <%= @c_point %>
 			<td>Max Value: <%= @max_set[1..-1].max %></td>
 		</tr>
 		<tr>
-			<td colspan=2 align=center>
+			<td>
+				<%= button_to "Download", root_path+@cdo_output_path.to_s, method: :get %>
+			</td>
+			<td>
 				<div class="buttons">
 					<input type="button" class="data" value="Hide Detail"/>
 				</div>

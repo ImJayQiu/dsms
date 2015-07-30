@@ -1,5 +1,5 @@
+<% if can? :manage, :users %>
 
-<%if can? :manage, :users%>
 	<%= form_for(@user) do |f| %>
 
 	<% if @user.errors.any? %>
@@ -14,32 +14,40 @@
 </div>
   <% end %>
 
-<div class="field">
-	<%= f.label :username %><br>
-	<%= f.text_field :username %>
-</div>
-<div class="field">
-	<%= f.label :email %><br>
-	<%= f.text_field :email %>
-</div>
-<div class="field">
-	<%= f.label :Role %><br />
-	<%= f.collection_select :role, Common::ROLES, :to_s, :humanize %>
-</div>
-<div class="field">
-	<%= f.label :password, "New password" %><br />
-	<%= f.password_field :password, autofocus: true, autocomplete: "off" %>
-</div>
+<table>
 
-<div class="field">
-	<%= f.label :password_confirmation, "Confirm new password" %><br />
-	<%= f.password_field :password_confirmation, autocomplete: "off" %>
-</div>
+	<tr>
+		<td>User Name:</td>
+		<td><%= f.text_field :username %></td>
+	</tr>
+	<tr>
+		<td>E-Mail:</td>
+		<td><%= f.text_field :email %></td>
+	</tr>
+	<tr>
+		<td>Role:</td>
+		<td><%= f.collection_select :role, Common::ROLES, :to_s, :humanize %></td>
+	</tr>
+	<tr>
+		<td>New Password</td>
+		<td><%= f.password_field :password, autofocus: true, autocomplete: "off" %></td>
+	</tr>
+
+	<tr>
+		<td>Confirm New Password</td>
+		<td><%= f.password_field :password_confirmation, autocomplete: "off" %></td>
+	</tr>
+
+</table>
 
 <%= f.hidden_field :reset_password_token %>
 
-<div class="actions">
-	<%= f.submit %>
-</div>
-<% end %>
-<% end %>
+<table>
+	<tr>
+		<td><%= f.submit %></td>
+		<% end #form %>
+		<td><%= button_to 'Back', users_path, method: :get %></td>
+	</tr>
+</table>
+
+<% end #can %>

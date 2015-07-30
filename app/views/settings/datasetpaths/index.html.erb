@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Listing Dataset Root Paths</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th>MIP</th>
+			<th>Path</th>
+			<th colspan="3"></th>
+		</tr>
+	</thead>
+
+	<tbody>
+	<% @settings_datasetpaths.each do |settings_datasetpath| %>
+		<tr>
+		<td><%= settings_datasetpath.name %></td>
+		<td><%= settings_datasetpath.path %></td>
+		<td><%= button_to 'Show', settings_datasetpath, method: :get %></td>
+		<% if can? :manage, :root_path %>
+			<td><%= button_to 'Edit', edit_settings_datasetpath_path(settings_datasetpath), method: :get %></td>
+		<td><%= button_to 'Del', settings_datasetpath, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<% end #can %>
+	</tr>
+<% end %>
+	</tbody>
+</table>
+
+<br>
+
+<% if can? :manage, :root_path %>
+	<%= button_to 'Add New Root Path', new_settings_datasetpath_path, method: :get %>
+<% end #can %>

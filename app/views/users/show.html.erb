@@ -1,17 +1,22 @@
 
 <%if can? :manage, :users%>
-<p id="notice"><%= notice %></p>
+
+	<p id="notice"><%= notice %></p>
 
 <p>
-  <strong>User Name:</strong>
-  <%= @user.username %>
+<strong>User Name:</strong>
+<%= @user.username %>
 </p>
 <p>
-  <strong>Email:</strong>
-  <%= @user.email %>
+<strong>Email:</strong>
+<%= @user.email %>
 </p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<table>
+	<tr>
+		<td><%= button_to 'Edit', edit_user_path(@user), method: :get %></td>
+		<td><%= button_to 'Back', users_path, method: :get %></td>
+	</tr>
+</table>
 
 <% end %>

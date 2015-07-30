@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Listing Temporal Subsets</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Remark</th>
+			<th colspan="3"></th>
+		</tr>
+	</thead>
+
+	<tbody>
+	<% @settings_temporals.each do |settings_temporal| %>
+		<tr>
+		<td><%= settings_temporal.name %></td>
+		<td><%= button_to 'Show', settings_temporal, method: :get %></td>
+		<% if can? :manage, :settings %>
+			<td><%= button_to 'Edit', edit_settings_temporal_path(settings_temporal), method: :get %></td>
+		<td><%= button_to 'Del', settings_temporal, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	<% end %>
+	</tr>
+<% end %>
+	</tbody>
+</table>
+
+<br>
+
+<%= button_to 'Add New Temporal Subset', new_settings_temporal_path, method: :get %>

@@ -8,11 +8,14 @@
 			<div id="menu">
 				<ul>
 					<li><%= link_to "Home", root_url %></li>
+					<%if can? :manage, :settings %>
+						<li><%= link_to "Admin Settings", admin_settings_site_index_path %></li>
+					<% end %>
 					<%if can? :manage, :user%>
 						<li><%= link_to "Users Management", users_path %></li>
 					<% end %>
 					<%if can? :manage, :dataset%>
-						<li><%= link_to "Datasets Management", datasets_path %></li>
+						<!-- li><%#= link_to "Datasets Management", datasets_path %></li -->
 					<% end %>
 
 					<% if user_signed_in? %>

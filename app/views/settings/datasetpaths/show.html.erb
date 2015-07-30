@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<table>
+	<tr>
+		<td><strong>MIP:</strong></td>
+		<td><%= @settings_datasetpath.name %></td>
+	</tr>
+
+	<tr>
+		<td><strong>Path:</strong></td>
+		<td><%= @settings_datasetpath.path %></td>
+	</tr>
+
+	<tr>
+		<td><strong>Remark:</strong></td>
+		<td><%= @settings_datasetpath.remark %></td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<td>
+			<%= button_to 'Back', settings_datasetpaths_path, method: :get %>
+		</td>
+	</tr>
+</table>

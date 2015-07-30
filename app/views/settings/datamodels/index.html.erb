@@ -5,7 +5,7 @@
 	<thead>
 		<tr>
 			<th>Name</th>
-			<th>Institute</th>
+			<th>Standard Name</th>
 			<th colspan="3"></th>
 		</tr>
 	</thead>
@@ -14,7 +14,7 @@
 	<% @settings_datamodels.each do |settings_datamodel| %>
 		<tr>
 		<td><%= settings_datamodel.name %></td>
-		<td><%= settings_datamodel.institute %></td>
+		<td><%= settings_datamodel.stdname %></td>
 		<td><%= button_to 'Show', settings_datamodel, method: :get %></td>
 		<% if can? :manage, :settings %>
 			<td><%= button_to 'Edit', edit_settings_datamodel_path(settings_datamodel), method: :get %></td>

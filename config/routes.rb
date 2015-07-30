@@ -1,20 +1,19 @@
 Rails.application.routes.draw do
 
   namespace :settings do
-    resources :ensembles
+    resources :temporals
   end
   namespace :settings do
-    resources :experiments
+    resources :datasetpaths
   end
-  namespace :settings do
-    resources :datamodels
-  end
-  namespace :settings do
-    resources :variables
-  end
-  namespace :settings do
-    resources :mips
-  end
+	namespace :settings do
+		resources :ensembles
+		resources :experiments
+		resources :datamodels
+		resources :variables
+		resources :mips
+	end
+
 	resources :datasets
 
 	resources :cmip5s do
@@ -39,6 +38,7 @@ Rails.application.routes.draw do
 		collection do
 			get 'index'
 			get 'home' 
+			get 'admin_settings' 
 		end
 	end
 	devise_for :users #, controllers: { sessions: "users/sessions" }

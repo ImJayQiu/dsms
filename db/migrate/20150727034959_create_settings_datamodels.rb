@@ -2,6 +2,7 @@ class CreateSettingsDatamodels < ActiveRecord::Migration
   def change
     create_table :settings_datamodels do |t|
       t.string :name
+      t.string :stdname
       t.string :institute
       t.string :remark
 

@@ -21,17 +21,22 @@ class Cmip5sController < ApplicationController
 		##############################################################
 
 
-		############# File name ######################################
-		part1=params[:part1].first.to_s
-		part2=params[:part2].first.to_s
-		part3=params[:part3].first.to_s
-		part4=params[:part4].first.to_s
-		part5=params[:part5].first.to_s
-		part6='200601-203512'.to_s
-		@file_name = part1+'_'+part2+'_'+part3+'_'+part4+'_'+part5+'_'+part6+'.nc'
-		@dataset = Dataset.where(file_file_name: @file_name.to_s).first
-		#	@file_name = @dataset.file_file_name
+		############# File path and  name ################################
+		var = params[:part1].first.to_s
+		mip = params[:part2].first.to_s
+		model = params[:part3].first.to_s
+		experiment = params[:part4].first.to_s
+		ensemble = params[:part5].first.to_s
+		temporal = params[:part6].first.to_s
 
+		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + ensemble + '_' + temporal + '.nc'
+
+		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
+
+		@experiment_path = Settings::Experiment.where(name: experiment).first.fullname
+		@model_path = Settings::Datamodel.where(name: model).first.stdname
+
+		file = @root_file_path.to_s + '/' + @experiment_path.to_s + '/' + @model_path.to_s + '/' + @file_name.to_s
 		##############################################################
 
 		############# Selected location  #############################
@@ -40,6 +45,7 @@ class Cmip5sController < ApplicationController
 		e_lat = params[:e_lat].first.to_f
 		s_lon = params[:s_lon].first.to_f
 		e_lon = params[:e_lon].first.to_f
+
 		@lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
 		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
 
@@ -83,9 +89,6 @@ class Cmip5sController < ApplicationController
 
 		#################### CDO operations  #########################
 
-		file = @dataset.file.path # find path of nc file
-
-		@file_path = file
 		paramater = Cdo.showname(input: file)
 
 		############ cut file by selected location ###################
@@ -93,7 +96,9 @@ class Cmip5sController < ApplicationController
 		###############################################################
 
 		############# cut file by selected date range ##################
-		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/tmp_nc/#{current_user.id}_#{Date.current}_#{paramater[0]}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc", options:'-f nc4')
+		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{ensemble}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+
+		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
 		##############################################################
 
 		@dataset_infon = Cdo.info(input: @sel_data)

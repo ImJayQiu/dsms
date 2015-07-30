@@ -13,6 +13,8 @@ class SiteController < ApplicationController
 	def home
 	end
 
+	def admin_settings
+	end
 	private 
 
 	def resolve_layout

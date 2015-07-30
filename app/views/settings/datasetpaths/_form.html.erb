@@ -1,0 +1,40 @@
+<% if can? :manage, :settings %>
+
+	<%= form_for(@settings_datasetpath) do |f| %>
+	<% if @settings_datasetpath.errors.any? %>
+	<div id="error_explanation">
+	<h2><%= pluralize(@settings_datasetpath.errors.count, "error") %> prohibited this settings_datasetpath from being saved:</h2>
+
+	<ul>
+		<% @settings_datasetpath.errors.full_messages.each do |message| %>
+			<li><%= message %></li>
+	<% end %>
+	</ul>
+</div>
+  <% end %>
+
+<ul>
+	<li>MIP: <%#= f.text_field :name %>
+<%= f.collection_select(:name, Settings::Mip.all, :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></li>
+	<p/>
+	<li>Path: <%= f.text_field :path %></li>
+	<p/>
+	<li>Remark: <%= f.text_field :remark %></li>
+	<p/>
+</ul>
+
+<table>
+	<tr>
+		<td>
+			<%= f.submit %>
+		</td>
+		<% end #form %>
+		<td>
+			<%= button_to 'Back', settings_datasetpaths_path, method: :get %>
+		</td>
+	</tr>
+</table>
+
+<%else%>
+	Access Denied !
+<% end #can %>

@@ -8,6 +8,17 @@ class Ability
 		if user.role == "admin"
 			can :manage, :all
 		end
+
+		if user.role == "super"
+			can :manage, :setting
+			can :manage, :root_path
+			can :manage, :analysis
+		end
+
+		if user.role == "normal"
+			can :manage, :analysis
+		end
+
 		#
 		# The first argument to `can` is the action you are giving the user 
 		# permission to do.

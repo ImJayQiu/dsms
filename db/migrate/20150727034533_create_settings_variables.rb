@@ -3,6 +3,7 @@ class CreateSettingsVariables < ActiveRecord::Migration
     create_table :settings_variables do |t|
       t.string :name
       t.string :fullname
+      t.string :unit
       t.string :description
 
       t.timestamps null: false
