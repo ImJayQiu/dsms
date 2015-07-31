@@ -32,11 +32,10 @@ class Cmip5sController < ApplicationController
 		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + ensemble + '_' + temporal + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
-		@var_path = var
 		@experiment_path = Settings::Experiment.where(name: experiment).first.fullname
 		@model_path = Settings::Datamodel.where(name: model).first.stdname
 
-		file = @root_file_path.to_s + '/' + @model_path.to_s +'/' + @var_path.to_s + '/' + @experiment_path.to_s + '/' + @file_name.to_s
+		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
 		##############################################################
 
 		############# Selected location  #############################
