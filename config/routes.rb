@@ -1,14 +1,10 @@
 Rails.application.routes.draw do
 
-  namespace :settings do
-    resources :temporals
-  end
-  namespace :settings do
-    resources :datasetpaths
-  end
 	namespace :settings do
 		resources :ensembles
 		resources :experiments
+		resources :datasetpaths
+		resources :temporals
 		resources :datamodels
 		resources :variables
 		resources :mips
@@ -18,7 +14,10 @@ Rails.application.routes.draw do
 
 	resources :cmip5s do
 		collection do
-			get :analysis
+			get :daily
+			get :monthly
+			get :daily_analysis
+			get :monthly_analysis
 			get :info
 		end
 	end

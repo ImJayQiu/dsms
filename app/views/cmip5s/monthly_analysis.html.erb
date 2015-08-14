@@ -1,0 +1,66 @@
+
+<p id="notice"><%= notice %></p>
+<h2>CMIP5 Data Analysis - Monthly</h2>
+
+
+<p/>
+<p/>
+<p/>
+<p/>
+<p/>
+Map will be here.
+<%#= render "cmip5s/graphs/map", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_size: @map_size, dataset_h: @dataset_h %>
+<p/>
+Central point of the map: <%= @c_point %>
+<%= render "cmip5s/graphs/default" %>
+<p/>
+<table>
+	<thead>
+		<tr>
+			<th>Basic Information of <%= @file_name.humanize%></th>
+			<th>
+				<div class="buttons">
+					<input type="button" class="data" value="Show Detail"/>
+				</div>
+			</th>
+		</tr>
+	</thead>
+</table>
+
+<p/>
+<div class="content_data" style="display:none" >
+	<table>
+		<tbody>
+		<tr>
+			<td>Variable: <%= @var_std_name.humanize %></td>
+			<td>Date Range: <%= @sdate.strftime("%Y-%m") %>--<%= @edate.strftime("%Y-%m") %></td>
+		</tr>
+
+		<tr>
+			<td>Longitude Range: <%= @lon_r %></td>
+			<td>Latitude Range: <%= @lat_r %></td>
+		</tr>
+		<tr>
+			<td>Min Value: <%= @min_set[1..-1].min %></td>
+			<td>Max Value: <%= @max_set[1..-1].max %></td>
+		</tr>
+		<tr>
+			<td>
+				<%= button_to "Download", root_path+@cdo_output_path.to_s, method: :get %>
+			</td>
+			<td>
+				<div class="buttons">
+					<input type="button" class="data" value="Hide Detail"/>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<p/>
+<%= render "cmip5s/form_hide" %>
+<p/>
+
+
+<%#= button_to 'Back', cmip5s_path, method: :get %>

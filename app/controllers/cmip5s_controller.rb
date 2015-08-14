@@ -11,7 +11,7 @@ class Cmip5sController < ApplicationController
 	end
 
 
-	def analysis
+	def daily_analysis
 
 		################ date range ##################################
 
@@ -23,7 +23,7 @@ class Cmip5sController < ApplicationController
 
 		############# File path and  name ################################
 		var = params[:part1].first.to_s
-		mip = params[:part2].first.to_s
+		mip = 'day' 
 		model = params[:part3].first.to_s
 		experiment = params[:part4].first.to_s
 		ensemble = params[:part5].first.to_s
