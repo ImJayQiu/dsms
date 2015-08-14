@@ -123,6 +123,122 @@ class Cmip5sController < ApplicationController
 
 	end
 
+
+
+
+	def monthly_analysis
+
+		################ date range ##################################
+
+		@sdate = params[:s_date].first.to_date.at_beginning_of_month
+		@edate = params[:e_date].first.to_date.end_of_month
+
+		##############################################################
+
+
+		############# File path and  name ################################
+		var = params[:part1].first.to_s
+		mip = 'Amon' 
+		model = params[:part3].first.to_s
+		experiment = params[:part4].first.to_s
+		ensemble = params[:part5].first.to_s
+		temporal = params[:part6].first.to_s
+
+		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + ensemble + '_' + temporal + '.nc'
+
+		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
+		@experiment_path = Settings::Experiment.where(name: experiment).first.fullname
+		@model_path = Settings::Datamodel.where(name: model).first.stdname
+
+		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
+		##############################################################
+
+		############# Selected location  #############################
+
+		s_lat = params[:s_lat].first.to_f
+		e_lat = params[:e_lat].first.to_f
+		s_lon = params[:s_lon].first.to_f
+		e_lon = params[:e_lon].first.to_f
+
+		@lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
+		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
+
+		############### auto map size #################################
+=begin
+		if params[:map_size].first.blank?
+			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
+			if map_size < 1
+				@map_size = 1
+			else
+				@map_size = map_size
+			end
+		else
+			@map_size = params[:map_size].first.to_i
+		end
+=end
+		################################################################
+
+		################## find centre point ###########################
+		c_lon = (e_lon - s_lon)/2 + s_lon
+		c_lat = (e_lat - s_lat)/2 + s_lat
+		@c_point = [c_lon,c_lat]
+		##############################################################
+
+		################ range of lon & lat ###########################
+		r_lat = s_lat..e_lat
+		r_lon = s_lon..e_lon
+
+		@area = [
+			[s_lon,s_lat],
+			[e_lon,s_lat],
+			[e_lon,e_lat],
+			[s_lon,e_lat],
+			[s_lon,s_lat]
+		]
+		############################################################
+
+		#################### date period ###########################
+
+		days = @sdate..@edate
+
+		#################### CDO operations  #########################
+
+		paramater = Cdo.showname(input: file)
+
+		############ cut file by selected location ###################
+		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
+		###############################################################
+
+		############# cut file by selected date range ##################
+		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{ensemble}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+
+		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
+		##############################################################
+
+		@dataset_infon = Cdo.info(input: @sel_data)
+		@var_name = Cdo.showname(input: @sel_data).first.to_s
+		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
+
+		###########################################################
+
+		date = Cdo.showdate(input: @sel_data)
+		@date = date.first.split(" ").to_a
+		#group max min mean
+		@max_set = [] 
+		@min_set = [] 
+		@mean_set = [] 
+		@dataset_infon.each do |i|
+			@min_set << i.split(" ")[8]
+			@mean_set << i.split(" ")[9] 
+			@max_set << i.split(" ")[10] 
+		end 
+		@max_h = Hash[@date.zip(@max_set[1..-1])]
+		@mean_h = Hash[@date.zip(@mean_set[1..-1])]
+		@min_h = Hash[@date.zip(@min_set[1..-1])]
+
+	end
+
+
 	# GET /cmip5s/1
 	# GET /cmip5s/1.json
 	def show
