@@ -6,7 +6,7 @@ class CdoanalysisesController < ApplicationController
 
 	def info
 		@file = params[:dataset]
-		@rate = params[:rate]
+		@rate = params[:rate].to_i
 		@unit = params[:unit]
 		@info = Cdo.info(input: @file)
 	end
@@ -15,7 +15,7 @@ class CdoanalysisesController < ApplicationController
 	### multi_year monthly analysis
 	def mym
 		@file = params[:dataset]
-		@rate = params[:rate]
+		@rate = params[:rate].to_i
 		@unit = params[:unit]
 		@ymonmin_f = Cdo.ymonmin(input: @file)
 		@ymonmin = Cdo.info(input: @ymonmin_f)
@@ -25,7 +25,7 @@ class CdoanalysisesController < ApplicationController
 	### Seasonal analysis 
 	def season
 		@file = params[:dataset]
-		@rate = params[:rate]
+		@rate = params[:rate].to_i
 		@unit = params[:unit]
 		@var_std_name = params[:var_std_name]
 		@seasmin_f = Cdo.seasmin(input: @file)
@@ -72,7 +72,7 @@ class CdoanalysisesController < ApplicationController
 
 	def yearly
 		@file = params[:dataset]
-		@rate = params[:rate]
+		@rate = params[:rate].to_i
 		@unit = params[:unit]
 		@var_std_name = params[:var_std_name]
 		@yearmin = Cdo.info(input: Cdo.yearmin(input: @file))
