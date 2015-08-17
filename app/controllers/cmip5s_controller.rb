@@ -251,9 +251,9 @@ class Cmip5sController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.each do |i|
-			@min_set << i.split(" ")[8]
-			@mean_set << i.split(" ")[9] 
-			@max_set << i.split(" ")[10] 
+			@min_set << (i.split(" ")[8].to_i * @rate).to_i
+			@mean_set << (i.split(" ")[9].to_i * @rate).to_i
+			@max_set << (i.split(" ")[10].to_i * @rate).to_i 
 		end 
 		@max_h = Hash[@date.zip(@max_set[1..-1])]
 		@mean_h = Hash[@date.zip(@mean_set[1..-1])]
