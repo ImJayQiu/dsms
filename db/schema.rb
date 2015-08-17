@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150730043936) do
+ActiveRecord::Schema.define(version: 20150817025538) do
 
   create_table "cmip5s", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -33,11 +33,12 @@ ActiveRecord::Schema.define(version: 20150730043936) do
   end
 
   create_table "settings_datamodels", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name",       limit: 50
     t.string   "institute",  limit: 255
     t.string   "remark",     limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.string   "stdname",    limit: 50
   end
 
   create_table "settings_datasetpaths", force: :cascade do |t|
@@ -86,6 +87,8 @@ ActiveRecord::Schema.define(version: 20150730043936) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.string   "unit",        limit: 10
+    t.integer  "c_rate",      limit: 4
+    t.string   "c_unit",      limit: 255
   end
 
   create_table "users", force: :cascade do |t|

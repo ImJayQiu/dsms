@@ -7,6 +7,7 @@ class Cmip5sController < ApplicationController
 
 	# GET /cmip5s
 	# GET /cmip5s.json
+
 	def index
 	end
 
@@ -37,6 +38,17 @@ class Cmip5sController < ApplicationController
 
 		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
 		##############################################################
+
+		############# convert rate & unit ############################
+		
+		@variable_setting = Settings::Variable.where(name: var).first
+		if @variable_setting.c_rate.blank?
+			@rate = 1
+			@unit = @variable_setting.unit
+		else
+			@rate = @variable_setting.c_rate 
+			@unit = @variable_setting.c_unit
+		end
 
 		############# Selected location  #############################
 
@@ -113,9 +125,9 @@ class Cmip5sController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.each do |i|
-			@min_set << i.split(" ")[8]
-			@mean_set << i.split(" ")[9] 
-			@max_set << i.split(" ")[10] 
+			@min_set << (i.split(" ")[8] * @rate).to_i
+			@mean_set << (i.split(" ")[9] * @rate).to_i
+			@max_set << (i.split(" ")[10] * @rate).to_i
 		end 
 		@max_h = Hash[@date.zip(@max_set[1..-1])]
 		@mean_h = Hash[@date.zip(@mean_set[1..-1])]
@@ -152,6 +164,17 @@ class Cmip5sController < ApplicationController
 
 		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
 		##############################################################
+
+		############# convert rate & unit ############################
+		
+		@variable_setting = Settings::Variable.where(name: var).first
+		if @variable_setting.c_rate.blank?
+			@rate = 1
+			@unit = @variable_setting.unit
+		else
+			@rate = @variable_setting.c_rate 
+			@unit = @variable_setting.c_unit
+		end
 
 		############# Selected location  #############################
 

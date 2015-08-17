@@ -69,6 +69,6 @@ class Settings::VariablesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def settings_variable_params
-      params.require(:settings_variable).permit(:name, :fullname, :unit, :description)
+      params.require(:settings_variable).permit(:name, :fullname, :unit, :c_rate, :c_unit, :description)
     end
 end

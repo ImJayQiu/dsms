@@ -59,7 +59,35 @@ Central point of the map: <%= @c_point %>
 </div>
 
 <p/>
-<%= render "cmip5s/form_hide" %>
+<table>
+	<thead>
+		<tr>
+			<th>Dataset Analysis Operations</th>
+			<th>
+				<div class="buttons">
+					<input type="button" class="analysis" value="Show"/>
+				</div>
+			</th>
+		</tr>
+	</thead>
+</table>
+
+<div class="content_analysis" style="display:none" >
+
+
+	<%= render "cmip5s/form_monthly_analysis" %>
+
+	<table>
+		<tr>
+			<td align=center>
+				<div class="buttons">
+					<input type="button" class="analysis" value="Hide Analysis Operators"/>
+				</div>
+
+			</td>
+		</tr>
+	</table>
+</div>
 <p/>
 
 
