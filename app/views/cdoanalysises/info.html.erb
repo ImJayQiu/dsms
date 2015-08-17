@@ -3,14 +3,12 @@
 <button class="btn btn-success">Export to Excel</button></div>
 <p/>
 <table id="t2e" >
-<% @info.first do |info| %>
-	<tr>
-	<td><%= info.split(" ")[2] %></td>
-	<td><%= info.split(" ")[8] %><br/><%= @unit %></td>
-	<td><%= info.split(" ")[9] %><br/><%= @unit %></td>
-	<td><%= info.split(" ")[10] %><br/><%= @unit %></td>
+<tr>
+	<td><%= @info[0].split(" ")[2] %></td>
+	<td><%= @info[0].split(" ")[8] %><br/><%= @unit %></td>
+	<td><%= @info[0].split(" ")[9] %><br/><%= @unit %></td>
+	<td><%= @info[0].split(" ")[10] %><br/><%= @unit %></td>
 </tr>
-<% end %>
 <% @info[1..-1].each do |info| %>
 	<tr>
 	<td><%= info.split(" ")[2].to_i %></td>
