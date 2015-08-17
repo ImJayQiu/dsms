@@ -11,7 +11,7 @@
 	<td><%= info.split(" ")[10] %><br/><%= @unit %></td>
 </tr>
 <% end %>
-<% @info(1..-1).each do |info| %>
+<% @info[1..-1].each do |info| %>
 	<tr>
 	<td><%= info.split(" ")[2].to_i %></td>
 	<td><%= info.split(" ")[8].to_i * @rate %></td>
