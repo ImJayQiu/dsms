@@ -1,23 +1,5 @@
 <h2>Yearly Analysis</h2>
 
-<p/>
-Max:<p/>
-<% @yearmax.each do |max| %>
-	<%= max %><br/>
-<%end%>
-<p/>
-<p/>
-Mean:<p/>
-<% @yearmean.each do |max| %>
-	<%= max %><br/>
-<%end%>
-<p/>
-<p/>
-Min:<p/>
-<% @yearmin.each do |max| %>
-	<%= max %><br/>
-<%end%>
-<p/>
 
 <%= line_chart [
 	{name: "Max of Min", data: @ymax_min_h },
