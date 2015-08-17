@@ -44,9 +44,9 @@ class CdoanalysisesController < ApplicationController
 		@min_min = [] 
 		@mean_min = [] 
 		@seasmin.each do |i|
-			@min_min << (i.split(" ")[8] * @rate).to_i
-			@mean_min << (i.split(" ")[9] * @rate).to_i
-			@max_min << (i.split(" ")[10] * @rate).to_i
+			@min_min << (i.split(" ")[8].to_i * @rate).to_i
+			@mean_min << (i.split(" ")[9].to_i * @rate).to_i
+			@max_min << (i.split(" ")[10].to_i * @rate).to_i
 		end 
 		@max_min_h = Hash[@quarter.zip(@max_min[1..-1])]
 		@mean_min_h = Hash[@quarter.zip(@mean_min[1..-1])]
@@ -58,9 +58,9 @@ class CdoanalysisesController < ApplicationController
 		@min_max = [] 
 		@mean_max = [] 
 		@seasmax.each do |i|
-			@min_max << (i.split(" ")[8] * @rate).to_i
-			@mean_max << (i.split(" ")[9] * @rate).to_i
-			@max_max << (i.split(" ")[10] * @rate).to_i
+			@min_max << (i.split(" ")[8].to_i * @rate).to_i
+			@mean_max << (i.split(" ")[9].to_i * @rate).to_i
+			@max_max << (i.split(" ")[10].to_i * @rate).to_i
 		end 
 		@max_max_h = Hash[@quarter.zip(@max_max[1..-1])]
 		@mean_max_h = Hash[@quarter.zip(@mean_max[1..-1])]
@@ -91,9 +91,9 @@ class CdoanalysisesController < ApplicationController
 		@ymin_min = [] 
 		@ymean_min = [] 
 		@yearmin.each do |i|
-			@ymin_min << (i.split(" ")[8] * @rate).to_i
-			@ymean_min << (i.split(" ")[9] * @rate).to_i
-			@ymax_min << (i.split(" ")[10] * @rate).to_i
+			@ymin_min << (i.split(" ")[8].to_i * @rate).to_i
+			@ymean_min << (i.split(" ")[9].to_i * @rate).to_i
+			@ymax_min << (i.split(" ")[10].to_i * @rate).to_i
 		end 
 		@ymax_min_h = Hash[@year.zip(@ymax_min[1..-1])]
 		@ymean_min_h = Hash[@year.zip(@ymean_min[1..-1])]
@@ -105,9 +105,9 @@ class CdoanalysisesController < ApplicationController
 		@ymin_mean = [] 
 		@ymean_mean = [] 
 		@yearmean.each do |i|
-			@ymin_mean << (i.split(" ")[8] * @rate).to_i
-			@ymean_mean << (i.split(" ")[9] * @rate).to_i
-			@ymax_mean << (i.split(" ")[10] * @rate).to_i
+			@ymin_mean << (i.split(" ")[8].to_i * @rate).to_i
+			@ymean_mean << (i.split(" ")[9].to_i * @rate).to_i
+			@ymax_mean << (i.split(" ")[10].to_i * @rate).to_i
 		end 
 		@ymax_mean_h = Hash[@year.zip(@ymax_mean[1..-1])]
 		@ymean_mean_h = Hash[@year.zip(@ymean_mean[1..-1])]
@@ -120,9 +120,9 @@ class CdoanalysisesController < ApplicationController
 		@ymin_max = [] 
 		@ymean_max = [] 
 		@yearmax.each do |i|
-			@ymin_max << (i.split(" ")[8] * @rate).to_i
-			@ymean_max << (i.split(" ")[9] * @rate).to_i
-			@ymax_max << (i.split(" ")[10] * @rate).to_i
+			@ymin_max << (i.split(" ")[8].to_i * @rate).to_i
+			@ymean_max << (i.split(" ")[9].to_i * @rate).to_i
+			@ymax_max << (i.split(" ")[10].to_i * @rate).to_i
 		end 
 		@ymax_max_h = Hash[@year.zip(@ymax_max[1..-1])]
 		@ymean_max_h = Hash[@year.zip(@ymean_max[1..-1])]

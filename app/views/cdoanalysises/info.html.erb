@@ -5,10 +5,10 @@
 <table id="t2e" >
 <% @info.each do |info| %>
 	<tr>
-	<td><%= info.split(" ")[2] %></td>
-	<td><%= info.split(" ")[8] %></td>
-	<td><%= info.split(" ")[9] %></td>
-	<td><%= info.split(" ")[10] %></td>
+	<td><%= info.split(" ")[2].to_i * @rate %></td>
+	<td><%= info.split(" ")[8].to_i * @rate %></td>
+	<td><%= info.split(" ")[9].to_i * @rate %></td>
+	<td><%= info.split(" ")[10].to_i * @rate %></td>
 </tr>
 <% end %>
 </table>
