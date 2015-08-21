@@ -124,14 +124,14 @@ class Cmip5sController < ApplicationController
 		@max_set = [] 
 		@min_set = [] 
 		@mean_set = [] 
-		@dataset_infon.each do |i|
-			@min_set << (i.split(" ")[8].to_f * @rate).to_f
-			@mean_set << (i.split(" ")[9].to_f * @rate).to_f
-			@max_set << (i.split(" ")[10].to_f * @rate).to_f
+		@dataset_infon.drop(1).each do |i|
+			@min_set << i.split(" ")[8].to_f * @rate
+			@mean_set << i.split(" ")[9].to_f * @rate
+			@max_set << i.split(" ")[10].to_f * @rate
 		end 
-		@max_h = Hash[@date.zip(@max_set[1..-1])]
-		@mean_h = Hash[@date.zip(@mean_set[1..-1])]
-		@min_h = Hash[@date.zip(@min_set[1..-1])]
+		@max_h = Hash[@date.zip(@max_set)]
+		@mean_h = Hash[@date.zip(@mean_set)]
+		@min_h = Hash[@date.zip(@min_set)]
 
 	end
 
@@ -251,9 +251,9 @@ class Cmip5sController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.drop(1).each do |i|
-			@min_set << i.split(" ")[8].to_f*@rate
-			@mean_set << i.split(" ")[9].to_f*@rate
-			@max_set << i.split(" ")[10].to_f*@rate
+			@min_set << i.split(" ")[8].to_f * @rate
+			@mean_set << i.split(" ")[9].to_f * @rate
+			@max_set << i.split(" ")[10].to_f * @rate
 		end 
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
