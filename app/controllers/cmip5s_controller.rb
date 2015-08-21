@@ -43,10 +43,10 @@ class Cmip5sController < ApplicationController
 		
 		@variable_setting = Settings::Variable.where(name: var).first
 		if @variable_setting.c_rate.blank?
-			@rate = 1
+			@rate = 1.to_i
 			@unit = @variable_setting.unit
 		else
-			@rate = @variable_setting.c_rate 
+			@rate = @variable_setting.c_rate.to_f 
 			@unit = @variable_setting.c_unit
 		end
 
@@ -169,10 +169,10 @@ class Cmip5sController < ApplicationController
 		
 		@variable_setting = Settings::Variable.where(name: var).first
 		if @variable_setting.c_rate.blank?
-			@rate = 1
+			@rate = 1.to_i
 			@unit = @variable_setting.unit
 		else
-			@rate = @variable_setting.c_rate 
+			@rate = @variable_setting.c_rate.to_f 
 			@unit = @variable_setting.c_unit
 		end
 
@@ -251,9 +251,9 @@ class Cmip5sController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.drop(1).each do |i|
-			@min_set << (i.split(" ")[8].to_f)*@rate
-			@mean_set << (i.split(" ")[9].to_f)*@rate
-			@max_set << (i.split(" ")[10].to_f)*@rate
+			@min_set << i.split(" ")[8].to_f*@rate
+			@mean_set << i.split(" ")[9].to_f*@rate
+			@max_set << i.split(" ")[10].to_f*@rate
 		end 
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
