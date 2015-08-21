@@ -250,7 +250,7 @@ class Cmip5sController < ApplicationController
 		@max_set = [] 
 		@min_set = [] 
 		@mean_set = [] 
-		@dataset_infon[1..-1].each do |i|
+		@dataset_infon.drop(1).each do |i|
 			@min_set << (i.split(" ")[8].to_f * @rate).to_f
 			@mean_set << (i.split(" ")[9].to_f * @rate).to_f
 			@max_set << (i.split(" ")[10].to_f * @rate).to_f 
