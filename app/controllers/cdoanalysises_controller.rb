@@ -7,6 +7,7 @@ class CdoanalysisesController < ApplicationController
 	def info
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
+		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 		@info = Cdo.info(input: @file)
 	end
@@ -16,6 +17,7 @@ class CdoanalysisesController < ApplicationController
 	def mym
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
+		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 		@ymonmin_f = Cdo.ymonmin(input: @file)
 		@ymonmin = Cdo.info(input: @ymonmin_f)
@@ -26,6 +28,7 @@ class CdoanalysisesController < ApplicationController
 	def season
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
+		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 		@var_std_name = params[:var_std_name]
 		@seasmin_f = Cdo.seasmin(input: @file)
@@ -44,9 +47,9 @@ class CdoanalysisesController < ApplicationController
 		@min_min = [] 
 		@mean_min = [] 
 		@seasmin.each do |i|
-			@min_min << (i.split(" ")[8].to_f * @rate).to_f
-			@mean_min << (i.split(" ")[9].to_f * @rate).to_f
-			@max_min << (i.split(" ")[10].to_f * @rate).to_f
+			@min_min << (i.split(" ")[8].to_f * @rate + @rate2).to_f
+			@mean_min << (i.split(" ")[9].to_f * @rate + @rate2).to_f
+			@max_min << (i.split(" ")[10].to_f * @rate + @rate2).to_f
 		end 
 		@max_min_h = Hash[@quarter.zip(@max_min[1..-1])]
 		@mean_min_h = Hash[@quarter.zip(@mean_min[1..-1])]
@@ -58,9 +61,9 @@ class CdoanalysisesController < ApplicationController
 		@min_max = [] 
 		@mean_max = [] 
 		@seasmax.each do |i|
-			@min_max << (i.split(" ")[8].to_f * @rate).to_f
-			@mean_max << (i.split(" ")[9].to_f * @rate).to_f
-			@max_max << (i.split(" ")[10].to_f * @rate).to_f
+			@min_max << (i.split(" ")[8].to_f * @rate + @rate2).to_f
+			@mean_max << (i.split(" ")[9].to_f * @rate + @rate2).to_f
+			@max_max << (i.split(" ")[10].to_f * @rate +@rate2).to_f
 		end 
 		@max_max_h = Hash[@quarter.zip(@max_max[1..-1])]
 		@mean_max_h = Hash[@quarter.zip(@mean_max[1..-1])]
@@ -73,6 +76,7 @@ class CdoanalysisesController < ApplicationController
 	def yearly
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
+		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 		@var_std_name = params[:var_std_name]
 		@yearmin = Cdo.info(input: Cdo.yearmin(input: @file))
@@ -91,9 +95,9 @@ class CdoanalysisesController < ApplicationController
 		@ymin_min = [] 
 		@ymean_min = [] 
 		@yearmin.each do |i|
-			@ymin_min << (i.split(" ")[8].to_f * @rate).to_f
-			@ymean_min << (i.split(" ")[9].to_f * @rate).to_f
-			@ymax_min << (i.split(" ")[10].to_f * @rate).to_f
+			@ymin_min << (i.split(" ")[8].to_f * @rate + @rate2).to_f
+			@ymean_min << (i.split(" ")[9].to_f * @rate + @rate2).to_f
+			@ymax_min << (i.split(" ")[10].to_f * @rate + @rate2).to_f
 		end 
 		@ymax_min_h = Hash[@year.zip(@ymax_min[1..-1])]
 		@ymean_min_h = Hash[@year.zip(@ymean_min[1..-1])]
@@ -105,9 +109,9 @@ class CdoanalysisesController < ApplicationController
 		@ymin_mean = [] 
 		@ymean_mean = [] 
 		@yearmean.each do |i|
-			@ymin_mean << (i.split(" ")[8].to_f * @rate).to_f
-			@ymean_mean << (i.split(" ")[9].to_f * @rate).to_f
-			@ymax_mean << (i.split(" ")[10].to_f * @rate).to_f
+			@ymin_mean << (i.split(" ")[8].to_f * @rate + @rate2).to_f
+			@ymean_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f
+			@ymax_mean << (i.split(" ")[10].to_f * @rate + @rate2).to_f
 		end 
 		@ymax_mean_h = Hash[@year.zip(@ymax_mean[1..-1])]
 		@ymean_mean_h = Hash[@year.zip(@ymean_mean[1..-1])]
@@ -120,9 +124,9 @@ class CdoanalysisesController < ApplicationController
 		@ymin_max = [] 
 		@ymean_max = [] 
 		@yearmax.each do |i|
-			@ymin_max << (i.split(" ")[8].to_f * @rate).to_f
-			@ymean_max << (i.split(" ")[9].to_f * @rate).to_f
-			@ymax_max << (i.split(" ")[10].to_f * @rate).to_f
+			@ymin_max << (i.split(" ")[8].to_f * @rate + @rate2).to_f
+			@ymean_max << (i.split(" ")[9].to_f * @rate + @rate2).to_f
+			@ymax_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f
 		end 
 		@ymax_max_h = Hash[@year.zip(@ymax_max[1..-1])]
 		@ymean_max_h = Hash[@year.zip(@ymean_max[1..-1])]
