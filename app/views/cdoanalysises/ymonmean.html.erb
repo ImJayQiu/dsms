@@ -1,4 +1,16 @@
-<h2>Information of Dataset</h2>
+
+<h2>Year Month Mean Analysis</h2>
+<%= line_chart [
+	{name: "Max", data: @max_ymmean_h },
+	{name: "Min", data: @min_ymmean_h },
+	{name: "Mean", data: @mean_ymmean_h }
+], 
+discrete: true, 
+library: {
+	title: {text: "Year Month Mean Analysis"},
+	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
+} %>
+
 <p/>
 <button class="btn btn-success">Export to Excel</button></div>
 <p/>
@@ -12,9 +24,9 @@
 <% @ymonmean[1..-1].each do |m| %>
 	<tr>
 	<td><%= m.split(" ")[2] %></td>
-	<td><%= m.split(" ")[8].to_f * @rate %></td>
-	<td><%= m.split(" ")[9].to_f * @rate %></td>
-	<td><%= m.split(" ")[10].to_f * @rate %></td>
+	<td><%= m.split(" ")[8].to_f * @rate + @rate2 %></td>
+	<td><%= m.split(" ")[9].to_f * @rate + @rate2 %></td>
+	<td><%= m.split(" ")[10].to_f * @rate + @rate2 %></td>
 </tr>
 <% end %>
 </table>
