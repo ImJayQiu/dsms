@@ -9,7 +9,7 @@
 	<td><%= @ymonmean[0].split(" ")[9] %><br/><%= @unit %></td>
 	<td><%= @ymonmean[0].split(" ")[10] %><br/><%= @unit %></td>
 </tr>
-<% @ymonmean.drop(1).each do |m| %>
+<% @ymonmean[1..-1].each do |m| %>
 	<tr>
 	<td><%= m.split(" ")[2] %></td>
 	<td><%= m.split(" ")[8].to_f * @rate %></td>
