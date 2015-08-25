@@ -46,17 +46,17 @@ class Cmip5sController < ApplicationController
 			@rate2 = 0.to_i 
 			@unit = @variable_setting.unit
 		else
-			if @variable_setting.unit == "K" && @variable_setting.c_unit == "C"
-			@rate = 1.to_i
-			@rate2 = @variable_setting.c_rate.to_f 
-			@unit = @variable_setting.c_unit
+			if @variable_setting.unit == "K" && @variable_setting.c_unit == "°C"
+				@rate = 1.to_i
+				@rate2 = @variable_setting.c_rate.to_f 
+				@unit = @variable_setting.c_unit
 			else
-			@rate = @variable_setting.c_rate.to_f 
-			@rate2 = 0.to_i 
-			@unit = @variable_setting.c_unit
+				@rate = @variable_setting.c_rate.to_f 
+				@rate2 = 0.to_i 
+				@unit = @variable_setting.c_unit
 			end
 		end
-		
+
 		############# Selected location  #############################
 
 		s_lat = params[:s_lat].first.to_f
@@ -173,21 +173,21 @@ class Cmip5sController < ApplicationController
 		##############################################################
 
 		############# convert rate & unit ############################
-		
+
 		@variable_setting = Settings::Variable.where(name: var).first
 		if @variable_setting.c_rate.blank?
 			@rate = 1.to_i
 			@rate2 = 0.to_i 
 			@unit = @variable_setting.unit
 		else
-			if @variable_setting.unit == "K" && @variable_setting.c_unit == "C"
-			@rate = 1.to_i
-			@rate2 = @variable_setting.c_rate.to_f 
-			@unit = @variable_setting.c_unit
+			if @variable_setting.unit == "K" && @variable_setting.c_unit == "°C"
+				@rate = 1.to_i
+				@rate2 = @variable_setting.c_rate.to_f 
+				@unit = @variable_setting.c_unit
 			else
-			@rate = @variable_setting.c_rate.to_f 
-			@rate2 = 0.to_i 
-			@unit = @variable_setting.c_unit
+				@rate = @variable_setting.c_rate.to_f 
+				@rate2 = 0.to_i 
+				@unit = @variable_setting.c_unit
 			end
 		end
 
