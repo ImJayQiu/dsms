@@ -17,7 +17,8 @@ class CdoanalysisesController < ApplicationController
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
-		@ymonmean = Cdo.ymonmean(input: @file)
+		@ymonmean_f = Cdo.ymonmean(input: @file)
+		@ymonmean = Cdo.info(input: @ymonmean_f)
 	end
 
 
