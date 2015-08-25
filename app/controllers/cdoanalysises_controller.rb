@@ -145,22 +145,19 @@ class CdoanalysisesController < ApplicationController
 		@var_std_name = params[:var_std_name]
 		@ymonmean_f = Cdo.ymonmean(input: @file)
 		@ymonmean = Cdo.info(input: @ymonmean_f)
-		############### show month ##################
-		#@months = Cdo.showmon(input: @file)
-		@months = [1..12].to_a 
-		####################################
 		####### year month mean group ###############  
 		@max_ymmean = [] 
 		@min_ymmean = [] 
 		@mean_ymmean = [] 
-		@ymonmean.each do |i|
+		@ymonmean.drop(1).each do |i|
+			@months << i.split(" ")[2].to_date
 			@min_ymmean << (i.split(" ")[8].to_f * @rate + @rate2).to_f
 			@mean_ymmean << (i.split(" ")[9].to_f * @rate + @rate2).to_f
 			@max_ymmean << (i.split(" ")[10].to_f * @rate + @rate2).to_f
 		end 
-		@max_ymmean_h = Hash[@months.zip(@max_ymmean[1..-1])]
-		@mean_ymmean_h = Hash[@months.zip(@mean_ymmean[1..-1])]
-		@min_ymmean_h = Hash[@months.zip(@min_ymmean[1..-1])]
+		@max_ymmean_h = Hash[@months.zip(@max_ymmean)]
+		@mean_ymmean_h = Hash[@months.zip(@mean_ymmean)]
+		@min_ymmean_h = Hash[@months.zip(@min_ymmean)]
 		####################################################
 
 	end
