@@ -34,4 +34,38 @@
 		</td>
 	</tr>
 
+	<tr>
+		<td>
+			<%= form_tag({controller: "cdoanalysises", action: "ymonmean" }, target: '_blank', method: :get) do %>  
+				<%= hidden_field_tag :dataset, @sel_data %>
+			<%= hidden_field_tag :var_std_name, @var_std_name %>
+			<%= hidden_field_tag :rate, @rate %>
+			<%= hidden_field_tag :rate2, @rate2 %>
+			<%= hidden_field_tag :unit, @unit %>
+			<%= submit_tag "Monthly Mean", class: "submit" %>
+		<% end %>
+		</td>
+
+		<td>
+			<%= form_tag({controller: "cdoanalysises", action: "season" }, target: '_blank' , method: :get) do %>  
+				<%= hidden_field_tag :dataset, @sel_data  %>
+			<%= hidden_field_tag :var_std_name, @var_std_name %>
+			<%= hidden_field_tag :rate, @rate %>
+			<%= hidden_field_tag :rate2, @rate2 %>
+			<%= hidden_field_tag :unit, @unit %>
+			<%= submit_tag "Seasonal Analysis", class: "submit"  %>
+		<% end %>
+		</td>
+
+		<td>
+			<%= form_tag({controller: "cdoanalysises", action: "yearly" }, target: '_blank' , method: :get) do %>  
+				<%= hidden_field_tag :dataset, @sel_data  %>
+			<%= hidden_field_tag :var_std_name, @var_std_name %>
+			<%= hidden_field_tag :rate, @rate %>
+			<%= hidden_field_tag :rate2, @rate2 %>
+			<%= hidden_field_tag :unit, @unit %>
+			<%= submit_tag "Yearly Analysis", class: "submit"  %>
+		<% end %>
+		</td>
+	</tr>
 </table>

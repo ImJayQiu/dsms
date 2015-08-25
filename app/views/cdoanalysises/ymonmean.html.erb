@@ -1,0 +1,35 @@
+<h2>Information of Dataset</h2>
+<p/>
+<button class="btn btn-success">Export to Excel</button></div>
+<p/>
+<table id="t2e" >
+<tr>
+	<td><%= @ymonmean[0].split(" ")[2] %></td>
+	<td><%= @ymonmean[0].split(" ")[8] %><br/><%= @unit %></td>
+	<td><%= @ymonmean[0].split(" ")[9] %><br/><%= @unit %></td>
+	<td><%= @ymonmean[0].split(" ")[10] %><br/><%= @unit %></td>
+</tr>
+<% @ymonmean.drop(1).each do |m| %>
+	<tr>
+	<td><%= m.split(" ")[2] %></td>
+	<td><%= m.split(" ")[8].to_f * @rate %></td>
+	<td><%= m.split(" ")[9].to_f * @rate %></td>
+	<td><%= m.split(" ")[10].to_f * @rate %></td>
+</tr>
+<% end %>
+</table>
+
+<script>
+
+$(function() {
+		$("button").click(function(){
+			$("#t2e").table2excel({
+exclude: ".noExl",
+name: "Year_Month_Mean",
+filename: "Year_Month_Mean"
+}); 
+			});
+		});
+
+
+</script>

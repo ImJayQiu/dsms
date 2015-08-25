@@ -12,6 +12,14 @@ class CdoanalysisesController < ApplicationController
 		@info = Cdo.info(input: @file)
 	end
 
+	def ymonmean 
+		@file = params[:dataset]
+		@rate = params[:rate].to_f
+		@rate2 = params[:rate2].to_f
+		@unit = params[:unit]
+		@ymonmean = Cdo.ymonmean(input: @file)
+	end
+
 
 	### multi_year monthly analysis
 	def mym

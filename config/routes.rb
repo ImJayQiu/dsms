@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 			get :mym
 			get :yearly
 			get :map
+			get :ymonmean
 		end
 	end
 
