@@ -146,7 +146,7 @@ class CdoanalysisesController < ApplicationController
 		@ymonmean = Cdo.info(input: @ymonmean_f)
 	end
 	############### show month ##################
-	@months = Cdo.showmon(input: @file).split(" ")
+	@months = Cdo.showmon(input: @file)
 	####################################
 	####### year month mean group ###############  
 	@max_ymmean = [] 
