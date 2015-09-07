@@ -1,5 +1,6 @@
 require "cdo"
 require "gsl"
+require "rinruby"
 
 class Cmip5sController < ApplicationController
 
@@ -8,9 +9,11 @@ class Cmip5sController < ApplicationController
 	# GET /cmip5s
 	# GET /cmip5s.json
 
-	def index
+	def daily 
 	end
 
+	def monthly 
+	end
 
 	def daily_analysis
 
@@ -144,7 +147,6 @@ class Cmip5sController < ApplicationController
 
 
 
-
 	def monthly_analysis
 
 		################ date range ##################################
@@ -171,6 +173,7 @@ class Cmip5sController < ApplicationController
 
 		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
 		##############################################################
+
 
 		############# convert rate & unit ############################
 
@@ -274,6 +277,20 @@ class Cmip5sController < ApplicationController
 		@mean_h = Hash[@date.zip(@mean_set)]
 		@min_h = Hash[@date.zip(@min_set)]
 
+		################ R esd ploting ####################
+		R.var = var.to_s
+		R.file_path = Rails.root.join("public", "#{@cdo_output_path}").to_s
+		R.image_path = Rails.root.join("public", "#{@cdo_output_path}.png").to_s
+		R.eval "library(esd)"
+		R.eval "gcm <- retrieve.ncdf4(ncfile = file_path, param = 'auto' , plot=TRUE)"
+		R.eval("png(filename=image_path)")
+		R.eval "map(gcm,projection='sphere')"
+		R.eval("dev.off()")
+		#	/home/jay/Projects/dsms/public/tmp_nc
+		#@cdo_output_path
+		#R.eval "gcm <-retrieve(ncfile='/home/jay/Projects/dsms/public/tmp_nc/hfss_Amon_CanCM4_rcp45_r1i1p1_2006-01-01_2012-12-31_lon_64.335938_117.246094_lat_-2.635789_31.353637.nc',param='hfss',plot=TRUE)"
+		#R.eval "gcm <-retrieve(ncfile=#{Rails.root.join('public', @cdo_output_path)}, param=#{var}, plot=TRUE)"
+		##########################################################
 	end
 
 

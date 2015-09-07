@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'rinruby', '~> 2.0.3'
+
 # map library
 #gem "leaflet-rails"
 
