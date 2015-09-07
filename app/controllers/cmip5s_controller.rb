@@ -13,6 +13,15 @@ class Cmip5sController < ApplicationController
 	end
 
 	def monthly 
+=begin
+		R.image_path = Rails.root.join("public", "tmp_nc", "rlus.png").to_s
+		R.file_path = Rails.root.join("public","tmp_nc","rlus.nc").to_s
+		R.eval "library(esd)"
+		R.eval "gcm <- retrieve.ncdf(ncfile = file_path, param='auto', plot=TRUE)"
+		R.eval "png(filename=image_path)"
+		R.eval "map(gcm,projection='lonlat')"
+		R.eval "dev.off()"
+=end
 	end
 
 	def daily_analysis
@@ -85,63 +94,63 @@ class Cmip5sController < ApplicationController
 =end
 		################################################################
 
-		################## find centre point ###########################
-		c_lon = (e_lon - s_lon)/2 + s_lon
-		c_lat = (e_lat - s_lat)/2 + s_lat
-		@c_point = [c_lon,c_lat]
-		##############################################################
+	################## find centre point ###########################
+	c_lon = (e_lon - s_lon)/2 + s_lon
+	c_lat = (e_lat - s_lat)/2 + s_lat
+	@c_point = [c_lon,c_lat]
+	##############################################################
 
-		################ range of lon & lat ###########################
-		r_lat = s_lat..e_lat
-		r_lon = s_lon..e_lon
+	################ range of lon & lat ###########################
+	r_lat = s_lat..e_lat
+	r_lon = s_lon..e_lon
 
-		@area = [
-			[s_lon,s_lat],
-			[e_lon,s_lat],
-			[e_lon,e_lat],
-			[s_lon,e_lat],
-			[s_lon,s_lat]
-		]
-		############################################################
+	@area = [
+		[s_lon,s_lat],
+		[e_lon,s_lat],
+		[e_lon,e_lat],
+		[s_lon,e_lat],
+		[s_lon,s_lat]
+	]
+	############################################################
 
-		#################### date period ###########################
+	#################### date period ###########################
 
-		days = @sdate..@edate
+	days = @sdate..@edate
 
-		#################### CDO operations  #########################
+	#################### CDO operations  #########################
 
-		paramater = Cdo.showname(input: file)
+	paramater = Cdo.showname(input: file)
 
-		############ cut file by selected location ###################
-		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
-		###############################################################
+	############ cut file by selected location ###################
+	sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
+	###############################################################
 
-		############# cut file by selected date range ##################
-		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{ensemble}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+	############# cut file by selected date range ##################
+	@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{ensemble}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
 
-		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
-		##############################################################
+	@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
+	##############################################################
 
-		@dataset_infon = Cdo.info(input: @sel_data)
-		@var_name = Cdo.showname(input: @sel_data).first.to_s
-		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
+	@dataset_infon = Cdo.info(input: @sel_data)
+	@var_name = Cdo.showname(input: @sel_data).first.to_s
+	@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
 
-		###########################################################
+	###########################################################
 
-		date = Cdo.showdate(input: @sel_data)
-		@date = date.first.split(" ").to_a
-		#group max min mean
-		@max_set = [] 
-		@min_set = [] 
-		@mean_set = [] 
-		@dataset_infon.drop(1).each do |i|
-			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f
-			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f
-			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f
-		end 
-		@max_h = Hash[@date.zip(@max_set)]
-		@mean_h = Hash[@date.zip(@mean_set)]
-		@min_h = Hash[@date.zip(@min_set)]
+	date = Cdo.showdate(input: @sel_data)
+	@date = date.first.split(" ").to_a
+	#group max min mean
+	@max_set = [] 
+	@min_set = [] 
+	@mean_set = [] 
+	@dataset_infon.drop(1).each do |i|
+		@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f
+		@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f
+		@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f
+	end 
+	@max_h = Hash[@date.zip(@max_set)]
+	@mean_h = Hash[@date.zip(@mean_set)]
+	@min_h = Hash[@date.zip(@min_set)]
 
 	end
 
@@ -279,17 +288,21 @@ class Cmip5sController < ApplicationController
 
 		################ R esd ploting ####################
 		R.var = var.to_s
-		R.file_path = Rails.root.join("public", "#{@cdo_output_path}").to_s
-		R.image_path = Rails.root.join("public", "#{@cdo_output_path}.png").to_s
+		R.file_path = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
+		R.image_path = Rails.root.join("public", "#{@cdo_output_path.to_s}.png").to_s
 		R.eval "library(esd)"
-		R.eval "gcm <- retrieve.ncdf4(ncfile = file_path, param = 'auto' , plot=TRUE)"
-		R.eval("png(filename=image_path)")
-		R.eval "map(gcm,projection='sphere')"
-		R.eval("dev.off()")
-		#	/home/jay/Projects/dsms/public/tmp_nc
-		#@cdo_output_path
-		#R.eval "gcm <-retrieve(ncfile='/home/jay/Projects/dsms/public/tmp_nc/hfss_Amon_CanCM4_rcp45_r1i1p1_2006-01-01_2012-12-31_lon_64.335938_117.246094_lat_-2.635789_31.353637.nc',param='hfss',plot=TRUE)"
-		#R.eval "gcm <-retrieve(ncfile=#{Rails.root.join('public', @cdo_output_path)}, param=#{var}, plot=TRUE)"
+		R.eval "gcm <- retrieve.ncdf(ncfile = file_path, param = var, plot = TRUE)"
+		R.eval "png(filename=image_path)"
+		R.eval "map(gcm,projection='lonlat')"
+		R.eval "dev.off()"
+
+		#/home/jay/Projects/dsms/public/tmp_nc
+		#R.image_path=Rails.root.join("public", "tmp_nc", "sample.png").to_s
+		#R.eval("numbers <- c(12,34,56,20,44,65)")
+		#R.eval("png(filename=image_path)")
+		#R.eval("plot(numbers)")
+		#R.eval("dev.off()")
+
 		##########################################################
 	end
 
