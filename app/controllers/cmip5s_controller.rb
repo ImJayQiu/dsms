@@ -10,7 +10,7 @@ class Cmip5sController < ApplicationController
 	# GET /cmip5s.json
 
 	def checkfiles
-		@files = Dir["/CLIMDATA/CMIP5/**/*"].to_a
+		@files = Dir["/CLIMDATA/CMIP5/**/*.nc"].to_a
 	end
 
 	def daily 
