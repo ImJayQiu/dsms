@@ -9,6 +9,10 @@ class Cmip5sController < ApplicationController
 	# GET /cmip5s
 	# GET /cmip5s.json
 
+	def checkfiles
+		@files = Dir["/CLIMDATA/CMIP5/**/*"].to_a
+	end
+
 	def daily 
 	end
 
@@ -94,63 +98,63 @@ class Cmip5sController < ApplicationController
 =end
 		################################################################
 
-	################## find centre point ###########################
-	c_lon = (e_lon - s_lon)/2 + s_lon
-	c_lat = (e_lat - s_lat)/2 + s_lat
-	@c_point = [c_lon,c_lat]
-	##############################################################
+		################## find centre point ###########################
+		c_lon = (e_lon - s_lon)/2 + s_lon
+		c_lat = (e_lat - s_lat)/2 + s_lat
+		@c_point = [c_lon,c_lat]
+		##############################################################
 
-	################ range of lon & lat ###########################
-	r_lat = s_lat..e_lat
-	r_lon = s_lon..e_lon
+		################ range of lon & lat ###########################
+		r_lat = s_lat..e_lat
+		r_lon = s_lon..e_lon
 
-	@area = [
-		[s_lon,s_lat],
-		[e_lon,s_lat],
-		[e_lon,e_lat],
-		[s_lon,e_lat],
-		[s_lon,s_lat]
-	]
-	############################################################
+		@area = [
+			[s_lon,s_lat],
+			[e_lon,s_lat],
+			[e_lon,e_lat],
+			[s_lon,e_lat],
+			[s_lon,s_lat]
+		]
+		############################################################
 
-	#################### date period ###########################
+		#################### date period ###########################
 
-	days = @sdate..@edate
+		days = @sdate..@edate
 
-	#################### CDO operations  #########################
+		#################### CDO operations  #########################
 
-	paramater = Cdo.showname(input: file)
+		paramater = Cdo.showname(input: file)
 
-	############ cut file by selected location ###################
-	sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
-	###############################################################
+		############ cut file by selected location ###################
+		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
+		###############################################################
 
-	############# cut file by selected date range ##################
-	@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{ensemble}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+		############# cut file by selected date range ##################
+		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{ensemble}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
 
-	@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
-	##############################################################
+		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
+		##############################################################
 
-	@dataset_infon = Cdo.info(input: @sel_data)
-	@var_name = Cdo.showname(input: @sel_data).first.to_s
-	@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
+		@dataset_infon = Cdo.info(input: @sel_data)
+		@var_name = Cdo.showname(input: @sel_data).first.to_s
+		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
 
-	###########################################################
+		###########################################################
 
-	date = Cdo.showdate(input: @sel_data)
-	@date = date.first.split(" ").to_a
-	#group max min mean
-	@max_set = [] 
-	@min_set = [] 
-	@mean_set = [] 
-	@dataset_infon.drop(1).each do |i|
-		@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f
-		@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f
-		@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f
-	end 
-	@max_h = Hash[@date.zip(@max_set)]
-	@mean_h = Hash[@date.zip(@mean_set)]
-	@min_h = Hash[@date.zip(@min_set)]
+		date = Cdo.showdate(input: @sel_data)
+		@date = date.first.split(" ").to_a
+		#group max min mean
+		@max_set = [] 
+		@min_set = [] 
+		@mean_set = [] 
+		@dataset_infon.drop(1).each do |i|
+			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f
+			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f
+			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f
+		end 
+		@max_h = Hash[@date.zip(@max_set)]
+		@mean_h = Hash[@date.zip(@mean_set)]
+		@min_h = Hash[@date.zip(@min_set)]
 
 	end
 

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
 	resources :cmip5s do
 		collection do
+			get :checkfiles
 			get :daily
 			get :monthly
 			get :daily_analysis
