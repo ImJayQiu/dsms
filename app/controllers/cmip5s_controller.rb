@@ -10,7 +10,11 @@ class Cmip5sController < ApplicationController
 	# GET /cmip5s.json
 
 	def checkfiles
-		@files = Dir["/CLIMDATA/CMIP5/**/*.nc"].to_a
+		@files = Dir["/CLIMDATA/CMIP5/MONTHLY/**/*.nc"]
+		@models = Settings::Datamodel.all
+		@ensembles = Settings::Ensemble.all
+		@exps = Settings::Experiment.all
+		@vars = Settings::Variable.all
 	end
 
 	def daily 
@@ -156,6 +160,25 @@ class Cmip5sController < ApplicationController
 		@mean_h = Hash[@date.zip(@mean_set)]
 		@min_h = Hash[@date.zip(@min_set)]
 
+		################ R esd ploting ####################
+		R.var = var.to_s
+		R.file_path = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
+		R.image_path = Rails.root.join("public", "#{@cdo_output_path.to_s}.png").to_s
+		R.eval "library(esd)"
+		R.eval "gcm <- retrieve.ncdf(ncfile = file_path, param = var, plot = TRUE)"
+		R.eval "png(filename=image_path)"
+		R.eval "map(gcm,projection='lonlat')"
+		R.eval "dev.off()"
+
+		#/home/jay/Projects/dsms/public/tmp_nc
+		#R.image_path=Rails.root.join("public", "tmp_nc", "sample.png").to_s
+		#R.eval("numbers <- c(12,34,56,20,44,65)")
+		#R.eval("png(filename=image_path)")
+		#R.eval("plot(numbers)")
+		#R.eval("dev.off()")
+
+		##########################################################
+	
 	end
 
 
