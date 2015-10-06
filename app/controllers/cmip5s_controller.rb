@@ -134,7 +134,7 @@ class Cmip5sController < ApplicationController
 		###############################################################
 
 		############# cut file by selected date range ##################
-		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{ensemble}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
 
 		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
 		##############################################################
@@ -198,10 +198,10 @@ class Cmip5sController < ApplicationController
 		mip = 'Amon' 
 		model = params[:part3].first.to_s
 		experiment = params[:part4].first.to_s
-		ensemble = params[:part5].first.to_s
-		temporal = params[:part6].first.to_s
+#		ensemble = params[:part5].first.to_s
+#		temporal = params[:part6].first.to_s
 
-		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + ensemble + '_' + temporal + '.nc'
+		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
 		@experiment_path = Settings::Experiment.where(name: experiment).first.fullname
@@ -287,7 +287,7 @@ class Cmip5sController < ApplicationController
 		###############################################################
 
 		############# cut file by selected date range ##################
-		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{ensemble}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
 
 		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
 		##############################################################

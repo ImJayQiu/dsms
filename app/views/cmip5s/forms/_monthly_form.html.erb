@@ -34,34 +34,13 @@
 	</tr>
 </table>
 
-<table>
-	<thead>
-		<tr>
-			<th>4.Select Ensemble Member</th>
-		</tr>
-	</thead>
-	<tr>
-		<td><%= collection_select(:part5, params[:part5], Settings::Ensemble.all, :name, :name, {include_blank: "- Select Ensemble Member -"} ) rescue nil %></td>
-	</tr>
-</table>
-
-<table>
-	<thead>
-		<tr>
-			<th>5.Select Temporal Subset</th>
-		</tr>
-	</thead>
-	<tr>
-		<td><%= collection_select(:part6, params[:part6], Settings::Temporal.all, :name, :name, {include_blank: "- Select Temporal Subset -"} ) rescue nil %></td>
-	</tr>
-</table>
 
 <%= render "layouts/partials/datepicker"%>
 
 <table>
 	<thead>
 		<tr>
-			<th colspan=2>6.Select Date</th>
+			<th colspan=2>4.Select Date</th>
 		</tr>
 	</thead>
 	<tr>
