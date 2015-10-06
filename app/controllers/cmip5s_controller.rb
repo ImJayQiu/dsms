@@ -47,10 +47,10 @@ class Cmip5sController < ApplicationController
 		mip = 'day' 
 		model = params[:part3].first.to_s
 		experiment = params[:part4].first.to_s
-		ensemble = params[:part5].first.to_s
-		temporal = params[:part6].first.to_s
+#		ensemble = params[:part5].first.to_s
+#		temporal = params[:part6].first.to_s
 
-		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + ensemble + '_' + temporal + '.nc'
+		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' +  + 'rimes' + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
 		@experiment_path = Settings::Experiment.where(name: experiment).first.fullname
