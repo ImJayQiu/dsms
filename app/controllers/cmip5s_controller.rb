@@ -47,8 +47,8 @@ class Cmip5sController < ApplicationController
 		mip = 'day' 
 		model = params[:part3].first.to_s
 		experiment = params[:part4].first.to_s
-#		ensemble = params[:part5].first.to_s
-#		temporal = params[:part6].first.to_s
+		#		ensemble = params[:part5].first.to_s
+		#		temporal = params[:part6].first.to_s
 
 		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
 
@@ -160,25 +160,58 @@ class Cmip5sController < ApplicationController
 		@mean_h = Hash[@date.zip(@mean_set)]
 		@min_h = Hash[@date.zip(@min_set)]
 
+
 		################ R esd ploting ####################
 		R.var = var.to_s
-		R.file_path = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
-		R.image_path = Rails.root.join("public", "#{@cdo_output_path.to_s}.png").to_s
+
+		# RIMES domain file
+		R.file_rimes = file 
+
+		# Selected domain file
+		R.file_sel = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
+
+		# RIMES domain lonlat image
+		R.image_rimes_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_lonlat.png").to_s
+
+		# RIMES domain sphere image
+		R.image_rimes_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_sphere.png").to_s
+
+		# Selected lonlat image
+		R.image_sel_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_lonlat.png").to_s
+
+		# Selected sphere image
+		R.image_sel_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_sphere.png").to_s
+
+		#Processing RIMES domain lonlat image
 		R.eval "library(esd)"
-		R.eval "gcm <- retrieve.ncdf(ncfile = file_path, param = var, plot = TRUE)"
-		R.eval "png(filename=image_path)"
-		R.eval "map(gcm,projection='lonlat')"
+		R.eval "data <- retrieve.ncdf(ncfile = file_rimes, param = var)"
+		R.eval "png(filename=image_rimes_lonlat)"
+		R.eval "map(data, projection='lonlat')"
 		R.eval "dev.off()"
 
-		#/home/jay/Projects/dsms/public/tmp_nc
-		#R.image_path=Rails.root.join("public", "tmp_nc", "sample.png").to_s
-		#R.eval("numbers <- c(12,34,56,20,44,65)")
-		#R.eval("png(filename=image_path)")
-		#R.eval("plot(numbers)")
-		#R.eval("dev.off()")
+		#Processing RIMES domain sphere image
+		R.eval "library(esd)"
+		R.eval "data <- retrieve.ncdf(ncfile = file_rimes, param = var)"
+		R.eval "png(filename=image_rimes_sphere)"
+		R.eval "map(data, projection='sphere')"
+		R.eval "dev.off()"
+
+		#Processing Selected domain lonlat image
+		R.eval "library(esd)"
+		R.eval "data <- retrieve.ncdf(ncfile = file_sel, param = var)"
+		R.eval "png(filename=image_sel_lonlat)"
+		R.eval "map(data, projection='lonlat')"
+		R.eval "dev.off()"
+
+		#Processing Selected domain sphere image
+		R.eval "library(esd)"
+		R.eval "data <- retrieve.ncdf(ncfile = file_sel, param = var)"
+		R.eval "png(filename=image_sel_sphere)"
+		R.eval "map(data, projection='sphere')"
+		R.eval "dev.off()"
 
 		##########################################################
-	
+
 	end
 
 
@@ -198,8 +231,8 @@ class Cmip5sController < ApplicationController
 		mip = 'Amon' 
 		model = params[:part3].first.to_s
 		experiment = params[:part4].first.to_s
-#		ensemble = params[:part5].first.to_s
-#		temporal = params[:part6].first.to_s
+		#		ensemble = params[:part5].first.to_s
+		#		temporal = params[:part6].first.to_s
 
 		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
 
@@ -315,21 +348,52 @@ class Cmip5sController < ApplicationController
 
 		################ R esd ploting ####################
 		R.var = var.to_s
-		R.file_path = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
-		R.image_path = Rails.root.join("public", "#{@cdo_output_path.to_s}.png").to_s
+
+		# RIMES domain file
+		R.file_rimes = file 
+
+		# Selected domain file
+		R.file_sel = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
+
+		# RIMES domain lonlat image
+		R.image_rimes_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_lonlat.png").to_s
+
+		# RIMES domain sphere image
+		R.image_rimes_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_sphere.png").to_s
+
+		# Selected lonlat image
+		R.image_sel_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_lonlat.png").to_s
+
+		# Selected sphere image
+		R.image_sel_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_sphere.png").to_s
+
+		#Processing RIMES domain lonlat image
 		R.eval "library(esd)"
-		R.eval "gcm <- retrieve.ncdf(ncfile = file_path, param = var, plot = TRUE)"
-		R.eval "png(filename=image_path)"
-		R.eval "map(gcm,projection='lonlat')"
+		R.eval "data <- retrieve.ncdf(ncfile = file_rimes, param = var)"
+		R.eval "png(filename=image_rimes_lonlat)"
+		R.eval "map(data, projection='lonlat')"
 		R.eval "dev.off()"
 
-		#/home/jay/Projects/dsms/public/tmp_nc
-		#R.image_path=Rails.root.join("public", "tmp_nc", "sample.png").to_s
-		#R.eval("numbers <- c(12,34,56,20,44,65)")
-		#R.eval("png(filename=image_path)")
-		#R.eval("plot(numbers)")
-		#R.eval("dev.off()")
+		#Processing RIMES domain sphere image
+		R.eval "library(esd)"
+		R.eval "data <- retrieve.ncdf(ncfile = file_rimes, param = var)"
+		R.eval "png(filename=image_rimes_sphere)"
+		R.eval "map(data, projection='sphere')"
+		R.eval "dev.off()"
 
+		#Processing Selected domain lonlat image
+		R.eval "library(esd)"
+		R.eval "data <- retrieve.ncdf(ncfile = file_sel, param = var)"
+		R.eval "png(filename=image_sel_lonlat)"
+		R.eval "map(data, projection='lonlat')"
+		R.eval "dev.off()"
+
+		#Processing Selected domain sphere image
+		R.eval "library(esd)"
+		R.eval "data <- retrieve.ncdf(ncfile = file_sel, param = var)"
+		R.eval "png(filename=image_sel_sphere)"
+		R.eval "map(data, projection='sphere')"
+		R.eval "dev.off()"
 		##########################################################
 	end
 

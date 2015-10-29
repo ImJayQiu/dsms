@@ -8,7 +8,25 @@
 <p/>
 <p/>
 <p/>
-<%= image_tag root_path+"#{@cdo_output_path}.png" %>
+<table>
+	<tr>
+		<td>
+			<%= image_tag root_path+"#{@cdo_output_path}_rimes_sphere.png" %>
+		</td>
+		<td>
+			<%= image_tag root_path+"#{@cdo_output_path}_rimes_lonlat.png" %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<%= image_tag root_path+"#{@cdo_output_path}_sel_sphere.png" %>
+		</td>
+		<td>
+			<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat.png" %>
+		</td>
+	</tr>
+</table>
+
 <%#= render "cmip5s/graphs/map", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_size: @map_size, dataset_h: @dataset_h %>
 <p/>
 Central point of the map: <%= @c_point %>
