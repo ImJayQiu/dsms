@@ -1,7 +1,6 @@
 require "cdo"
 require "gsl"
 require "rinruby"
-#require "fileutils"
 
 class Cmip5sController < ApplicationController
 
@@ -28,8 +27,8 @@ class Cmip5sController < ApplicationController
 
 		################ date range ##################################
 
-		@sdate = params[:s_date].first.to_date.at_beginning_of_month
-		@edate = params[:e_date].first.to_date.end_of_month
+		@sdate = params[:s_date].first.to_date
+		@edate = params[:e_date].first.to_date
 
 		##############################################################
 
@@ -45,7 +44,7 @@ class Cmip5sController < ApplicationController
 		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
-		@experiment_path = Settings::Experiment.where(name: experiment).first.fullname
+		@experiment_path = Settings::Experiment.where(name: experiment).first.name
 		@model_path = Settings::Datamodel.where(name: model).first.stdname
 
 		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
@@ -196,20 +195,23 @@ class Cmip5sController < ApplicationController
 		#Processing Selected domain lonlat image
 		R.eval "library(esd)"
 		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
-		R.eval "png(filename=image_sel_lonlat)"
+		R.eval "png(filename = image_sel_lonlat)"
 		R.eval "map(data_sel, projection='lonlat')"
 		R.eval "dev.off()"
 
 		#Processing Selected domain sphere image
 		R.eval "library(esd)"
 		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
-		R.eval "png(filename=image_sel_sphere)"
+		R.eval "png(filename = image_sel_sphere)"
 		R.eval "map(data_sel, projection='sphere')"
 		R.eval "dev.off()"
 
 		##########################################################
 
 	end
+
+
+
 
 
 
@@ -234,7 +236,7 @@ class Cmip5sController < ApplicationController
 		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
-		@experiment_path = Settings::Experiment.where(name: experiment).first.fullname
+		@experiment_path = Settings::Experiment.where(name: experiment).first.name
 		@model_path = Settings::Datamodel.where(name: model).first.stdname
 
 		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
