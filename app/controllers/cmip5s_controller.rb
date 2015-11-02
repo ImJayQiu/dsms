@@ -1,6 +1,7 @@
 require "cdo"
 require "gsl"
 require "rinruby"
+#require "fileutils"
 
 class Cmip5sController < ApplicationController
 
@@ -21,15 +22,6 @@ class Cmip5sController < ApplicationController
 	end
 
 	def monthly 
-=begin
-		R.image_path = Rails.root.join("public", "tmp_nc", "rlus.png").to_s
-		R.file_path = Rails.root.join("public","tmp_nc","rlus.nc").to_s
-		R.eval "library(esd)"
-		R.eval "gcm <- retrieve.ncdf(ncfile = file_path, param='auto', plot=TRUE)"
-		R.eval "png(filename=image_path)"
-		R.eval "map(gcm,projection='lonlat')"
-		R.eval "dev.off()"
-=end
 	end
 
 	def daily_analysis
@@ -134,7 +126,12 @@ class Cmip5sController < ApplicationController
 		###############################################################
 
 		############# cut file by selected date range ##################
-		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+		output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}/#{experiment}"
+		sys_output_dir = Rails.root.join("public", output_dir)
+
+		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
+
+		@cdo_output_path = output_dir.to_s + "/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
 
 		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
 		##############################################################
@@ -167,47 +164,47 @@ class Cmip5sController < ApplicationController
 		# RIMES domain file
 		R.file_rimes = file 
 
-		# Selected domain file
-		R.file_sel = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
-
 		# RIMES domain lonlat image
 		R.image_rimes_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_lonlat.png").to_s
 
 		# RIMES domain sphere image
 		R.image_rimes_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_sphere.png").to_s
 
+		#Processing RIMES domain lonlat image
+		R.eval "library(esd)"
+		R.eval "data_rimes <- retrieve.ncdf(ncfile = file_rimes, param = var)"
+		R.eval "png(filename=image_rimes_lonlat)"
+		R.eval "map(data_rimes, projection='lonlat')"
+		R.eval "dev.off()"
+
+		#Processing RIMES domain sphere image
+		R.eval "library(esd)"
+		R.eval "data_rimes <- retrieve.ncdf(ncfile = file_rimes, param = var)"
+		R.eval "png(filename=image_rimes_sphere)"
+		R.eval "map(data_rimes, projection='sphere')"
+		R.eval "dev.off()"
+
+
+		# Selected domain file
+		R.file_sel = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
 		# Selected lonlat image
 		R.image_sel_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_lonlat.png").to_s
 
 		# Selected sphere image
 		R.image_sel_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_sphere.png").to_s
 
-		#Processing RIMES domain lonlat image
-		R.eval "library(esd)"
-		R.eval "data <- retrieve.ncdf(ncfile = file_rimes, param = var)"
-		R.eval "png(filename=image_rimes_lonlat)"
-		R.eval "map(data, projection='lonlat')"
-		R.eval "dev.off()"
-
-		#Processing RIMES domain sphere image
-		R.eval "library(esd)"
-		R.eval "data <- retrieve.ncdf(ncfile = file_rimes, param = var)"
-		R.eval "png(filename=image_rimes_sphere)"
-		R.eval "map(data, projection='sphere')"
-		R.eval "dev.off()"
-
 		#Processing Selected domain lonlat image
 		R.eval "library(esd)"
-		R.eval "data <- retrieve.ncdf(ncfile = file_sel, param = var)"
+		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
 		R.eval "png(filename=image_sel_lonlat)"
-		R.eval "map(data, projection='lonlat')"
+		R.eval "map(data_sel, projection='lonlat')"
 		R.eval "dev.off()"
 
 		#Processing Selected domain sphere image
 		R.eval "library(esd)"
-		R.eval "data <- retrieve.ncdf(ncfile = file_sel, param = var)"
+		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
 		R.eval "png(filename=image_sel_sphere)"
-		R.eval "map(data, projection='sphere')"
+		R.eval "map(data_sel, projection='sphere')"
 		R.eval "dev.off()"
 
 		##########################################################
@@ -320,7 +317,12 @@ class Cmip5sController < ApplicationController
 		###############################################################
 
 		############# cut file by selected date range ##################
-		@cdo_output_path = "tmp_nc/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+		output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}/#{experiment}"
+		sys_output_dir = Rails.root.join("public", output_dir)
+
+		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
+
+		@cdo_output_path = output_dir.to_s + "/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
 
 		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
 		##############################################################
@@ -349,17 +351,9 @@ class Cmip5sController < ApplicationController
 		################ R esd ploting ####################
 		R.var = var.to_s
 
-		# RIMES domain file
-		R.file_rimes = file 
-
 		# Selected domain file
-		R.file_sel = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
-
-		# RIMES domain lonlat image
-		R.image_rimes_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_lonlat.png").to_s
-
-		# RIMES domain sphere image
-		R.image_rimes_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_sphere.png").to_s
+		#R.file_sel = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
+		R.file_sel = sel_lonlat 
 
 		# Selected lonlat image
 		R.image_sel_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_lonlat.png").to_s
@@ -367,32 +361,41 @@ class Cmip5sController < ApplicationController
 		# Selected sphere image
 		R.image_sel_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_sphere.png").to_s
 
-		#Processing RIMES domain lonlat image
-		R.eval "library(esd)"
-		R.eval "data <- retrieve.ncdf(ncfile = file_rimes, param = var)"
-		R.eval "png(filename=image_rimes_lonlat)"
-		R.eval "map(data, projection='lonlat')"
-		R.eval "dev.off()"
-
-		#Processing RIMES domain sphere image
-		R.eval "library(esd)"
-		R.eval "data <- retrieve.ncdf(ncfile = file_rimes, param = var)"
-		R.eval "png(filename=image_rimes_sphere)"
-		R.eval "map(data, projection='sphere')"
-		R.eval "dev.off()"
-
 		#Processing Selected domain lonlat image
 		R.eval "library(esd)"
-		R.eval "data <- retrieve.ncdf(ncfile = file_sel, param = var)"
+		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
 		R.eval "png(filename=image_sel_lonlat)"
-		R.eval "map(data, projection='lonlat')"
+		R.eval "map(data_sel, projection='lonlat')"
 		R.eval "dev.off()"
 
 		#Processing Selected domain sphere image
 		R.eval "library(esd)"
-		R.eval "data <- retrieve.ncdf(ncfile = file_sel, param = var)"
+		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
 		R.eval "png(filename=image_sel_sphere)"
-		R.eval "map(data, projection='sphere')"
+		R.eval "map(data_sel, projection='sphere')"
+		R.eval "dev.off()"
+
+
+		# RIMES domain file
+		R.file_rimes = file 
+
+		# RIMES domain lonlat image
+		R.image_rimes_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_lonlat.png").to_s
+		# RIMES domain sphere image
+		R.image_rimes_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_sphere.png").to_s
+
+		#Processing RIMES domain lonlat image
+		R.eval "library(esd)"
+		R.eval "data_rimes <- retrieve.ncdf(ncfile = file_rimes, param = var)"
+		R.eval "png(filename=image_rimes_lonlat)"
+		R.eval "map(data_rimes, projection='lonlat')"
+		R.eval "dev.off()"
+
+		#Processing RIMES domain sphere image
+		R.eval "library(esd)"
+		R.eval "data_rimes <- retrieve.ncdf(ncfile = file_rimes, param = var)"
+		R.eval "png(filename=image_rimes_sphere)"
+		R.eval "map(data_rimes, projection='sphere')"
 		R.eval "dev.off()"
 		##########################################################
 	end
