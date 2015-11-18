@@ -1,15 +1,64 @@
+
+require "numru/gphys"
+#require "numru/dcl"
+#require "numru/ggraph"
+include NumRu
+
 require "cdo"
 require "gsl"
+require "narray"
+
+
 
 class CdoanalysisesController < ApplicationController
 
-
-	def info
-		@file = params[:dataset]
+	def lonlat
+		@lon = params[:lon].to_f
+		@lat = params[:lat].to_f
+		s_lon=@lon-0.01
+		e_lon=@lon+0.01
+		s_lat=@lat-0.01
+		e_lat=@lat+0.01
+		@var_name = params[:var_name]
+		@dataset = params[:dataset]
+		@file_name = params[:file_name]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
-		@info = Cdo.info(input: @file)
+
+		file = File.join(Rails.root, @dataset)
+		@s_lonlat = Cdo.remapnn(["#{@lon}"_"#{@lat}"], input: file, output: @s_lonlat, options: '-f nc4')
+		@lonlat_info = Cdo.info(input: @s_lonlat)
+
+=begin
+		@sel_file_path = File.join(Rails.root, @dataset)
+		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name ).cut("lat"=>@lat..@lat, "lon"=>@lon..@lon)
+		@data = @g_file.axis("time").pos.to_a 
+=end
+	end
+
+
+
+	def info
+		@var_name = params[:var_name]
+		@dataset = params[:dataset]
+		@file_name = params[:file_name]
+		@lon_r = params[:lon_r]
+		@lat_r = params[:lat_r]
+		@rate = params[:rate].to_f
+		@rate2 = params[:rate2].to_f
+		@unit = params[:unit]
+		@info = Cdo.info( input: @dataset )
+
+		@sel_file_path = File.join(Rails.root, @dataset)
+
+		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name )
+
+		@lon = @g_file.axis("lon").pos.to_a 
+		@lat = @g_file.axis("lat").pos.to_a 
+		@day = @g_file.axis("time").pos.to_a 
+
+
 	end
 
 
@@ -160,6 +209,89 @@ class CdoanalysisesController < ApplicationController
 		@mean_ymmean_h = Hash[@months.zip(@mean_ymmean)]
 		@min_ymmean_h = Hash[@months.zip(@min_ymmean)]
 		####################################################
+
+	end
+
+	def indices 
+		@var_name = params[:var_name]
+		@file = params[:dataset]
+		@rate = params[:rate].to_f
+		@rate2 = params[:rate2].to_f
+		@unit = params[:unit]
+		@ind = params[:indice].to_s
+
+		case
+		when @ind = "ECACDD"
+			@ind_output = Cdo.eca_cdd(input: @file) 
+		when @ind = "ECACFD"
+			@ind_output = Cdo.eca_cfd(input: @file) 
+		when @ind = "ECACSU"
+			@ind_output = Cdo.eca_csu(input: @file) 
+		when @ind = "ECACWD"
+			@ind_output = Cdo.eca_cwd(input: @file) 
+		when @ind = "ECACWDI"
+			@ind_output = Cdo.eca_cwdi(input: @file) 
+		when @ind = "ECACWFI"
+			@ind_output = Cdo.eca_cwfi(input: @file) 
+		when @ind = "ECAETR"
+			@ind_output = Cdo.eca_etr(input: @file) 
+		when @ind = "ECAFD"
+			@ind_output = Cdo.eca_fd(input: @file) 
+		when @ind = "ECAGSL"
+			@ind_output = Cdo.eca_gsl(input: @file) 
+		when @ind = "ECAHD"
+			@ind_output = Cdo.eca_hd(input: @file) 
+		when @ind = "ECAHWDI"
+			@ind_output = Cdo.eca_hwdi(input: @file) 
+		when @ind = "ECAHWFI"
+			@ind_output = Cdo.eca_hwfi(input: @file) 
+		when @ind = "ECAID"
+			@ind_output = Cdo.eca_id(input: @file) 
+		when @ind = "ECAR75P"
+			@ind_output = Cdo.eca_r75p(input: @file) 
+		when @ind = "ECAR75PTOT"
+			@ind_output = Cdo.eca_r75ptot(input: @file) 
+		when @ind = "ECAR90P"
+			@ind_output = Cdo.eca_r90p(input: @file) 
+		when @ind = "ECAR90PTOT"
+			@ind_output = Cdo.eca_r90ptot(input: @file) 
+		when @ind = "ECAR95P"
+			@ind_output = Cdo.eca_r95p(input: @file) 
+		when @ind = "ECAR95PTOT"
+			@ind_output = Cdo.eca_r95ptot(input: @file) 
+		when @ind = "ECAR99P"
+			@ind_output = Cdo.eca_r99p(input: @file) 
+		when @ind = "ECAR99PTOT"
+			@ind_output = Cdo.eca_r99ptot(input: @file) 
+		when @ind = "ECAPD"
+			@ind_output = Cdo.eca_pd(input: @file) 
+		when @ind = "ECARR1"
+			@ind_output = Cdo.eca_rr1(input: @file) 
+		when @ind = "ECARX1DAY"
+			@ind_output = Cdo.eca_rx1day(input: @file) 
+		when @ind = "ECARX5DAY"
+			@ind_output = Cdo.eca_rx5day(input: @file) 
+		when @ind = "ECASDII"
+			@ind_output = Cdo.eca_sdii(input: @file) 
+		when @ind = "ECASU"
+			@ind_output = Cdo.eca_su(input: @file) 
+		when @ind = "ECATG10P"
+			@ind_output = Cdo.eca_tg10p(input: @file) 
+		when @ind = "ECATG90P"
+			@ind_output = Cdo.eca_tg90p(input: @file) 
+		when @ind = "ECATN10P"
+			@ind_output = Cdo.eca_tn10p(input: @file) 
+		when @ind = "ECATN90P"
+			@ind_output = Cdo.eca_tn90p(input: @file) 
+		when @ind = "ECATR"
+			@ind_output = Cdo.eca_tr(input: @file) 
+		when @ind = "ECATX10P"
+			@ind_output = Cdo.eca_tx10p(input: @file) 
+		when @ind = "ECATX90P"
+			@ind_output = Cdo.eca_tx90p(input: @file) 
+		end
+
+		@indice = Cdo.info(input: @ind_output)
 
 	end
 

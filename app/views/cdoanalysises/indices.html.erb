@@ -1,0 +1,35 @@
+<h2>Information of Dataset</h2>
+<p/>
+<button class="btn btn-success">Export to Excel</button></div>
+<p/>
+<%= @indice %>
+<table id="t2e" >
+<tr>
+	<td><%#= @info[0].split(" ")[2] %></td>
+	<td><%#= @info[0].split(" ")[8] %><br/><%= @unit %></td>
+	<td><%#= @info[0].split(" ")[9] %><br/><%= @unit %></td>
+	<td><%#= @info[0].split(" ")[10] %><br/><%= @unit %></td>
+</tr>
+<%# @info[1..-1].each do |info| %>
+	<tr>
+	<td><%#= info.split(" ")[2] %></td>
+	<td><%#= (info.split(" ")[8].to_f * @rate).to_f.round(1) %></td>
+	<td><%#= (info.split(" ")[9].to_f * @rate).to_f.round(1) %></td>
+	<td><%#= (info.split(" ")[10].to_f * @rate).to_f.round(1) %></td>
+</tr>
+<%# end %>
+</table>
+<script>
+
+$(function() {
+		$("button").click(function(){
+			$("#t2e").table2excel({
+exclude: ".noExl",
+name: "Basic_Info",
+filename: "Basic_Info"
+}); 
+			});
+		});
+
+
+</script>

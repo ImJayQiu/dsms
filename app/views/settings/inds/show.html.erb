@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @settings_ind.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @settings_ind.description %>
+</p>
+
+<p>
+  <strong>Remark:</strong>
+  <%= @settings_ind.remark %>
+</p>
+
+<%= link_to 'Edit', edit_settings_ind_path(@settings_ind) %> |
+<%= link_to 'Back', settings_inds_path %>

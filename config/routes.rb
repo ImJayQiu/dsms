@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
+
 	namespace :settings do
+		resources :inds
 		resources :ensembles
 		resources :experiments
 		resources :datasetpaths
@@ -26,12 +28,14 @@ Rails.application.routes.draw do
 
 	resources :cdoanalysises do
 		collection do
+			get :indices
 			get :info
 			get :season
 			get :mym
 			get :yearly
 			get :map
 			get :ymonmean
+			get :lonlat
 		end
 	end
 

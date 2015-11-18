@@ -1,3 +1,7 @@
+#require "narray"
+#require "numru/ggraph"
+#include NumRu
+
 require "cdo"
 require "gsl"
 require "rinruby"
@@ -155,7 +159,7 @@ class Cmip5sController < ApplicationController
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
 		@min_h = Hash[@date.zip(@min_set)]
-
+		@sel_file_path = root_path+@cdo_output_path.to_s
 
 		################ R esd ploting ####################
 		R.var = var.to_s
@@ -349,6 +353,8 @@ class Cmip5sController < ApplicationController
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
 		@min_h = Hash[@date.zip(@min_set)]
+
+		@sel_file_path = root_path+@cdo_output_path.to_s
 
 		################ R esd ploting ####################
 		R.var = var.to_s

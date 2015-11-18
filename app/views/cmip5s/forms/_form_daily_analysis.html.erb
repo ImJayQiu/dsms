@@ -1,38 +1,41 @@
 <table>
+
 	<tr>
-		<td>
-			<%= form_tag({controller: "cdoanalysises", action: "info" }, target: '_blank', method: :get) do %>  
+		<% ["info", "season", "yearly"].each do |a|  %>
+			<td>
+			<%= form_tag({controller: "cdoanalysises", action: a }, target: '_blank', method: :get) do %>  
 				<%= hidden_field_tag :dataset, @sel_data %>
+			<%= hidden_field_tag :file_name, @file_name %>
+			<%= hidden_field_tag :var_name, @var_name %>
 			<%= hidden_field_tag :var_std_name, @var_std_name %>
+			<%= hidden_field_tag :lon_r, @lon_r %>
+			<%= hidden_field_tag :lat_r, @lat_r %>
 			<%= hidden_field_tag :rate, @rate %>
 			<%= hidden_field_tag :rate2, @rate2 %>
 			<%= hidden_field_tag :unit, @unit %>
-			<%= submit_tag "Dataset Info.", class: "submit" %>
+			<%= submit_tag a.humanize, class: "submit" %>
 		<% end %>
 		</td>
-
-		<td>
-			<%= form_tag({controller: "cdoanalysises", action: "season" }, target: '_blank' , method: :get) do %>  
-				<%= hidden_field_tag :dataset, @sel_data  %>
-			<%= hidden_field_tag :var_std_name, @var_std_name %>
-			<%= hidden_field_tag :rate, @rate %>
-			<%= hidden_field_tag :rate2, @rate2 %>
-			<%= hidden_field_tag :unit, @unit %>
-			<%= submit_tag "Seasonal Analysis", class: "submit"  %>
-		<% end %>
-		</td>
-
-		<td>
-			<%= form_tag({controller: "cdoanalysises", action: "yearly" }, target: '_blank' , method: :get) do %>  
-				<%= hidden_field_tag :dataset, @sel_data  %>
-			<%= hidden_field_tag :var_std_name, @var_std_name %>
-			<%= hidden_field_tag :rate, @rate %>
-			<%= hidden_field_tag :rate2, @rate2 %>
-			<%= hidden_field_tag :unit, @unit %>
-			<%= submit_tag "Yearly Analysis", class: "submit"  %>
-		<% end %>
-		</td>
+	<% end %>
 	</tr>
 
+
+	<%= form_tag({controller: "cdoanalysises", action: "indices" }, target: '_blank' , method: :get) do %>  
+		<tr>
+		<td>Climate Index :</td>
+		<td>
+			<%= collection_select(:indice, params[:indice], Settings::Ind.all, :name, :name, {include_blank: "- Select -"} ) rescue nil %>
+			<%= hidden_field_tag :dataset, @sel_data  %>
+			<%= hidden_field_tag :var_name, @var_name %>
+			<%= hidden_field_tag :file_name, @file_name %>
+			<%= hidden_field_tag :var_std_name, @var_std_name %>
+			<%= hidden_field_tag :rate, @rate %>
+			<%= hidden_field_tag :rate2, @rate2 %>
+			<%= hidden_field_tag :unit, @unit %>
+		</td>
+		<td>
+			<%= submit_tag "Analysis", class: "submit"  %>
+		</td>
 	</tr>
+<% end %>
 </table>
