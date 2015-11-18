@@ -26,11 +26,11 @@ class CdoanalysisesController < ApplicationController
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 
+=begin
 		file = File.join(Rails.root, @dataset)
 		@s_lonlat = Cdo.remapnn(["#{@lon}"_"#{@lat}"], input: file, output: @s_lonlat, options: '-f nc4')
 		@lonlat_info = Cdo.info(input: @s_lonlat)
 
-=begin
 		@sel_file_path = File.join(Rails.root, @dataset)
 		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name ).cut("lat"=>@lat..@lat, "lon"=>@lon..@lon)
 		@data = @g_file.axis("time").pos.to_a 
@@ -57,7 +57,6 @@ class CdoanalysisesController < ApplicationController
 		@lon = @g_file.axis("lon").pos.to_a 
 		@lat = @g_file.axis("lat").pos.to_a 
 		@day = @g_file.axis("time").pos.to_a 
-
 
 	end
 
