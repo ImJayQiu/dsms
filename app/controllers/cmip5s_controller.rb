@@ -1,6 +1,7 @@
 #require "narray"
 #require "numru/ggraph"
-#include NumRu
+require "numru/gphys"
+include NumRu
 
 require "cdo"
 require "gsl"
@@ -83,6 +84,12 @@ class Cmip5sController < ApplicationController
 		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
 
 		############### auto map size #################################
+			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
+			if map_size < 1
+				@map_size = 1
+			else
+				@map_size = map_size
+			end
 =begin
 		if params[:map_size].first.blank?
 			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
@@ -139,6 +146,13 @@ class Cmip5sController < ApplicationController
 		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
 		##############################################################
 
+		################ Data from GPhys ###########################
+#		@sel_data_path = File.join(Rails.root, @sel_data)
+#		@dataset_g = GPhys::NetCDF_IO.open(@sel_data_path, var)
+		
+		################ Data from CDO ###########################
+
+		@_data = Cdo.info(input: @sel_data)
 		@dataset_infon = Cdo.info(input: @sel_data)
 		@var_name = Cdo.showname(input: @sel_data).first.to_s
 		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
@@ -152,9 +166,9 @@ class Cmip5sController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.drop(1).each do |i|
-			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f
-			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f
-			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f
+			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(2)
+			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(2)
+			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(2)
 		end 
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
@@ -166,6 +180,11 @@ class Cmip5sController < ApplicationController
 
 		# RIMES domain file
 		R.file_rimes = file 
+		
+		# RIMES image size 
+		R.img_h = (e_lat-s_lat).abs*50 
+		R.img_w = (e_lon-s_lon).abs*50
+		R.img_res = 300.to_s
 
 		# RIMES domain lonlat image
 		R.image_rimes_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_lonlat.png").to_s
@@ -173,10 +192,11 @@ class Cmip5sController < ApplicationController
 		# RIMES domain sphere image
 		R.image_rimes_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_sphere.png").to_s
 
+=begin
 		#Processing RIMES domain lonlat image
 		R.eval "library(esd)"
 		R.eval "data_rimes <- retrieve.ncdf(ncfile = file_rimes, param = var)"
-		R.eval "png(filename=image_rimes_lonlat)"
+		R.eval "png(filename=image_rimes_lonlat, units='px', width = 800, height = 600, res = 100, te)"
 		R.eval "map(data_rimes, projection='lonlat')"
 		R.eval "dev.off()"
 
@@ -186,7 +206,7 @@ class Cmip5sController < ApplicationController
 		R.eval "png(filename=image_rimes_sphere)"
 		R.eval "map(data_rimes, projection='sphere')"
 		R.eval "dev.off()"
-
+=end
 
 		# Selected domain file
 		R.file_sel = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
@@ -199,7 +219,7 @@ class Cmip5sController < ApplicationController
 		#Processing Selected domain lonlat image
 		R.eval "library(esd)"
 		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
-		R.eval "png(filename = image_sel_lonlat)"
+		R.eval "png(filename = image_sel_lonlat, units='px', width = img_w, height = img_h, res = img_res )"
 		R.eval "map(data_sel, projection='lonlat')"
 		R.eval "dev.off()"
 
@@ -346,9 +366,9 @@ class Cmip5sController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.drop(1).each do |i|
-			@min_set << (i.split(" ")[8].to_f * @rate + @rate2.to_f).to_f
-			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2.to_f).to_f
-			@max_set << (i.split(" ")[10].to_f * @rate + @rate2.to_f).to_f
+			@min_set << (i.split(" ")[8].to_f * @rate + @rate2.to_f).to_f.round(2)
+			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2.to_f).to_f.round(2)
+			@max_set << (i.split(" ")[10].to_f * @rate + @rate2.to_f).to_f.round(2)
 		end 
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]

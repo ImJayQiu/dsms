@@ -5,24 +5,24 @@
 <table>
 	<tr>
 		<td>
-			<%= image_tag root_path+"#{@cdo_output_path}_rimes_sphere.png" %>
+			<%#= image_tag root_path+"#{@cdo_output_path}_rimes_sphere.png" %>
 		</td>
 		<td>
-			<%= image_tag root_path+"#{@cdo_output_path}_rimes_lonlat.png" %>
+			<%#= image_tag root_path+"#{@cdo_output_path}_rimes_lonlat.png" %>
 		</td>
 	</tr>
 	<tr>
-		<td>
-			<%= image_tag root_path+"#{@cdo_output_path}_sel_sphere.png" %>
+		<td style="width:50%;" align="center">
+			<%= image_tag root_path+"#{@cdo_output_path}_sel_sphere.png", width: "100%" %>
 		</td>
-		<td>
-			<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat.png" %>
+		<td style="width:50%;" align="center">
+			<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat.png", width: "100%" %>
 		</td>
 	</tr>
 </table>
-<%#= render "cmip5s/graphs/map", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_size: @map_size, dataset_h: @dataset_h %>
+<%#= render "cmip5s/graphs/map", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_size: @map_size, dataset_g: @dataset_g %>
 <p/>
-Central point of the map: <%= @c_point %>
+
 <%= render "cmip5s/graphs/daily" %>
 <p/>
 <table>
@@ -44,7 +44,7 @@ Central point of the map: <%= @c_point %>
 		<tbody>
 		<tr>
 			<td>Variable: <%= @var_std_name.humanize %></td>
-			<td>Date Range: <%= @sdate.strftime("%Y-%m") %>--<%= @edate.strftime("%Y-%m") %></td>
+			<td>Date Range: <%= @sdate.strftime("%Y-%m-%d") %>--<%= @edate.strftime("%Y-%m-%d") %></td>
 		</tr>
 
 		<tr>

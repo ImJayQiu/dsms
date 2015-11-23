@@ -4,12 +4,11 @@
 	<table>
 	<tr>
 		<td colspan=5 >
-			*Longitude Range:<%= @lon_r %> | Latitude Range:<%= @lat_r %>
-	</td>
+		</td>
 	</tr>
 	<tr>
 		<td>
-			Specific Location Search:
+		Select Specific Location :
 		</td>
 		<td>
 			<%= text_field_tag :lon, params[:lon], placeholder: "Longitude" rescue nil %>
@@ -30,7 +29,10 @@
 		</td>
 	</tr>
 </table>
+*Remark : Longitude Range:<%= @lon_r %> | Latitude Range:<%= @lat_r %>
 <% end %>
+
+<p/>
 
 <table>
 	<tr>
@@ -87,10 +89,10 @@
 	</thead>
 	<tbody>
 	<%# @g_file.to_a.each_with_index do |d,i| %>
-		<%# @lon.each_with_index do |lon,x| %>
-		<%# @lat.each_with_index do |lat,y| %>
-		<%# @day.each_with_index do |day,z| %>
-		<tr>
+   <%# @lon.each_with_index do |lon,x| %>
+   <%# @lat.each_with_index do |lat,y| %>
+   <%# @day.each_with_index do |day,z| %>
+   <tr>
 		<td><%#= i + 1 %>-<%#= x + 1 %>-<%#= y + 1 %>-<%#= z + 1 %></td>
 		<td><%#= day %></td>
 		<td><%#= lon.round(2) %></td>
