@@ -1,6 +1,5 @@
-<h1>Editing Settings Ind</h1>
+<h2>Editing Settings Ind</h2>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @settings_ind %> |
-<%= link_to 'Back', settings_inds_path %>
+<% if can? :manage, :settings %>
+	<%= render 'form' %>
+<% end %>

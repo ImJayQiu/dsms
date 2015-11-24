@@ -1,19 +1,40 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @settings_ind.name %>
-</p>
+<table>
+	<tr>
+		<td>
+			Name
+		</td>
+		<td>
+			<%= @settings_ind.name %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Description	
+		</td>
+		<td>
+			<%= @settings_ind.description %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Remark	
+		</td>
+		<td>
+			<%= @settings_ind.remark %>
+		</td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td>
+			<%= button_to 'Edit', edit_settings_ind_path(@settings_ind), method: :get %> 
+		</td>
+		<td>
+			<%= button_to 'Back', settings_inds_path, method: :get %>
+		</td>
+	</tr>
+</tr>
+</table>
 
-<p>
-  <strong>Description:</strong>
-  <%= @settings_ind.description %>
-</p>
-
-<p>
-  <strong>Remark:</strong>
-  <%= @settings_ind.remark %>
-</p>
-
-<%= link_to 'Edit', edit_settings_ind_path(@settings_ind) %> |
-<%= link_to 'Back', settings_inds_path %>

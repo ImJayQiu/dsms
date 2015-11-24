@@ -1,29 +1,50 @@
 <%= form_for(@settings_ind) do |f| %>
-  <% if @settings_ind.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@settings_ind.errors.count, "error") %> prohibited this settings_ind from being saved:</h2>
+	<% if @settings_ind.errors.any? %>
+	<div id="error_explanation">
+	<h2><%= pluralize(@settings_ind.errors.count, "error") %> prohibited this settings_ind from being saved:</h2>
 
-      <ul>
-      <% @settings_ind.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
+	<ul>
+		<% @settings_ind.errors.full_messages.each do |message| %>
+			<li><%= message %></li>
+	<% end %>
+	</ul>
+</div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
-  </div>
-  <div class="field">
-    <%= f.label :remark %><br>
-    <%= f.text_field :remark %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+<table>
+	<tr>
+		<td>
+			Name
+		</td>
+		<td>
+			<%= f.text_field :name %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Description	
+		</td>
+		<td>
+			<%= f.text_field :description %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Remark	
+		</td>
+		<td>
+			<%= f.text_field :remark %>
+		</td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td colspan=2>
+			<%= f.submit "Submit" %>
+		<% end %>
+		</td>
+		<td colspan=2>
+			<%= button_to 'Back', settings_inds_path, method: :get %>
+		</td>
+	</tr>
+</table>

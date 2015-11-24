@@ -17,32 +17,28 @@
 	</tr>
 </table>
 
-<%=@lonlat_info%>
+<%#=@lonlat_info%>
 <div class="content_data" style="display:none" >
 	<hr>
 	<div id="dvData">
 
 		<table>
-			<thead>
-				<tr>
-					<th>Index</th>
-					<th>Date</th>
-					<th>Value<br/>Unit:<%= @unit %></th>
-				</tr>
-			</thead>
-			<tbody>
-			<%# @g_file.to_a.each_with_index do |d,i| %>
-				<%# @day.each_with_index do |day,z| %>
-				<tr>
-				<td><%#= i + 1 %></td>
-				<td><%#= day %></td>
-				<td><%#= (d[z].to_f * @rate).to_f.round(2) rescue nil %></td>
+			<tr>
+				<td><%= @lonlat_info[0].split(" ")[2] %></td>
+				<td>Value<br/>Unit:<%= @o_unit %></td>
+				<td>Value<br/>Unit:<%= @unit %></td>
 			</tr>
-			<%# end end %>
-			</tbody>
+			<% @lonlat_info[1..-1].each do |i| %>
+				<tr>
+				<td><%= i.split(" ")[2] %></td>
+				<td><%= i.split(" ")[8] %></td>
+				<td><%= (i.split(" ")[8].to_f * @rate).round(5) %></td>
+			</tr>
+		<% end %>
 		</table>
 
 	</div>
+	</hr>
 </div>
 
 <br/>

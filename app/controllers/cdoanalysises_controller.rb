@@ -29,8 +29,7 @@ class CdoanalysisesController < ApplicationController
 
 =begin
 		@sel_file_path = File.join(Rails.root, @dataset)
-		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name ).cut("lat"=>@lat..@lat, "lon"=>@lon..@lon)
-		@data = @g_file.axis("time").pos.to_a 
+		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name )
 =end
 	end
 

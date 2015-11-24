@@ -1,31 +1,34 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Settings Inds</h1>
+<h2>Listing Climate Indices</h2>
 
 <table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Remark</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+	<thead>
+		<tr>
+			<th>Index</th>
+			<th>Climate Indices</th>
+			<th colspan="3">Operations</th>
+		</tr>
+	</thead>
 
-  <tbody>
-    <% @settings_inds.each do |settings_ind| %>
-      <tr>
-        <td><%= settings_ind.name %></td>
-        <td><%= settings_ind.description %></td>
-        <td><%= settings_ind.remark %></td>
-        <td><%= link_to 'Show', settings_ind %></td>
-        <td><%= link_to 'Edit', edit_settings_ind_path(settings_ind) %></td>
-        <td><%= link_to 'Destroy', settings_ind, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
+	<tbody>
+	<% @settings_inds.each_with_index do |settings_ind, i| %>
+		<tr>
+		<td><%= i+1 %></td>
+		<td><%= settings_ind.name %></td>
+		<td><%= button_to 'Show', settings_ind, method: :get %></td>
+		<% if can? :manage, :settings %>
+			<td><%= button_to 'Edit', edit_settings_ind_path(settings_ind), method: :get %></td>
+		<td><%= button_to 'Del', settings_ind, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	<% end %>
+	</tr>
+<% end %>
+	</tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Ind', new_settings_ind_path %>
+<% if can? :manage, :settings %>
+	<%= button_to 'Add Index', new_settings_ind_path, method: :get %>
+<% end %>
+
