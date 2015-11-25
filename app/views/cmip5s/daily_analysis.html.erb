@@ -16,7 +16,10 @@
 			<%= image_tag root_path+"#{@cdo_output_path}_sel_sphere.png", width: "100%" %>
 		</td>
 		<td style="width:50%;" align="center">
-			<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat.png", width: "100%" %>
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat.png", width: "100%" %>
+				<br/>Click image to enlarge
+			</a>
 		</td>
 	</tr>
 </table>

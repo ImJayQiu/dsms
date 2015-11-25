@@ -180,6 +180,8 @@ class Cmip5sController < ApplicationController
 
 		# RIMES domain file
 		R.file_rimes = file 
+		R.img_title = model.upcase + ' | ' + experiment.upcase + ' | ' + var.humanize + ' | Daily: ' + @sdate.to_s + ' -- ' + @edate.to_s 
+	#	R.sub_title = 'Latitude: ' + s_lat.to_s + ' -- ' + e_lat.to_s + ' | '  + 'Longitude: ' + s_lon.to_s + ' -- ' + e_lon.to_s  
 		
 		# RIMES image size 
 		R.img_h = ( e_lat.to_f - s_lat.to_f ).abs*50*1.5 
@@ -220,7 +222,7 @@ class Cmip5sController < ApplicationController
 		R.eval "library(esd)"
 		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
 		R.eval "png(filename = image_sel_lonlat, units='px', width = img_w, height = img_h, res = img_res )"
-		R.eval "map(data_sel, projection='lonlat')"
+		R.eval "map(data_sel, projection='lonlat', main=img_title)"
 		R.eval "dev.off()"
 
 		#Processing Selected domain sphere image
