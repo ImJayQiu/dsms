@@ -182,8 +182,8 @@ class Cmip5sController < ApplicationController
 		R.file_rimes = file 
 		
 		# RIMES image size 
-		R.img_h = (e_lat.abs+s_lat.abs)*50 
-		R.img_w = (e_lon.abs+s_lon.abs)*50
+		R.img_w = (e_lat.abs+s_lat.abs)*50 
+		R.img_ = (e_lon.abs+s_lon.abs)*50
 		R.img_res = 300.to_s
 
 		# RIMES domain lonlat image
