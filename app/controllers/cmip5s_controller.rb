@@ -182,7 +182,7 @@ class Cmip5sController < ApplicationController
 		R.file_rimes = file 
 		
 		# RIMES image size 
-		R.img_h = ( e_lat.to_f - s_lat.to_f ).abs*50 
+		R.img_h = ( e_lat.to_f - s_lat.to_f ).abs*50*2 
 		R.img_w = ( e_lon.to_f - s_lon.to_f ).abs*50
 		R.img_res = 300.to_s
 
