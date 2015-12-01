@@ -1,10 +1,18 @@
 <h2>Data of Specific location </h2>
 <p/>
-
 <table>
 	<tr>
 		<td>
-			Value of Specific location (Lon:<%= @lon %> | Lat:<%= @lat %>) 
+			<%= line_chart [
+				{name: "Value", data: @dv_h },
+			], library: {title: {text: "Value of Specific Location (Unit: #{@unit} | Lon: #{@lon} | Lat: #{@lat} )" }, subtitle:{text: "#{@file_name.humanize} "} } %>
+	</td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td>
+			Value of Specific Location (Lon:<%= @lon %> | Lat:<%= @lat %>) 
 		</td>
 		<td>
 			<div class="buttons">
@@ -24,15 +32,15 @@
 
 		<table>
 			<tr>
-				<td><%= @lonlat_info[0].split(" ")[2] %></td>
-				<td>Value<br/>Unit:<%= @o_unit %></td>
+				<td>Date</td>
+				<td>Value</td>
 				<td>Value<br/>Unit:<%= @unit %></td>
 			</tr>
 			<% @lonlat_info[1..-1].each do |i| %>
 				<tr>
-				<td><%= i.split(" ")[2] %></td>
-				<td><%= i.split(" ")[8] %></td>
-				<td><%= (i.split(" ")[8].to_f * @rate).round(5) %></td>
+				<td><%= i.split(" ")[0] %></td>
+				<td><%= i.split(" ")[1] %></td>
+				<td><%= (i.split(" ")[1].to_f * @rate).round(2) %></td>
 			</tr>
 		<% end %>
 		</table>

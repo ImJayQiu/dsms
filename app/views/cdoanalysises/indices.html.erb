@@ -1,6 +1,7 @@
 <h2>Climate Index Analysis</h2>
 <p/>
-<%#= @indice %>
+<%= @var.first.split(" ").first %>
+<p/>
 <table>
 	<tr>
 		<td>
@@ -22,17 +23,18 @@
 	<div id="dvData">
 		<table>
 			<tr>
+				<td><%= @indice[0].split(" ")[1] %></td>
 				<td><%= @indice[0].split(" ")[2] %></td>
-				<td><%= @indice[0].split(" ")[8] %><br/><%= @unit %></td>
-				<td><%= @indice[0].split(" ")[9] %><br/><%= @unit %></td>
-				<td><%= @indice[0].split(" ")[10] %><br/><%= @unit %></td>
+				<td><%= @indice[0].split(" ")[3] %></td>
+				<td><%= @indice[0].split(" ")[4] %><br/><%= @unit %></td>
 			</tr>
 			<% @indice[1..-1].each do |i| %>
 				<tr>
+				<td><%= i.split(" ")[0] %></td>
+				<td><%= i.split(" ")[1] %></td>
 				<td><%= i.split(" ")[2] %></td>
-				<td><%= (i.split(" ")[8].to_f * @rate).to_f.round(1) %></td>
-				<td><%= (i.split(" ")[9].to_f * @rate).to_f.round(1) %></td>
-				<td><%= (i.split(" ")[10].to_f * @rate).to_f.round(1) %></td>
+				<td><%= i.split(" ")[3] %></td>
+				<%#= (i.split(" ")[3].to_f * @rate).to_f.round(1) %>
 			</tr>
 		<% end %>
 		</table>

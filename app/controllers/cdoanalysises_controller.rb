@@ -1,4 +1,3 @@
-
 require "numru/gphys"
 #require "numru/dcl"
 #require "numru/ggraph"
@@ -6,7 +5,8 @@ include NumRu
 
 require "cdo"
 require "gsl"
-require "narray"
+require "rinruby"
+
 
 
 
@@ -24,13 +24,17 @@ class CdoanalysisesController < ApplicationController
 		@unit = params[:unit]
 
 		file = File.join(Rails.root, @dataset)
-		@s_lonlat = Cdo.remapnn(lon_lat, input: file, output: @s_lonlat, options: '-f nc4')
-		@lonlat_info = Cdo.info(input: @s_lonlat)
+		@s_lonlat = Cdo.remapnn(lon_lat, input: file, options: '-f nc4')
+		@lonlat_info = Cdo.outputtab(['date','value'],input: @s_lonlat)
 
-=begin
-		@sel_file_path = File.join(Rails.root, @dataset)
-		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name )
-=end
+		@date_set = [] 
+		@value_set = [] 
+		@lonlat_info.drop(1).each do |i|
+			@date_set << i.split(" ")[0]
+			@value_set << (i.split(" ")[1].to_f * @rate + @rate2).to_f.round(2)
+		end 
+		@dv_h = Hash[@date_set.zip(@value_set)]
+
 	end
 
 
@@ -44,7 +48,7 @@ class CdoanalysisesController < ApplicationController
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
-		@info = Cdo.info( input: @dataset )
+		@info = Cdo.info(input: @dataset)
 
 		@sel_file_path = File.join(Rails.root, @dataset)
 
@@ -213,80 +217,39 @@ class CdoanalysisesController < ApplicationController
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
-		@ind = params[:indice].to_s
+		@ind = params[:indice].first.to_s
+		@cdo_output_path = params[:cdo_output_path].to_s
 
-		case
-		when @ind = "ECACDD"
-			@ind_output = Cdo.eca_cdd(input: @file) 
-		when @ind = "ECACFD"
-			@ind_output = Cdo.eca_cfd(input: @file) 
-		when @ind = "ECACSU"
-			@ind_output = Cdo.eca_csu(input: @file) 
-		when @ind = "ECACWD"
-			@ind_output = Cdo.eca_cwd(input: @file) 
-		when @ind = "ECACWDI"
-			@ind_output = Cdo.eca_cwdi(input: @file) 
-		when @ind = "ECACWFI"
-			@ind_output = Cdo.eca_cwfi(input: @file) 
-		when @ind = "ECAETR"
-			@ind_output = Cdo.eca_etr(input: @file) 
-		when @ind = "ECAFD"
-			@ind_output = Cdo.eca_fd(input: @file) 
-		when @ind = "ECAGSL"
-			@ind_output = Cdo.eca_gsl(input: @file) 
-		when @ind = "ECAHD"
-			@ind_output = Cdo.eca_hd(input: @file) 
-		when @ind = "ECAHWDI"
-			@ind_output = Cdo.eca_hwdi(input: @file) 
-		when @ind = "ECAHWFI"
-			@ind_output = Cdo.eca_hwfi(input: @file) 
-		when @ind = "ECAID"
-			@ind_output = Cdo.eca_id(input: @file) 
-		when @ind = "ECAR75P"
-			@ind_output = Cdo.eca_r75p(input: @file) 
-		when @ind = "ECAR75PTOT"
-			@ind_output = Cdo.eca_r75ptot(input: @file) 
-		when @ind = "ECAR90P"
-			@ind_output = Cdo.eca_r90p(input: @file) 
-		when @ind = "ECAR90PTOT"
-			@ind_output = Cdo.eca_r90ptot(input: @file) 
-		when @ind = "ECAR95P"
-			@ind_output = Cdo.eca_r95p(input: @file) 
-		when @ind = "ECAR95PTOT"
-			@ind_output = Cdo.eca_r95ptot(input: @file) 
-		when @ind = "ECAR99P"
-			@ind_output = Cdo.eca_r99p(input: @file) 
-		when @ind = "ECAR99PTOT"
-			@ind_output = Cdo.eca_r99ptot(input: @file) 
-		when @ind = "ECAPD"
-			@ind_output = Cdo.eca_pd(input: @file) 
-		when @ind = "ECARR1"
-			@ind_output = Cdo.eca_rr1(input: @file) 
-		when @ind = "ECARX1DAY"
-			@ind_output = Cdo.eca_rx1day(input: @file) 
-		when @ind = "ECARX5DAY"
-			@ind_output = Cdo.eca_rx5day(input: @file) 
-		when @ind = "ECASDII"
-			@ind_output = Cdo.eca_sdii(input: @file) 
-		when @ind = "ECASU"
-			@ind_output = Cdo.eca_su(input: @file) 
-		when @ind = "ECATG10P"
-			@ind_output = Cdo.eca_tg10p(input: @file) 
-		when @ind = "ECATG90P"
-			@ind_output = Cdo.eca_tg90p(input: @file) 
-		when @ind = "ECATN10P"
-			@ind_output = Cdo.eca_tn10p(input: @file) 
-		when @ind = "ECATN90P"
-			@ind_output = Cdo.eca_tn90p(input: @file) 
-		when @ind = "ECATR"
-			@ind_output = Cdo.eca_tr(input: @file) 
-		when @ind = "ECATX10P"
-			@ind_output = Cdo.eca_tx10p(input: @file) 
-		when @ind = "ECATX90P"
-			@ind_output = Cdo.eca_tx90p(input: @file) 
+		#@ind_output = Cdo.send(@ind, [1/@rate+@rate2], input: @file, options:'-f nc4' )
+		if @unit = "mm/d"
+			@ind_output = Cdo.send(@ind, [1/@rate+@rate2], input: @file, options:'-f nc4' )
+		else
+			@ind_output = Cdo.send(@ind, input: @file, options:'-f nc4' )
 		end
 
-		@indice = Cdo.info(input: @ind_output)
+		@var = Cdo.showname(input: @ind_output) 
+		@indice = Cdo.outputtab(['date','lon','lat','value'], input: @ind_output) 
+		R.var = @var.first.split(" ").first.to_s 
+
+		R.inds = 'cdo_'+ @ind.to_s 
+		R.inds_out = 'cdo_' + @ind.to_s + '.nc' 
+		R.cdocmd = 'cdo '+ @ind.to_s 
+
+		# Selected domain file
+		R.ind_output = @ind_output 
+		# R.ind_output = @file 
+
+		# Selected index image
+		R.image_sel_index = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_#{@ind.to_s}.png").to_s
+
+
+		#Processing Selected domain lonlat image
+		R.eval "library(esd)"
+		#R.eval "data_sel <- retrieve(ncfile=ind_output, param=var, type='ncdf4')"
+		R.eval "data_sel <- retrieve.ncdf(ncfile=ind_output)"
+		R.eval "png(filename = image_sel_index )"
+		R.eval "plot(data_sel)"
+		R.eval "dev.off()"
 
 	end
 

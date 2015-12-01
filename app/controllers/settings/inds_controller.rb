@@ -69,6 +69,6 @@ class Settings::IndsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def settings_ind_params
-      params.require(:settings_ind).permit(:name, :description, :remark)
+      params.require(:settings_ind).permit(:name, :cdocmd, :description, :remark)
     end
 end

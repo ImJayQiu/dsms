@@ -84,12 +84,12 @@ class Cmip5sController < ApplicationController
 		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
 
 		############### auto map size #################################
-			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
-			if map_size < 1
-				@map_size = 1
-			else
-				@map_size = map_size
-			end
+		map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
+		if map_size < 1
+			@map_size = 1
+		else
+			@map_size = map_size
+		end
 =begin
 		if params[:map_size].first.blank?
 			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
@@ -147,9 +147,9 @@ class Cmip5sController < ApplicationController
 		##############################################################
 
 		################ Data from GPhys ###########################
-#		@sel_data_path = File.join(Rails.root, @sel_data)
-#		@dataset_g = GPhys::NetCDF_IO.open(@sel_data_path, var)
-		
+		#		@sel_data_path = File.join(Rails.root, @sel_data)
+		#		@dataset_g = GPhys::NetCDF_IO.open(@sel_data_path, var)
+
 		################ Data from CDO ###########################
 
 		@_data = Cdo.info(input: @sel_data)
@@ -161,6 +161,7 @@ class Cmip5sController < ApplicationController
 
 		date = Cdo.showdate(input: @sel_data)
 		@date = date.first.split(" ").to_a
+		
 		#group max min mean
 		@max_set = [] 
 		@min_set = [] 
@@ -181,10 +182,11 @@ class Cmip5sController < ApplicationController
 		# RIMES domain file
 		R.file_rimes = file 
 		R.img_title = model.upcase + ' | ' + experiment.upcase + ' | ' + var.humanize + ' | Daily: ' + @sdate.to_s + ' -- ' + @edate.to_s 
-	#	R.sub_title = 'Latitude: ' + s_lat.to_s + ' -- ' + e_lat.to_s + ' | '  + 'Longitude: ' + s_lon.to_s + ' -- ' + e_lon.to_s  
+		#	R.sub_title = 'Latitude: ' + s_lat.to_s + ' -- ' + e_lat.to_s + ' | '  + 'Longitude: ' + s_lon.to_s + ' -- ' + e_lon.to_s  
+		
 		
 		# RIMES image size 
-		R.img_h = ( e_lat.to_f - s_lat.to_f ).abs*50*1.5 
+		R.img_h = ( e_lat.to_f - s_lat.to_f ).abs*50
 		R.img_w = ( e_lon.to_f - s_lon.to_f ).abs*50
 		R.img_res = 300.to_s
 

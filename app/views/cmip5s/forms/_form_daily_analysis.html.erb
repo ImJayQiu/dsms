@@ -24,8 +24,9 @@
 		<tr>
 		<td>Climate Index :</td>
 		<td>
-			<%= collection_select(:indice, params[:indice], Settings::Ind.all, :name, :name, {include_blank: "- Select -"} ) rescue nil %>
+			<%= collection_select(:indice, params[:indice], Settings::Ind.all, :cdocmd, :name, {include_blank: "- Select -"} ) rescue nil %>
 			<%= hidden_field_tag :dataset, @sel_data  %>
+			<%= hidden_field_tag :cdo_output_path, @cdo_output_path %>
 			<%= hidden_field_tag :var_name, @var_name %>
 			<%= hidden_field_tag :file_name, @file_name %>
 			<%= hidden_field_tag :var_std_name, @var_std_name %>
