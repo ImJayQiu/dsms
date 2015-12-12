@@ -242,7 +242,7 @@ class Cmip5sController < ApplicationController
 		############ Parameters for GrADS ctl file #################
 		@griddes = Cdo.griddes(input: @sel_data).to_a
 		std_name = Cdo.showstdname(input: @sel_data)[0].humanize
-		levels = Cdo.showlevel(input: @sel_data)
+		levels = Cdo.showlevel(input: @sel_data)[0]
 		nlevel = Cdo.nlevel(input: @sel_data)[0]
 		ntime = Cdo.ntime(input: @sel_data)[0]
 		xsize = @griddes[12].split(" ")[2].to_s
