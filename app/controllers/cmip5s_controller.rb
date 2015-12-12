@@ -57,10 +57,11 @@ class Cmip5sController < ApplicationController
 
 		############# convert rate & unit ############################
 		@variable_setting = Settings::Variable.where(name: var).first
+		o_unit = @variable_setting.unit
 		if @variable_setting.c_rate.blank?
 			@rate = 1.to_i
 			@rate2 = 0.to_i 
-			@unit = @variable_setting.unit
+			@unit = o_unit
 		else
 			if @variable_setting.unit == "K" && @variable_setting.c_unit == "°C"
 				@rate = 1.to_i
@@ -141,7 +142,12 @@ class Cmip5sController < ApplicationController
 
 		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
 
-		@cdo_output_path = output_dir.to_s + "/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
+		output_file_name = "#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}.nc"
+		#output_file_name = "#{var}#{mip[0]}#{model}#{experiment}#{@sdate.strftime("%Y%m%d")}#{@edate.strftime("%Y%m%d")}lo#{s_lon.to_i}_#{e_lon.to_i}la#{s_lat.to_i}_#{e_lat.to_i}.nc"
+
+		@cdo_output_path = output_dir.to_s + "/" + output_file_name
+
+		#@cdo_output_path = output_dir.to_s + "/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
 
 		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
 		##############################################################
@@ -152,7 +158,6 @@ class Cmip5sController < ApplicationController
 
 		################ Data from CDO ###########################
 
-		@_data = Cdo.info(input: @sel_data)
 		@dataset_infon = Cdo.info(input: @sel_data)
 		@var_name = Cdo.showname(input: @sel_data).first.to_s
 		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
@@ -161,7 +166,7 @@ class Cmip5sController < ApplicationController
 
 		date = Cdo.showdate(input: @sel_data)
 		@date = date.first.split(" ").to_a
-		
+
 		#group max min mean
 		@max_set = [] 
 		@min_set = [] 
@@ -183,8 +188,8 @@ class Cmip5sController < ApplicationController
 		R.file_rimes = file 
 		R.img_title = model.upcase + ' | ' + experiment.upcase + ' | ' + var.humanize + ' | Daily: ' + @sdate.to_s + ' -- ' + @edate.to_s 
 		#	R.sub_title = 'Latitude: ' + s_lat.to_s + ' -- ' + e_lat.to_s + ' | '  + 'Longitude: ' + s_lon.to_s + ' -- ' + e_lon.to_s  
-		
-		
+
+
 		# RIMES image size 
 		R.img_h = ( e_lat.to_f - s_lat.to_f ).abs*50
 		R.img_w = ( e_lon.to_f - s_lon.to_f ).abs*50
@@ -234,8 +239,52 @@ class Cmip5sController < ApplicationController
 		R.eval "map(data_sel, projection='sphere')"
 		R.eval "dev.off()"
 
-		##########################################################
+		############ Parameters for GrADS ctl file #################
+		@ntime = Cdo.ntime(input: @sel_data)[0]
+		@griddes = Cdo.griddes(input: @sel_data).to_a
+		std_name = Cdo.showstdname(input: @sel_data)[0].humanize
+		nlevel = Cdo.nlevel(input: @sel_data)[0]
+		xsize = @griddes[12].split(" ")[2].to_s
+		ysize = @griddes[13].split(" ")[2].to_s
+		xinc = @griddes[15].split(" ")[2].to_s
 
+		############## Generate ctl file for GrADS ###############
+		grads_ctl = File.new("public/#{@cdo_output_path}.ctl", "w")
+		grads_ctl.puts("DSET ^#{output_file_name} ")
+		grads_ctl.puts("TITLE Reading GCM Cut Datasets")
+		grads_ctl.puts("DTYPE netcdf")
+		grads_ctl.puts("UNDEF 1.e+20f")
+		grads_ctl.puts("OPTIONS template")
+		grads_ctl.puts("XDEF #{xsize} LINEAR #{s_lon.to_s} #{xinc} ")
+		grads_ctl.puts("YDEF #{ysize} LINEAR #{s_lat.to_s} #{xinc}")
+		grads_ctl.puts("TDEF #{@ntime.to_s} LINEAR 0Z01JAN2006 1DY")
+		grads_ctl.puts("ZDEF #{nlevel.to_s} Levels 1000")
+		grads_ctl.puts("VARS 1")
+		grads_ctl.puts("#{var} 0 t,y,x #{std_name} (#{o_unit.to_s})")
+		grads_ctl.puts("ENDVARS")
+		grads_ctl.close
+
+		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+		grads_gs = File.new("#{sys_output_dir}/#{gs_name}.gs", "w")
+		grads_gs.puts("reinit")
+		grads_gs.puts("open #{output_file_name}.ctl")
+		grads_gs.puts("set t 200")
+		grads_gs.puts("set grads off")
+		grads_gs.puts("set gxout shaded")
+		grads_gs.puts("set mpdset hires")
+		grads_gs.puts("set clevs 0 1 2 3 4 5 6 7 8 9 10")
+		#	grads_gs.puts("set ccols 0 14 20 25 30 40 50 60")
+		grads_gs.puts("d ave(pr*86400,t=1,t=360)")
+		#	grads_gs.puts("d pr*86400")
+		# grads_gs.puts("cbar")
+		grads_gs.puts("draw title RIMES")
+		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads.png png white")
+		grads_gs.puts("quit")
+		grads_gs.close
+
+		@go_dir = "cd #{sys_output_dir.to_s}"
+		@plot_cmd = "grads -lbc 'exec #{gs_name}.gs'"
+		@plot = system("cd / && #{@go_dir} && #{@plot_cmd} ") 
 	end
 
 

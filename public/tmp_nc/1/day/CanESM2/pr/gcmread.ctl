@@ -1,0 +1,12 @@
+DSET ^pr_day_CanESM2_rcp45_2006-01-01_2006-12-31_lon_64.16_90.352_lat_7.537_31.952.nc
+TITLE Reading GCM Cut Datasets
+DTYPE netcdf
+UNDEF 1.e+20f
+OPTIONS template
+XDEF 10 LINEAR 64.6875 2.8125 
+YDEF 8 LINEAR 9.76715 2.8125
+TDEF 364 LINEAR 0Z01JAN2006 1DY
+zdef 1 Levels 1000
+VARS 1
+pr 0 t,y,x Precipitation Flux (kg/m^2/s)
+ENDVARS
