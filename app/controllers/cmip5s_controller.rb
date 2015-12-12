@@ -240,10 +240,10 @@ class Cmip5sController < ApplicationController
 		R.eval "dev.off()"
 
 		############ Parameters for GrADS ctl file #################
-		@ntime = Cdo.ntime(input: @sel_data)[0]
 		@griddes = Cdo.griddes(input: @sel_data).to_a
 		std_name = Cdo.showstdname(input: @sel_data)[0].humanize
 		nlevel = Cdo.nlevel(input: @sel_data)[0]
+		ntime = Cdo.ntime(input: @sel_data)[0]
 		xsize = @griddes[12].split(" ")[2].to_s
 		ysize = @griddes[13].split(" ")[2].to_s
 		xinc = @griddes[15].split(" ")[2].to_s
@@ -257,7 +257,7 @@ class Cmip5sController < ApplicationController
 		grads_ctl.puts("OPTIONS template")
 		grads_ctl.puts("XDEF #{xsize} LINEAR #{s_lon.to_s} #{xinc} ")
 		grads_ctl.puts("YDEF #{ysize} LINEAR #{s_lat.to_s} #{xinc}")
-		grads_ctl.puts("TDEF #{@ntime.to_s} LINEAR 0Z01JAN2006 1DY")
+		grads_ctl.puts("TDEF #{ntime.to_s} LINEAR 0Z01JAN2006 1DY")
 		grads_ctl.puts("ZDEF #{nlevel.to_s} Levels 1000")
 		grads_ctl.puts("VARS 1")
 		grads_ctl.puts("#{var} 0 t,y,x #{std_name} (#{o_unit.to_s})")
@@ -274,7 +274,7 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("set clevs 0 1 2 3 4 5 6 7 8 9 10")
 		#	grads_gs.puts("set ccols 0 14 20 25 30 40 50 60")
-		grads_gs.puts("d ave(pr*86400,t=1,t=360)")
+		grads_gs.puts("d ave(#{var},t=1,t=#{ntime})")
 		#	grads_gs.puts("d pr*86400")
 		# grads_gs.puts("cbar")
 		grads_gs.puts("draw title RIMES")
