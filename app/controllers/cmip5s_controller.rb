@@ -274,7 +274,7 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("set clevs 0 1 2 3 4 5 6 7 8 9 10")
 		#	grads_gs.puts("set ccols 0 14 20 25 30 40 50 60")
-		grads_gs.puts("d ave(#{var},t=1,t=#{ntime})")
+		grads_gs.puts("d ave(#{var},t=1,t=#{ntime.to_s})")
 		#	grads_gs.puts("d pr*86400")
 		# grads_gs.puts("cbar")
 		grads_gs.puts("draw title RIMES")
