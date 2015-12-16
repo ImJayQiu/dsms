@@ -236,7 +236,7 @@ class Cmip5sController < ApplicationController
 		xsize = @griddes.grep(/^xsize/)[0].split(" ")[2].to_s
 		ysize = @griddes.grep(/^ysize/)[0].split(" ")[2].to_s
 		xinc = @griddes.grep(/^xinc/)[0].split(" ")[2].to_s
-		if @griddes.grep(/^yinc/)[0].blank?
+		if @griddes.grep(/^yinc/).blank?
 			yinc = xinc
 		else
 			yinc =  @griddes.grep(/^yinc/).split(" ")[2].to_s
