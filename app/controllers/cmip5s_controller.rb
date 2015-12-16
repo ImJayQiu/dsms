@@ -239,7 +239,7 @@ class Cmip5sController < ApplicationController
 		if @griddes.grep(/^yinc/).blank?
 			yinc = xinc
 		else
-			yinc =  @griddes.grep(/^yinc/).split(" ")[2].to_s
+			yinc =  @griddes.grep(/^yinc/)[0].split(" ")[2].to_s
 		end
 		@xsize = xsize 
 		@ysize = ysize 
@@ -255,7 +255,7 @@ class Cmip5sController < ApplicationController
 		grads_ctl.puts("OPTIONS template")
 		grads_ctl.puts("XDEF #{xsize} LINEAR #{s_lon.to_s} #{xinc} ")
 		grads_ctl.puts("YDEF #{ysize} LINEAR #{s_lat.to_s} #{yinc}")
-		grads_ctl.puts("TDEF #{ntime.to_s} LINEAR 0Z01JAN2006 1DY")
+		grads_ctl.puts("TDEF #{ntime.to_s} LINEAR 0Z#{@sdate.strftime('%d%b%Y')} 1DY")
 		grads_ctl.puts("ZDEF #{nlevel.to_s} Levels #{levels.to_s}")
 		grads_ctl.puts("VARS 1")
 		grads_ctl.puts("#{var} 0 t,y,x #{std_name} (#{o_unit.to_s})")
