@@ -91,18 +91,6 @@ class Cmip5sController < ApplicationController
 		else
 			@map_size = map_size
 		end
-=begin
-		if params[:map_size].first.blank?
-			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
-			if map_size < 1
-				@map_size = 1
-			else
-				@map_size = map_size
-			end
-		else
-			@map_size = params[:map_size].first.to_i
-		end
-=end
 		################################################################
 
 		################## find centre point ###########################
@@ -245,9 +233,18 @@ class Cmip5sController < ApplicationController
 		levels = Cdo.showlevel(input: @sel_data)[0]
 		nlevel = Cdo.nlevel(input: @sel_data)[0]
 		ntime = Cdo.ntime(input: @sel_data)[0]
-		xsize = @griddes[12].split(" ")[2].to_s
-		ysize = @griddes[13].split(" ")[2].to_s
-		xinc = @griddes[15].split(" ")[2].to_s
+		xsize = @griddes.grep(/^xsize/)[0].split(" ")[2].to_s
+		ysize = @griddes.grep(/^ysize/)[0].split(" ")[2].to_s
+		xinc = @griddes.grep(/^xinc/)[0].split(" ")[2].to_s
+		if @griddes.grep(/^yinc/)[0].blank?
+			yinc = xinc
+		else
+			yinc =  @griddes.grep(/^yinc/).split(" ")[2].to_s
+		end
+		@xsize = xsize 
+		@ysize = ysize 
+		@xinc = xinc
+		@yinc = yinc
 
 		############## Generate ctl file for GrADS ###############
 		grads_ctl = File.new("public/#{@cdo_output_path}.ctl", "w")
@@ -257,7 +254,7 @@ class Cmip5sController < ApplicationController
 		grads_ctl.puts("UNDEF 1.e+20f")
 		grads_ctl.puts("OPTIONS template")
 		grads_ctl.puts("XDEF #{xsize} LINEAR #{s_lon.to_s} #{xinc} ")
-		grads_ctl.puts("YDEF #{ysize} LINEAR #{s_lat.to_s} #{xinc}")
+		grads_ctl.puts("YDEF #{ysize} LINEAR #{s_lat.to_s} #{yinc}")
 		grads_ctl.puts("TDEF #{ntime.to_s} LINEAR 0Z01JAN2006 1DY")
 		grads_ctl.puts("ZDEF #{nlevel.to_s} Levels #{levels.to_s}")
 		grads_ctl.puts("VARS 1")
@@ -278,7 +275,8 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("d ave(#{var},t=1,t=#{ntime.to_s})")
 		#	grads_gs.puts("d pr*86400")
 		# grads_gs.puts("cbar")
-		grads_gs.puts("draw title RIMES")
+		grads_gs.puts("draw title #{model} #{experiment} #{mip} #{var} ")
+		grads_gs.puts("draw subtitle #{@sdate.to_s}-- #{@edate.to_s} ")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
