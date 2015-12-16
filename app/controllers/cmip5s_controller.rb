@@ -262,7 +262,7 @@ class Cmip5sController < ApplicationController
 		grads_ctl.puts("ENDVARS")
 		grads_ctl.close
 
-		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}.gs", "w")
 		grads_gs.puts("reinit")
 		grads_gs.puts("open #{output_file_name}.ctl")
