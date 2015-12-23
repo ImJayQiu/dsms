@@ -1,10 +1,10 @@
-require "numru/gphys"
+#require "numru/gphys"
 #require "numru/dcl"
 #require "numru/ggraph"
-include NumRu
+#include NumRu
 
 require "cdo"
-require "gsl"
+#require "gsl"
 require "rinruby"
 
 
@@ -50,13 +50,13 @@ class CdoanalysisesController < ApplicationController
 		@unit = params[:unit]
 		@info = Cdo.info(input: @dataset)
 
-		@sel_file_path = File.join(Rails.root, @dataset)
+#		@sel_file_path = File.join(Rails.root, @dataset)
 
-		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name )
+#		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name )
 
-		@lon = @g_file.axis("lon").pos.to_a 
-		@lat = @g_file.axis("lat").pos.to_a 
-		@day = @g_file.axis("time").pos.to_a 
+#		@lon = @g_file.axis("lon").pos.to_a 
+#		@lat = @g_file.axis("lat").pos.to_a 
+#		@day = @g_file.axis("time").pos.to_a 
 
 	end
 

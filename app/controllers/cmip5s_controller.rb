@@ -1,10 +1,10 @@
 #require "narray"
 #require "numru/ggraph"
-require "numru/gphys"
-include NumRu
+#require "numru/gphys"
+#include NumRu
 
 require "cdo"
-require "gsl"
+#require "gsl"
 require "rinruby"
 
 class Cmip5sController < ApplicationController
@@ -130,12 +130,9 @@ class Cmip5sController < ApplicationController
 
 		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
 
-		output_file_name = "#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}.nc"
-		#output_file_name = "#{var}#{mip[0]}#{model}#{experiment}#{@sdate.strftime("%Y%m%d")}#{@edate.strftime("%Y%m%d")}lo#{s_lon.to_i}_#{e_lon.to_i}la#{s_lat.to_i}_#{e_lat.to_i}.nc"
+		output_file_name = "#{var}_#{mip}_#{model}_#{experiment}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}.nc"
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
-
-		#@cdo_output_path = output_dir.to_s + "/#{var}_#{mip}_#{model}_#{experiment}_#{@sdate}_#{@edate}_lon_#{s_lon}_#{e_lon}_lat_#{s_lat}_#{e_lat}.nc"
 
 		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
 		##############################################################
@@ -224,7 +221,7 @@ class Cmip5sController < ApplicationController
 		R.eval "library(esd)"
 		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
 		R.eval "png(filename = image_sel_sphere)"
-		R.eval "map(data_sel, projection='sphere')"
+		R.eval "plot(data_sel)"
 		R.eval "dev.off()"
 
 		############ Parameters for GrADS ctl file #################
@@ -270,14 +267,20 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set grads off")
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set mpdset hires")
-		grads_gs.puts("set clevs 0 1 2 3 4 5 6 7 8 9 10")
-		#	grads_gs.puts("set ccols 0 14 20 25 30 40 50 60")
-		grads_gs.puts("d ave(#{var},t=1,t=#{ntime.to_s})")
+		if @unit == "°C"
+			grads_gs.puts("set clevs -40 -30 -20 -10 0 14 20 25 30 40 50 60")
+		elsif @unit == "mm/d"
+			grads_gs.puts("set clevs 0 0.5 1 1.5 2.0 2.5 3.0 3.5")
+		else
+			grads_gs.puts("set clevs 0 1 2 3 4 5 6 7 8 9 10")
+		end
+		grads_gs.puts("set ccols 9 14 4 11 5 13 3 10 7 12 8 2 6")
+		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		#	grads_gs.puts("d pr*86400")
 		# grads_gs.puts("cbar")
 		grads_gs.puts("draw title #{model} #{experiment} #{mip} #{var} ")
 		grads_gs.puts("draw subtitle #{@sdate.to_s}-- #{@edate.to_s} ")
-		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads.png png white")
+		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads.gif gif white")
 		grads_gs.puts("quit")
 		grads_gs.close
 

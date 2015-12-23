@@ -80,15 +80,6 @@ GEM
       pkg-config
     globalid (0.3.5)
       activesupport (>= 4.1.0)
-    gphys (1.4.3.2)
-      narray (>= 0.5.7)
-      narray_miss (>= 1.2.4)
-      numru-misc (>= 0.1.0)
-      numru-units (>= 1.7)
-      rb-gsl (>= 1.14)
-      ruby-dcl (>= 1.6.1)
-      ruby-fftw3 (>= 0.3)
-      ruby-netcdf (>= 0.6.6)
     i18n (0.7.0)
     jbuilder (2.2.16)
       activesupport (>= 3.0.0, < 5)
@@ -113,9 +104,6 @@ GEM
       narray
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
-    numru-misc (0.1.2)
-      narray (>= 0.5.5)
-    numru-units (1.9.0)
     orm_adapter (0.5.0)
     pango (2.2.5)
       cairo (>= 1.14.0)
@@ -161,9 +149,6 @@ GEM
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     rinruby (2.0.3)
-    ruby-dcl (1.7.1)
-      narray (>= 0.5.5)
-      narray_miss
     ruby-fftw3 (0.4.2)
       narray
     ruby-netcdf (0.7.1.1)
@@ -219,7 +204,6 @@ DEPENDENCIES
   devise
   gdk_pixbuf2 (~> 2.2.5)
   glib2 (~> 2.2.5)
-  gphys (~> 1.4.3.2)
   jbuilder (~> 2.0)
   jquery-rails
   mysql2
@@ -229,7 +213,6 @@ DEPENDENCIES
   rails (= 4.2.1)
   rb-gsl (~> 1.16.0.4)
   rinruby (~> 2.0.3)
-  ruby-dcl (~> 1.7.1)
   ruby-fftw3 (~> 0.4.2)
   ruby-netcdf (~> 0.7.1.1)
   sass-rails (~> 5.0)
