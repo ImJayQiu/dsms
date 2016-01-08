@@ -5,7 +5,7 @@
 
 require "cdo"
 #require "gsl"
-require "rinruby"
+#require "rinruby"
 
 class Cmip5sController < ApplicationController
 
@@ -43,8 +43,6 @@ class Cmip5sController < ApplicationController
 		mip = 'day' 
 		model = params[:part3].first.to_s
 		experiment = params[:part4].first.to_s
-		#		ensemble = params[:part5].first.to_s
-		#		temporal = params[:part6].first.to_s
 
 		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
 
@@ -130,16 +128,13 @@ class Cmip5sController < ApplicationController
 
 		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
 
-		output_file_name = "#{var}_#{mip}_#{model}_#{experiment}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}.nc"
+		output_file_name = "#{var}_#{mip}_#{model}_#{experiment}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
-		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
+		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
 		##############################################################
 
-		################ Data from GPhys ###########################
-		#		@sel_data_path = File.join(Rails.root, @sel_data)
-		#		@dataset_g = GPhys::NetCDF_IO.open(@sel_data_path, var)
 
 		################ Data from CDO ###########################
 
@@ -166,13 +161,13 @@ class Cmip5sController < ApplicationController
 		@min_h = Hash[@date.zip(@min_set)]
 		@sel_file_path = root_path+@cdo_output_path.to_s
 
+=begin
 		################ R esd ploting ####################
 		R.var = var.to_s
 
 		# RIMES domain file
 		R.file_rimes = file 
 		R.img_title = model.upcase + ' | ' + experiment.upcase + ' | ' + var.humanize + ' | Daily: ' + @sdate.to_s + ' -- ' + @edate.to_s 
-		#	R.sub_title = 'Latitude: ' + s_lat.to_s + ' -- ' + e_lat.to_s + ' | '  + 'Longitude: ' + s_lon.to_s + ' -- ' + e_lon.to_s  
 
 
 		# RIMES image size 
@@ -186,7 +181,6 @@ class Cmip5sController < ApplicationController
 		# RIMES domain sphere image
 		R.image_rimes_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_sphere.png").to_s
 
-=begin
 		#Processing RIMES domain lonlat image
 		R.eval "library(esd)"
 		R.eval "data_rimes <- retrieve.ncdf(ncfile = file_rimes, param = var)"
@@ -200,10 +194,9 @@ class Cmip5sController < ApplicationController
 		R.eval "png(filename=image_rimes_sphere)"
 		R.eval "map(data_rimes, projection='sphere')"
 		R.eval "dev.off()"
-=end
 
 		# Selected domain file
-		R.file_sel = Rails.root.join("public", "#{@cdo_output_path.to_s}").to_s
+		R.file_sel = Rails.root.join("public", "#{@cdo_output_path}.nc").to_s
 		# Selected lonlat image
 		R.image_sel_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_lonlat.png").to_s
 
@@ -258,29 +251,103 @@ class Cmip5sController < ApplicationController
 		grads_ctl.puts("#{var} 0 t,y,x #{std_name} (#{o_unit.to_s})")
 		grads_ctl.puts("ENDVARS")
 		grads_ctl.close
+=end
 
+		@sel_data_ctl = Cdo.gradsdes(input: @sel_data)
+		ntime = Cdo.ntime(input: @sel_data)[0]
 		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
+
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}.gs", "w")
 		grads_gs.puts("reinit")
 		grads_gs.puts("open #{output_file_name}.ctl")
-		grads_gs.puts("set t 200")
 		grads_gs.puts("set grads off")
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set mpdset hires")
+		#grads_gs.puts("set font 1")
+		#grads_gs.puts("set strsiz 0.18")
+		#grads_gs.puts("draw string 3.5 8.1 #{model} #{experiment}")
+		#grads_gs.puts("set font 2")
+		#grads_gs.puts("set strsiz 0.15")
+		#grads_gs.puts("draw string 3.5 7.8 #{@sdate} to #{@edate}")
+
 		if @unit == "°C"
-			grads_gs.puts("set clevs -40 -30 -20 -10 0 14 20 25 30 40 50 60")
+			grads_gs.puts('set rgb 33 248 50 60')
+			grads_gs.puts('set rgb 34 255 50 89')
+			grads_gs.puts('set rgb 35 255 50 185')
+			grads_gs.puts('set rgb 36 248 50 255')
+			grads_gs.puts('set rgb 37 224 50 255')
+			grads_gs.puts('set rgb 38 195 50 255')
+			grads_gs.puts('set rgb 39 175 50 255')
+			grads_gs.puts('set rgb 40 161 50 255')
+			grads_gs.puts('set rgb 41 137 50 255')
+			grads_gs.puts('set rgb 42 118 74 255')
+			grads_gs.puts('set rgb 43 98 74 255')
+			grads_gs.puts('set rgb 44 79 50 255')
+			grads_gs.puts('set rgb 45 50 50 255')
+			grads_gs.puts('set rgb 46 50 74 255')
+			grads_gs.puts('set rgb 47 50 89 255')
+			grads_gs.puts('set rgb 48 50 113 255')
+			grads_gs.puts('set rgb 49 50 146 255')
+			grads_gs.puts('set rgb 50 50 175 255')
+			grads_gs.puts('set rgb 51 50 204 255')
+			grads_gs.puts('set rgb 52 50 224 255')
+			grads_gs.puts('set rgb 53 50 255 253')
+			grads_gs.puts('set rgb 54 50 255 228')
+			grads_gs.puts('set rgb 55 50 255 200')
+			grads_gs.puts('set rgb 56 50 255 161')
+			grads_gs.puts('set rgb 57 50 255 132')
+			grads_gs.puts('set rgb 58 50 255 103')
+			grads_gs.puts('set rgb 59 50 255 79')
+			grads_gs.puts('set rgb 60 50 255 60')
+			grads_gs.puts('set rgb 61 79 255 50')
+			grads_gs.puts('set rgb 62 132 255 50')
+			grads_gs.puts('set rgb 63 171 255 50')
+			grads_gs.puts('set rgb 64 204 255 50')
+			grads_gs.puts('set rgb 65 224 255 50')
+			grads_gs.puts('set rgb 66 253 255 50')
+			grads_gs.puts('set rgb 67 255 233 50')
+			grads_gs.puts('set rgb 68 255 224 50')
+			grads_gs.puts('set rgb 69 255 209 50')
+			grads_gs.puts('set rgb 70 255 204 50')
+			grads_gs.puts('set rgb 71 255 185 50')
+			grads_gs.puts('set rgb 72 255 161 50')
+			grads_gs.puts('set rgb 73 255 146 50')
+			grads_gs.puts('set rgb 74 255 127 50')
+			grads_gs.puts('set rgb 75 255 118 50')
+			grads_gs.puts('set rgb 76 255 93 50')
+			grads_gs.puts('set rgb 77 255 74 50')
+			grads_gs.puts('set rgb 78 255 60 50')
+			grads_gs.puts('set rgb 79 255 33 33')
+			grads_gs.puts('set rgb 80 255 0 0')
+			grads_gs.puts('set rgb 81 235 10 0')
+			grads_gs.puts('set rgb 82 215 20 0')
+			grads_gs.puts('set rgb 83 195 30 0')
+			grads_gs.puts('set rgb 84 175 40 0')
+			grads_gs.puts('set rgb 85 165 45 0')
+			grads_gs.puts('set rgb 86 155 50 0')
+			grads_gs.puts('set rgb 87 145 55 0')
+			grads_gs.puts('set rgb 88 135 60 0')
+			grads_gs.puts('set rgb 89 120 60 0')
+			grads_gs.puts('set rgb 90 100 60 0')
+			grads_gs.puts('set rgb 91 80 60 0')
+			grads_gs.puts('set rgb 20 250 240 230')
+			grads_gs.puts('set rgb 21 240 220 210')
+			grads_gs.puts('set rgb 22 225 190 180')
+			grads_gs.puts('set rgb 23 200 160 150')
+			grads_gs.puts('set rgb 24 180 140 130')
+			grads_gs.puts('set rgb 25 160 120 110')
+			grads_gs.puts('set rgb 26 140 100 90')
+			grads_gs.puts("set clevs -10 -9 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 ")
+			grads_gs.puts('set ccols 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 85 87 88 89 90 91 26 25 24 23 22 21 20')
 		elsif @unit == "mm/d"
-			grads_gs.puts("set clevs 0 0.5 1 1.5 2.0 2.5 3.0 3.5")
-		else
-			grads_gs.puts("set clevs 0 1 2 3 4 5 6 7 8 9 10")
+			grads_gs.puts("set clevs 0 2 4 6 8 10 12 14 16 18 20 22")
+			grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 		end
-		grads_gs.puts("set ccols 9 14 4 11 5 13 3 10 7 12 8 2 6")
+
 		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
-		#	grads_gs.puts("d pr*86400")
-		# grads_gs.puts("cbar")
+		#grads_gs.puts('./public/cbar.gs')
 		grads_gs.puts("draw title #{model} #{experiment} #{mip} #{var} ")
-		grads_gs.puts("draw subtitle #{@sdate.to_s}-- #{@edate.to_s} ")
-		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads.gif gif white")
+		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
 
@@ -483,9 +550,295 @@ class Cmip5sController < ApplicationController
 		##########################################################
 	end
 
+	def mult_analysis
+
+		################ date range ##################################
+
+		@sdate = params[:s_date].first.to_date
+		@edate = params[:e_date].first.to_date
+
+		##############################################################
+
+
+		############# File path and  name ################################
+		var = params[:var].first.to_s
+		mip = params[:mip].first.to_s
+		@m1 = m1 = params[:m1].first.to_s
+		@m2 = m2 = params[:m2].first.to_s
+		@m3 = m3 = params[:m3].first.to_s
+		@m4 = m4 = params[:m4].first.to_s
+		exp = params[:exp].first.to_s
+
+		@f1_name = var + '_' + mip +'_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
+		@f2_name = var + '_' + mip +'_' + m2 + '_' + exp + '_' + 'rimes' + '.nc'
+		@f3_name = var + '_' + mip +'_' + m3 + '_' + exp + '_' + 'rimes' + '.nc'
+		@f4_name = var + '_' + mip +'_' + m4 + '_' + exp + '_' + 'rimes' + '.nc'
+
+		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
+		@exp_path = Settings::Experiment.where(name: exp).first.name
+		@m1_path = Settings::Datamodel.where(name: m1).first.stdname
+		@m2_path = Settings::Datamodel.where(name: m2).first.stdname
+		@m3_path = Settings::Datamodel.where(name: m3).first.stdname
+		@m4_path = Settings::Datamodel.where(name: m4).first.stdname
+
+		f1=@root_file_path.to_s+'/'+@m1_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f1_name.to_s
+		f2=@root_file_path.to_s+'/'+@m2_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f2_name.to_s
+		f3=@root_file_path.to_s+'/'+@m3_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f3_name.to_s
+		f4=@root_file_path.to_s+'/'+@m4_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f4_name.to_s
+		##############################################################
+		#
+		############# convert rate & unit ############################
+		@variable_setting = Settings::Variable.where(name: var).first
+		o_unit = @variable_setting.unit
+		if @variable_setting.c_rate.blank?
+			@rate = 1.to_i
+			@rate2 = 0.to_i 
+			@unit = o_unit
+		else
+			if @variable_setting.unit == "K" && @variable_setting.c_unit == "°C"
+				@rate = 1.to_i
+				@rate2 = @variable_setting.c_rate.to_f 
+				@unit = @variable_setting.c_unit
+			else
+				@rate = @variable_setting.c_rate.to_f 
+				@rate2 = 0.to_i 
+				@unit = @variable_setting.c_unit
+			end
+		end
+
+		##############################################################
+		#
+		############# Selected location  #############################
+
+		s_lat = params[:s_lat].first.to_f
+		e_lat = params[:e_lat].first.to_f
+		s_lon = params[:s_lon].first.to_f
+		e_lon = params[:e_lon].first.to_f
+
+		@lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
+		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
+
+		################################################################
+		#
+		############ cut file by selected location ###################
+		f1_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1, output: f1_ll, options: '-f nc4') rescue nil
+		f2_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2, output: f2_ll, options: '-f nc4') rescue nil
+		f3_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3, output: f3_ll, options: '-f nc4') rescue nil
+		f4_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4, output: f4_ll, options: '-f nc4') rescue nil
+		###############################################################
+
+		############# cut file by selected date range ##################
+		output_dir = "tmp_m_nc/#{current_user.id}/#{mip}/#{var}/#{exp}"
+		sys_output_dir = Rails.root.join("public", output_dir)
+
+		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
+
+		output_file_name = "#{var}_#{mip}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+
+		@cdo_output_path = output_dir.to_s + "/" + output_file_name
+
+		#	@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
+
+		@f1_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f1_ll, output:"public/#{@cdo_output_path}_#{m1}.nc", options:'-f nc4') rescue nil
+		@f2_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f2_ll, output:"public/#{@cdo_output_path}_#{m2}.nc", options:'-f nc4') rescue nil
+		@f3_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f3_ll, output:"public/#{@cdo_output_path}_#{m3}.nc", options:'-f nc4') rescue nil
+		@f4_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f4_ll, output:"public/#{@cdo_output_path}_#{m4}.nc", options:'-f nc4') rescue nil
+
+		#	@f1_data_ctl = Cdo.gradsdes(input: @f1_data)
+		#	@f2_data_ctl = Cdo.gradsdes(input: @f2_data)
+		@f3_data_ctl = Cdo.gradsdes(input: @f3_data)
+		#	@f4_data_ctl = Cdo.gradsdes(input: @f4_data)
+		##############################################################
+		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
+
+		[@f1_data,@f2_data,@f3_data,@f4_data].each_with_index do |data,i|
+			if i+1==1
+				m_name = m1
+			elsif i+1==2
+				m_name = m2
+			elsif i+1==3
+				m_name = m3
+			elsif i+1==4
+				m_name = m4
+			end
+			ntime = Cdo.ntime(input: data)[0] rescue nil
+			data_ctl = Cdo.gradsdes(input: data) rescue nil
+			gs_name_m = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_#{i+1}"
+
+			grads_gs = File.new("#{sys_output_dir}/#{gs_name_m}.gs", "w")
+			grads_gs.puts("reinit")
+			grads_gs.puts("open #{output_file_name}_#{m_name}.ctl")
+			grads_gs.puts("set grads off")
+			grads_gs.puts("set gxout shaded")
+			grads_gs.puts("set font 2")
+			grads_gs.puts("set strsiz 0.12")
+			grads_gs.puts("draw string 3.5 7.8 #{@sdate} to #{@edate}")
+			grads_gs.puts("set font 1")
+			grads_gs.puts("set mpdset hires")
+
+			if @unit == "°C"
+				grads_gs.puts('set rgb 33 248 50 60')
+				grads_gs.puts('set rgb 34 255 50 89')
+				grads_gs.puts('set rgb 35 255 50 185')
+				grads_gs.puts('set rgb 36 248 50 255')
+				grads_gs.puts('set rgb 37 224 50 255')
+				grads_gs.puts('set rgb 38 195 50 255')
+				grads_gs.puts('set rgb 39 175 50 255')
+				grads_gs.puts('set rgb 40 161 50 255')
+				grads_gs.puts('set rgb 41 137 50 255')
+				grads_gs.puts('set rgb 42 118 74 255')
+				grads_gs.puts('set rgb 43 98 74 255')
+				grads_gs.puts('set rgb 44 79 50 255')
+				grads_gs.puts('set rgb 45 50 50 255')
+				grads_gs.puts('set rgb 46 50 74 255')
+				grads_gs.puts('set rgb 47 50 89 255')
+				grads_gs.puts('set rgb 48 50 113 255')
+				grads_gs.puts('set rgb 49 50 146 255')
+				grads_gs.puts('set rgb 50 50 175 255')
+				grads_gs.puts('set rgb 51 50 204 255')
+				grads_gs.puts('set rgb 52 50 224 255')
+				grads_gs.puts('set rgb 53 50 255 253')
+				grads_gs.puts('set rgb 54 50 255 228')
+				grads_gs.puts('set rgb 55 50 255 200')
+				grads_gs.puts('set rgb 56 50 255 161')
+				grads_gs.puts('set rgb 57 50 255 132')
+				grads_gs.puts('set rgb 58 50 255 103')
+				grads_gs.puts('set rgb 59 50 255 79')
+				grads_gs.puts('set rgb 60 50 255 60')
+				grads_gs.puts('set rgb 61 79 255 50')
+				grads_gs.puts('set rgb 62 132 255 50')
+				grads_gs.puts('set rgb 63 171 255 50')
+				grads_gs.puts('set rgb 64 204 255 50')
+				grads_gs.puts('set rgb 65 224 255 50')
+				grads_gs.puts('set rgb 66 253 255 50')
+				grads_gs.puts('set rgb 67 255 233 50')
+				grads_gs.puts('set rgb 68 255 224 50')
+				grads_gs.puts('set rgb 69 255 209 50')
+				grads_gs.puts('set rgb 70 255 204 50')
+				grads_gs.puts('set rgb 71 255 185 50')
+				grads_gs.puts('set rgb 72 255 161 50')
+				grads_gs.puts('set rgb 73 255 146 50')
+				grads_gs.puts('set rgb 74 255 127 50')
+				grads_gs.puts('set rgb 75 255 118 50')
+				grads_gs.puts('set rgb 76 255 93 50')
+				grads_gs.puts('set rgb 77 255 74 50')
+				grads_gs.puts('set rgb 78 255 60 50')
+				grads_gs.puts('set rgb 79 255 33 33')
+				grads_gs.puts('set rgb 80 255 0 0')
+				grads_gs.puts('set rgb 81 235 10 0')
+				grads_gs.puts('set rgb 82 215 20 0')
+				grads_gs.puts('set rgb 83 195 30 0')
+				grads_gs.puts('set rgb 84 175 40 0')
+				grads_gs.puts('set rgb 85 165 45 0')
+				grads_gs.puts('set rgb 86 155 50 0')
+				grads_gs.puts('set rgb 87 145 55 0')
+				grads_gs.puts('set rgb 88 135 60 0')
+				grads_gs.puts('set rgb 89 120 60 0')
+				grads_gs.puts('set rgb 90 100 60 0')
+				grads_gs.puts('set rgb 91 80 60 0')
+				grads_gs.puts('set rgb 20 250 240 230')
+				grads_gs.puts('set rgb 21 240 220 210')
+				grads_gs.puts('set rgb 22 225 190 180')
+				grads_gs.puts('set rgb 23 200 160 150')
+				grads_gs.puts('set rgb 24 180 140 130')
+				grads_gs.puts('set rgb 25 160 120 110')
+				grads_gs.puts('set rgb 26 140 100 90')
+				grads_gs.puts('set clevs -10 -9 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35')
+				grads_gs.puts('set ccols 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 85 87 88 89 90 91 26 25 24 23 22 21 20')
+			elsif @unit == "mm/d"
+				grads_gs.puts("set clevs 0 2 4 6 8 10 12 14 16 18 20 22")
+				grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
+			end
+			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
+			#grads_gs.puts('/public/cbar.gs')
+			grads_gs.puts("draw title #{m_name} #{exp} ")
+			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{i+1}.png png white")
+			grads_gs.puts("quit")
+			grads_gs.close
+		end
+
+		@go_dir = "cd #{sys_output_dir.to_s}"
+
+		if @f1_data.nil?
+			@plot_m1_cmd = ""
+		else
+			@plot_m1_cmd = "grads -lbc 'exec #{gs_name}_1.gs'"
+		end
+
+		if @f2_data.nil?
+			@plot_m2_cmd = ""
+		else
+			@plot_m2_cmd = "grads -lbc 'exec #{gs_name}_2.gs'"
+		end
+
+		if @f3_data.nil?
+			@plot_m3_cmd = ""
+		else
+			@plot_m3_cmd = "grads -lbc 'exec #{gs_name}_3.gs'"
+		end
+
+		if @f4_data.nil?
+			@plot_m4_cmd = ""
+		else
+			@plot_m4_cmd = "grads -lbc 'exec #{gs_name}_4.gs'"
+		end
+
+		system("cd / && #{@go_dir} && #{@plot_m1_cmd}") 
+		system("cd / && #{@go_dir} && #{@plot_m2_cmd}") 
+		system("cd / && #{@go_dir} && #{@plot_m3_cmd}") 
+		system("cd / && #{@go_dir} && #{@plot_m4_cmd}") 
+
+=begin
+		R.var = var.to_s
+		# Selected domain file
+		R.f1_sel = @f1_data.to_s
+		R.f2_sel = @f2_data.to_s
+		R.f3_sel = @f3_data.to_s
+		R.f4_sel = @f4_data.to_s
+		# Selected lonlat image
+		R.img_f1_ll = ("#{@f1_data.to_s}.png").to_s
+		R.img_f2_ll = ("#{@f2_data.to_s}.png").to_s
+		R.img_f3_ll = ("#{@f3_data.to_s}.png").to_s
+		R.img_f4_ll = ("#{@f4_data.to_s}.png").to_s
+
+		#Processing F1 imgs
+		R.eval "library(esd)"
+		R.eval "data_sel <- retrieve.ncdf(ncfile = f1_sel, param = var)"
+		R.eval "png(filename = img_f1_ll)"
+		R.eval "plot(data_sel)"
+		R.eval "dev.off()"
+		#Processing F2 imgs
+		R.eval "library(esd)"
+		R.eval "data_sel <- retrieve.ncdf(ncfile = f2_sel, param = var)"
+		R.eval "png(filename = img_f2_ll)"
+		R.eval "plot(data_sel)"
+		R.eval "dev.off()"
+		#Processing F3 imgs
+		R.eval "library(esd)"
+		R.eval "data_sel <- retrieve.ncdf(ncfile = f3_sel, param = var)"
+		R.eval "png(filename = img_f3_ll)"
+		R.eval "plot(data_sel)"
+		R.eval "dev.off()"
+		#Processing F4 imgs
+		R.eval "library(esd)"
+		R.eval "data_sel <- retrieve.ncdf(ncfile = f4_sel, param = var)"
+		R.eval "png(filename = img_f4_ll)"
+		R.eval "plot(data_sel)"
+		R.eval "dev.off()"
+
+		@f1_img="#{@f1_data.to_s}.png".to_s
+		@f2_img="#{@f2_data.to_s}.png".to_s
+		@f3_img="#{@f3_data.to_s}.png".to_s
+		@f4_img="#{@f4_data.to_s}.png".to_s
+=end
+
+
+	end
+
 
 	# GET /cmip5s/1
 	# GET /cmip5s/1.json
+	#
 	def show
 	end
 

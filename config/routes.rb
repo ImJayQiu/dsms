@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+	get '/temps/:name' => 'cmip5s#temps', :as => :tmp_img
 
 	namespace :settings do
 		resources :inds
@@ -21,6 +22,8 @@ Rails.application.routes.draw do
 			get :monthly
 			get :daily_analysis
 			get :monthly_analysis
+			get :mult
+			get :mult_analysis
 			get :info
 		end
 	end

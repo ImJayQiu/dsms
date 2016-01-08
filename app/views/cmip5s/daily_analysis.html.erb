@@ -1,13 +1,6 @@
 
 <p id="notice"><%= notice %></p>
 <h2>CMIP5 Data Analysis - Daily</h2>
-<p/>
-X-size:<%= @xsize %><br/>
-Y-size:<%= @ysize %><br/>
-X-inc:<%= @xinc %><br/>
-y-inc:<%= @yinc %><br/>
-</p>
-<%= @plot %>
 
 <table>
 	<tr>
@@ -20,11 +13,14 @@ y-inc:<%= @yinc %><br/>
 	</tr>
 	<tr>
 		<td style="width:50%;" align="center">
-			<%= image_tag root_path+"#{@cdo_output_path}_sel_sphere.png", width: "100%" %>
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads.png", width: "100%" %>
+				<br/>Click image to enlarge
+			</a>
 		</td>
 		<td style="width:50%;" align="center">
-			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads.gif" %> target = "_blank" >
-				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads.gif", width: "100%" %>
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads.png", width: "100%" %>
 				<br/>Click image to enlarge
 			</a>
 		</td>

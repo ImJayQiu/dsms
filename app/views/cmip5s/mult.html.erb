@@ -1,57 +1,56 @@
-<link rel="stylesheet" href="/assets/css/1574105.css" type="text/css"/>
-<link rel="stylesheet" href="/assets/leaflet/leaflet.css" />
 <link rel="stylesheet" href="/assets/leaflet/style.css">
+<link rel="stylesheet" href="/assets/leaflet/leaflet.css" />
 <link rel="stylesheet" href="/assets/leaflet/leaflet-areaselect.css">
 
 <p id="notice"><%= notice %></p>
 
-<h2>CMIP5 Data Analysis - Daily</h2>
+<h2>CMIP5 Data Analysis - Multi-Models</h2>
 
-<div id="pagewidth">
-	<div id="wrapper" class="clearfix">
+<h3>Step 1. Select Region</h3>
+<table>
+	<tr></tr>
+	<tr align=middle>
+		<td>
+			<div id="map">map</div>
+		</td>
 
-		<div id="maincol">
-			<h3>Select Region</h3>
-			<table>
-				<tr></tr>
-				<tr><td>
-						<div id="map">map</div>
-				</td></tr>
-			</table>
-
-			<p/>
-
+		<td>
 			<table id="result">
+				<tr></tr>
 				<tr>
-					<th colspan=5>Location Region</th>
+					<td colspan=3>Location Region</td>
 				</tr>
-
-				<tr>
-					<td>Lon.</td>
+					<td>Lon.</td> 
 					<td>W:</td>
 					<td><input type="text" class="slon" ></td>
+				</tr>
+				<tr>
+					<td>Lon.</td> 
 					<td>E:</td>
 					<td><input type="text" class="elon" ></td>
 				</tr>
 				<tr>
-					<td>Lat.</td>
+					<td>Lat.</td> 
 					<td>S:</td>
 					<td><input type="text" class="slat" ></td>
+				</tr>
+				<tr>
+					<td>Lat.</td> 
 					<td>N:</td>
 					<td><input type="text" class="elat" ></td>
 				</tr>
 			</table>
+		</td>
+	</tr>
+</table>
+<p/>
 
 
-		</div>
-
-		<div id="leftcol">
-			<h3>Select Dataset</h3>
-			<%= render "cmip5s/forms/daily_form" %>
-		</div>
-
-	</div>
+<div>
+	<h3>Step 2. Select Dataset</h3>
+	<%= render "cmip5s/forms/mult_form" %>
 </div>
+
 
 
 
@@ -66,7 +65,7 @@ attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contri
 }).addTo(map);
 
 $(window).on("resize", function() {
-		$("#map").height($(window).height()*0.45).width($(window).width()*0.45);
+		$("#map").height($(window).height()*0.5).width($(window).width()*0.5);
 		map.invalidateSize();
 		}).trigger("resize");
 
