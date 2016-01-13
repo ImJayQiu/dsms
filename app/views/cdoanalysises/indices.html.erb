@@ -23,18 +23,17 @@
 	<div id="dvData">
 		<table>
 			<tr>
-				<td><%= @indice[0].split(" ")[1] %></td>
+				<td>Index</td>
 				<td><%= @indice[0].split(" ")[2] %></td>
 				<td><%= @indice[0].split(" ")[3] %></td>
-				<td><%= @indice[0].split(" ")[4] %><br/><%= @unit %></td>
+				<td>Number of Days</td>
 			</tr>
-			<% @indice[1..-1].each do |i| %>
+			<% @indice[1..-1].each_with_index do |i,index| %>
 				<tr>
-				<td><%= i.split(" ")[0] %></td>
+				<td><%= index+1 %></td>
 				<td><%= i.split(" ")[1] %></td>
 				<td><%= i.split(" ")[2] %></td>
 				<td><%= i.split(" ")[3] %></td>
-				<%#= (i.split(" ")[3].to_f * @rate).to_f.round(1) %>
 			</tr>
 		<% end %>
 		</table>

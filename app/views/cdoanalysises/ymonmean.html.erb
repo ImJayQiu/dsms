@@ -24,9 +24,9 @@ library: {
 <% @ymonmean[1..-1].each do |m| %>
 	<tr>
 	<td><%= m.split(" ")[2] %></td>
-	<td><%= m.split(" ")[8].to_f * @rate + @rate2 %></td>
-	<td><%= m.split(" ")[9].to_f * @rate + @rate2 %></td>
-	<td><%= m.split(" ")[10].to_f * @rate + @rate2 %></td>
+	<td><%= (m.split(" ")[8].to_f * @rate + @rate2).round(3) %></td>
+	<td><%= (m.split(" ")[9].to_f * @rate + @rate2).round(3) %></td>
+	<td><%= (m.split(" ")[10].to_f * @rate + @rate2).round(3) %></td>
 </tr>
 <% end %>
 </table>

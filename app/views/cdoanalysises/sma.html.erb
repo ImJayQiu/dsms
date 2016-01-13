@@ -1,7 +1,25 @@
-<%# Multi-year monthly analysis %>
-<h2>Multi-Year Monthly Analysis</h2>
+<h2>Selected Months Analysis</h2>
 
-<%= @ymonmin %>
+<%= Cdo.info(input: @sel_months) %>
+<%#= @months_data.to_a %>
+		<table>
+			<tr>
+				<td>Date</td>
+				<td>Min</td>
+				<td>Mean</td>
+				<td>Max</td>
+			</tr>
+			<%# @months_data[1..-1].each do |md| %>
+
+				<tr>
+				<td><%#= md.split(" ")[0] %></td>
+				<td><%#= md.split(" ")[1] %></td>
+				<td><%#= md.split(" ")[2] %></td>
+				<td><%#= md.split(" ")[3] %></td>
+			</tr>
+		<%# end %>
+		</table>
+
 
 <%#= line_chart [
 	{name: "Max", data: @max_min_h },

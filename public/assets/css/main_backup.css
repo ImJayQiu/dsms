@@ -1789,6 +1789,7 @@ input[type="radio"] + label:before {
 	text-transform: none !important;
 }
 
+input[type="checkbox"] + label:before,
 input[type="radio"] + label:before {
 	background: rgba(144, 144, 144, 0.25);
 	border-radius: 3px;
@@ -1803,12 +1804,11 @@ input[type="radio"] + label:before {
 	width: 1.65em;
 }
 
-input[type="checkbox"] + label:before,
 input[type="checkbox"]:checked + label:before,
 input[type="radio"]:checked + label:before {
-	background: #2e3842; 
-	color: #FFF; 
-	content: '✓';
+	background: #2e3842;
+	color: #fff;
+	content: '\f00c';
 }
 
 input[type="checkbox"]:focus + label:before,

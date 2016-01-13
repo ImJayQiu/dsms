@@ -61,12 +61,17 @@
 <table>
 	<thead>
 		<tr>
-			<th colspan=12>5.Select Months</th>
+			<th colspan=6>5.Select Months</th>
 		</tr>
 	</thead>
 	<tr>
-		<% ["1","2","3","4","5","6","7","8","9","10","11","12"].each do |m|%>
-			<td><%= check_box_tag m, m %><%= label_tag m %></label></td>
+		<% ["Jan.","Feb.","Mar.","Apr.","May","June"].each_with_index do |m,i|%>
+			<td><%= check_box_tag "months[#{i+1}]", i+1, checked: false, name: 'months[]' %><%= label_tag "months[#{i+1}]", " #{i+1}-#{m}"  %></td>
+	<% end %>
+	</tr>
+	<tr>
+		<% ["July","Aug.","Sep.","Oct.","Nov.","Dec."].each_with_index do |m,i|%>
+			<td><%= check_box_tag "months[#{i+7}]", i+7, checked: false, name: 'months[]' %><%= label_tag "months[#{i+7}]", " #{i+7}-#{m}"  %></td>
 	<% end %>
 	</tr>
 </table>

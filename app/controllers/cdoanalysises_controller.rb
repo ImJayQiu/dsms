@@ -5,7 +5,7 @@
 
 require "cdo"
 #require "gsl"
-require "rinruby"
+#require "rinruby"
 
 
 
@@ -50,31 +50,27 @@ class CdoanalysisesController < ApplicationController
 		@unit = params[:unit]
 		@info = Cdo.info(input: @dataset)
 
-#		@sel_file_path = File.join(Rails.root, @dataset)
-
-#		@g_file = GPhys::NetCDF_IO.open(@sel_file_path, @var_name )
-
-#		@lon = @g_file.axis("lon").pos.to_a 
-#		@lat = @g_file.axis("lat").pos.to_a 
-#		@day = @g_file.axis("time").pos.to_a 
 
 	end
 
 
 
-	### multi_year monthly analysis
-	def mym
-		@file = params[:dataset]
+	# specific_monthly_analysis 
+	def sma
+		@dataset = params[:dataset]
+		@file_name = params[:file_name]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
-		@ymonmin_f = Cdo.ymonmin(input: @file)
-		@ymonmin = Cdo.info(input: @ymonmin_f)
+		@months = params[:months].values
+		sel_months = @months.to_s
+		@sel_months = Cdo.selmon("1,2,4,7", input: @dataset, options:"-f nc4")
+		#@month_data = Cdo.outputtab(['date','min','mean','max'],input: @sel_months)
 	end
 
 
 	### Seasonal analysis 
-	def season
+	def seasonal
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
@@ -229,27 +225,6 @@ class CdoanalysisesController < ApplicationController
 
 		@var = Cdo.showname(input: @ind_output) 
 		@indice = Cdo.outputtab(['date','lon','lat','value'], input: @ind_output) 
-		R.var = @var.first.split(" ").first.to_s 
-
-		R.inds = 'cdo_'+ @ind.to_s 
-		R.inds_out = 'cdo_' + @ind.to_s + '.nc' 
-		R.cdocmd = 'cdo '+ @ind.to_s 
-
-		# Selected domain file
-		R.ind_output = @ind_output 
-		# R.ind_output = @file 
-
-		# Selected index image
-		R.image_sel_index = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_#{@ind.to_s}.png").to_s
-
-
-		#Processing Selected domain lonlat image
-		R.eval "library(esd)"
-		#R.eval "data_sel <- retrieve(ncfile=ind_output, param=var, type='ncdf4')"
-		R.eval "data_sel <- retrieve.ncdf(ncfile=ind_output)"
-		R.eval "png(filename = image_sel_index )"
-		R.eval "plot(data_sel)"
-		R.eval "dev.off()"
 
 	end
 

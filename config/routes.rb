@@ -33,8 +33,8 @@ Rails.application.routes.draw do
 		collection do
 			get :indices
 			get :info
-			get :season
-			get :mym
+			get :seasonal
+			get :sma
 			get :yearly
 			get :map
 			get :ymonmean

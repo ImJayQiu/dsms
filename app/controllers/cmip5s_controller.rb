@@ -124,6 +124,7 @@ class Cmip5sController < ApplicationController
 
 		############# cut file by selected date range ##################
 		output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}/#{experiment}"
+		sys_output_pub = Rails.root.join("public")
 		sys_output_dir = Rails.root.join("public", output_dir)
 
 		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
@@ -161,97 +162,9 @@ class Cmip5sController < ApplicationController
 		@min_h = Hash[@date.zip(@min_set)]
 		@sel_file_path = root_path+@cdo_output_path.to_s
 
-=begin
-		################ R esd ploting ####################
-		R.var = var.to_s
-
-		# RIMES domain file
-		R.file_rimes = file 
-		R.img_title = model.upcase + ' | ' + experiment.upcase + ' | ' + var.humanize + ' | Daily: ' + @sdate.to_s + ' -- ' + @edate.to_s 
-
-
-		# RIMES image size 
-		R.img_h = ( e_lat.to_f - s_lat.to_f ).abs*50
-		R.img_w = ( e_lon.to_f - s_lon.to_f ).abs*50
-		R.img_res = 300.to_s
-
-		# RIMES domain lonlat image
-		R.image_rimes_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_lonlat.png").to_s
-
-		# RIMES domain sphere image
-		R.image_rimes_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_rimes_sphere.png").to_s
-
-		#Processing RIMES domain lonlat image
-		R.eval "library(esd)"
-		R.eval "data_rimes <- retrieve.ncdf(ncfile = file_rimes, param = var)"
-		R.eval "png(filename=image_rimes_lonlat, units='px', width = 800, height = 600, res = 100, te)"
-		R.eval "map(data_rimes, projection='lonlat')"
-		R.eval "dev.off()"
-
-		#Processing RIMES domain sphere image
-		R.eval "library(esd)"
-		R.eval "data_rimes <- retrieve.ncdf(ncfile = file_rimes, param = var)"
-		R.eval "png(filename=image_rimes_sphere)"
-		R.eval "map(data_rimes, projection='sphere')"
-		R.eval "dev.off()"
-
-		# Selected domain file
-		R.file_sel = Rails.root.join("public", "#{@cdo_output_path}.nc").to_s
-		# Selected lonlat image
-		R.image_sel_lonlat = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_lonlat.png").to_s
-
-		# Selected sphere image
-		R.image_sel_sphere = Rails.root.join("public", "#{@cdo_output_path.to_s}_sel_sphere.png").to_s
-
-		#Processing Selected domain lonlat image
-		R.eval "library(esd)"
-		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
-		R.eval "png(filename = image_sel_lonlat, units='px', width = img_w, height = img_h, res = img_res )"
-		R.eval "map(data_sel, projection='lonlat', main=img_title)"
-		R.eval "dev.off()"
-
-		#Processing Selected domain sphere image
-		R.eval "library(esd)"
-		R.eval "data_sel <- retrieve.ncdf(ncfile = file_sel, param = var)"
-		R.eval "png(filename = image_sel_sphere)"
-		R.eval "plot(data_sel)"
-		R.eval "dev.off()"
-
-		############ Parameters for GrADS ctl file #################
-		@griddes = Cdo.griddes(input: @sel_data).to_a
-		std_name = Cdo.showstdname(input: @sel_data)[0].humanize
-		levels = Cdo.showlevel(input: @sel_data)[0]
-		nlevel = Cdo.nlevel(input: @sel_data)[0]
-		ntime = Cdo.ntime(input: @sel_data)[0]
-		xsize = @griddes.grep(/^xsize/)[0].split(" ")[2].to_s
-		ysize = @griddes.grep(/^ysize/)[0].split(" ")[2].to_s
-		xinc = @griddes.grep(/^xinc/)[0].split(" ")[2].to_s
-		if @griddes.grep(/^yinc/).blank?
-			yinc = xinc
-		else
-			yinc =  @griddes.grep(/^yinc/)[0].split(" ")[2].to_s
-		end
-		@xsize = xsize 
-		@ysize = ysize 
-		@xinc = xinc
-		@yinc = yinc
-
-		############## Generate ctl file for GrADS ###############
-		grads_ctl = File.new("public/#{@cdo_output_path}.ctl", "w")
-		grads_ctl.puts("DSET ^#{output_file_name} ")
-		grads_ctl.puts("TITLE Reading GCM Cut Datasets")
-		grads_ctl.puts("DTYPE netcdf")
-		grads_ctl.puts("UNDEF 1.e+20f")
-		grads_ctl.puts("OPTIONS template")
-		grads_ctl.puts("XDEF #{xsize} LINEAR #{s_lon.to_s} #{xinc} ")
-		grads_ctl.puts("YDEF #{ysize} LINEAR #{s_lat.to_s} #{yinc}")
-		grads_ctl.puts("TDEF #{ntime.to_s} LINEAR 0Z#{@sdate.strftime('%d%b%Y')} 1DY")
-		grads_ctl.puts("ZDEF #{nlevel.to_s} Levels #{levels.to_s}")
-		grads_ctl.puts("VARS 1")
-		grads_ctl.puts("#{var} 0 t,y,x #{std_name} (#{o_unit.to_s})")
-		grads_ctl.puts("ENDVARS")
-		grads_ctl.close
-=end
+		##### to copy cbar.gs to output folder  #################
+		system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
+		#########################################################
 
 		@sel_data_ctl = Cdo.gradsdes(input: @sel_data)
 		ntime = Cdo.ntime(input: @sel_data)[0]
@@ -264,9 +177,6 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set grads off")
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set mpdset hires")
-		#grads_gs.puts("set font 1")
-		#grads_gs.puts("set strsiz 0.18")
-		#grads_gs.puts("draw string 3.5 8.1 #{model} #{experiment}")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
 		grads_gs.puts("draw string 4 0.2 CDAAS RIMES.INT #{Time.now.year}")
@@ -346,7 +256,7 @@ class Cmip5sController < ApplicationController
 		end
 
 		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
-		#grads_gs.puts('./public/cbar.gs')
+		grads_gs.puts("cbar.gs")
 		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} | Mean")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_mean.png png white")
 		grads_gs.puts("quit")
@@ -360,9 +270,6 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("set font 1")
-		#grads_gs.puts("set strsiz 0.18")
-		#grads_gs.puts("draw string 3.5 8.1 #{model} #{experiment}")
-		#grads_gs.puts("set font 2")
 		grads_gs.puts("set strsiz 0.12")
 		grads_gs.puts("draw string 4 0.2 CDAAS RIMES.INT #{Time.now.year}")
 
@@ -441,7 +348,7 @@ class Cmip5sController < ApplicationController
 		end
 
 		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
-		#grads_gs.puts('./public/cbar.gs')
+		grads_gs.puts("cbar.gs")
 		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} | Max")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_max.png png white")
 		grads_gs.puts("quit")
@@ -516,20 +423,6 @@ class Cmip5sController < ApplicationController
 		@lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
 		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
 
-		############### auto map size #################################
-=begin
-		if params[:map_size].first.blank?
-			map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
-			if map_size < 1
-				@map_size = 1
-			else
-				@map_size = map_size
-			end
-		else
-			@map_size = params[:map_size].first.to_i
-		end
-=end
-		################################################################
 
 		################## find centre point ###########################
 		c_lon = (e_lon - s_lon)/2 + s_lon
@@ -672,12 +565,12 @@ class Cmip5sController < ApplicationController
 		@f3_name = var + '_' + mip +'_' + m3 + '_' + exp + '_' + 'rimes' + '.nc'
 		@f4_name = var + '_' + mip +'_' + m4 + '_' + exp + '_' + 'rimes' + '.nc'
 
-		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
-		@exp_path = Settings::Experiment.where(name: exp).first.name
-		@m1_path = Settings::Datamodel.where(name: m1).first.stdname
-		@m2_path = Settings::Datamodel.where(name: m2).first.stdname
-		@m3_path = Settings::Datamodel.where(name: m3).first.stdname
-		@m4_path = Settings::Datamodel.where(name: m4).first.stdname
+		@root_file_path = Settings::Datasetpath.where(name: mip).first.path rescue nil
+		@exp_path = Settings::Experiment.where(name: exp).first.name rescue nil
+		@m1_path = Settings::Datamodel.where(name: m1).first.stdname rescue nil
+		@m2_path = Settings::Datamodel.where(name: m2).first.stdname rescue nil
+		@m3_path = Settings::Datamodel.where(name: m3).first.stdname rescue nil
+		@m4_path = Settings::Datamodel.where(name: m4).first.stdname rescue nil
 
 		f1=@root_file_path.to_s+'/'+@m1_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f1_name.to_s
 		f2=@root_file_path.to_s+'/'+@m2_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f2_name.to_s
@@ -686,9 +579,9 @@ class Cmip5sController < ApplicationController
 		##############################################################
 		#
 		############# convert rate & unit ############################
-		@variable_setting = Settings::Variable.where(name: var).first
-		o_unit = @variable_setting.unit
-		if @variable_setting.c_rate.blank?
+		@variable_setting = Settings::Variable.where(name: var).first rescue nil
+		o_unit = @variable_setting.unit rescue nil
+		if @variable_setting.c_rate.blank? 
 			@rate = 1.to_i
 			@rate2 = 0.to_i 
 			@unit = o_unit
@@ -727,8 +620,13 @@ class Cmip5sController < ApplicationController
 
 		############# cut file by selected date range ##################
 		output_dir = "tmp_m_nc/#{current_user.id}/#{mip}/#{var}/#{exp}"
+		sys_output_pub = Rails.root.join("public")
 		sys_output_dir = Rails.root.join("public", output_dir)
 
+		##### to copy cbar.gs to output folder  #################
+		system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
+		#########################################################
+		
 		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
 
 		output_file_name = "#{var}_#{mip}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
@@ -742,10 +640,6 @@ class Cmip5sController < ApplicationController
 		@f3_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f3_ll, output:"public/#{@cdo_output_path}_#{m3}.nc", options:'-f nc4') rescue nil
 		@f4_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f4_ll, output:"public/#{@cdo_output_path}_#{m4}.nc", options:'-f nc4') rescue nil
 
-		#	@f1_data_ctl = Cdo.gradsdes(input: @f1_data)
-		#	@f2_data_ctl = Cdo.gradsdes(input: @f2_data)
-		#   @f3_data_ctl = Cdo.gradsdes(input: @f3_data)
-		#	@f4_data_ctl = Cdo.gradsdes(input: @f4_data)
 		##############################################################
 		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
@@ -769,11 +663,6 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("open #{output_file_name}_#{m_name}.ctl")
 			grads_gs.puts("set grads off")
 			grads_gs.puts("set gxout shaded")
-			#	grads_gs.puts("set font 2")
-			#	grads_gs.puts("set strsiz 0.12")
-			#	grads_gs.puts("draw string 3.5 7.8 #{@sdate} to #{@edate}")
-			#	grads_gs.puts("set font 1")
-			#	grads_gs.puts("set mpdset hires")
 
 			if @unit == "°C"
 				grads_gs.puts('set rgb 33 248 50 60')
@@ -849,7 +738,7 @@ class Cmip5sController < ApplicationController
 				grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 			end
 			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
-			#grads_gs.puts('/public/cbar.gs')
+			grads_gs.puts('cbar.gs')
 			grads_gs.puts("draw title #{m_name} Daily #{exp.humanize} #{stdname.humanize}") rescue nil
 			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{i+1}.png png white") rescue nil
 			grads_gs.puts("quit")
@@ -886,50 +775,6 @@ class Cmip5sController < ApplicationController
 		system("cd / && #{@go_dir} && #{@plot_m2_cmd}") 
 		system("cd / && #{@go_dir} && #{@plot_m3_cmd}") 
 		system("cd / && #{@go_dir} && #{@plot_m4_cmd}") 
-
-=begin
-		R.var = var.to_s
-		# Selected domain file
-		R.f1_sel = @f1_data.to_s
-		R.f2_sel = @f2_data.to_s
-		R.f3_sel = @f3_data.to_s
-		R.f4_sel = @f4_data.to_s
-		# Selected lonlat image
-		R.img_f1_ll = ("#{@f1_data.to_s}.png").to_s
-		R.img_f2_ll = ("#{@f2_data.to_s}.png").to_s
-		R.img_f3_ll = ("#{@f3_data.to_s}.png").to_s
-		R.img_f4_ll = ("#{@f4_data.to_s}.png").to_s
-
-		#Processing F1 imgs
-		R.eval "library(esd)"
-		R.eval "data_sel <- retrieve.ncdf(ncfile = f1_sel, param = var)"
-		R.eval "png(filename = img_f1_ll)"
-		R.eval "plot(data_sel)"
-		R.eval "dev.off()"
-		#Processing F2 imgs
-		R.eval "library(esd)"
-		R.eval "data_sel <- retrieve.ncdf(ncfile = f2_sel, param = var)"
-		R.eval "png(filename = img_f2_ll)"
-		R.eval "plot(data_sel)"
-		R.eval "dev.off()"
-		#Processing F3 imgs
-		R.eval "library(esd)"
-		R.eval "data_sel <- retrieve.ncdf(ncfile = f3_sel, param = var)"
-		R.eval "png(filename = img_f3_ll)"
-		R.eval "plot(data_sel)"
-		R.eval "dev.off()"
-		#Processing F4 imgs
-		R.eval "library(esd)"
-		R.eval "data_sel <- retrieve.ncdf(ncfile = f4_sel, param = var)"
-		R.eval "png(filename = img_f4_ll)"
-		R.eval "plot(data_sel)"
-		R.eval "dev.off()"
-
-		@f1_img="#{@f1_data.to_s}.png".to_s
-		@f2_img="#{@f2_data.to_s}.png".to_s
-		@f3_img="#{@f3_data.to_s}.png".to_s
-		@f4_img="#{@f4_data.to_s}.png".to_s
-=end
 
 
 	end
