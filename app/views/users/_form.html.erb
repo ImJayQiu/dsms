@@ -26,7 +26,7 @@
 	</tr>
 	<tr>
 		<td>Role:</td>
-		<td><%= f.collection_select :role, Common::ROLES, :to_s, :humanize %></td>
+		<td><%= f.collection_select :role, Common::ROLES, :to_s, :humanize, prompt: "-Select-" %></td>
 	</tr>
 	<tr>
 		<td>New Password</td>

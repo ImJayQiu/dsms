@@ -4,12 +4,6 @@
 
 <table>
 	<tr>
-		<td>
-			<%#= image_tag root_path+"#{@cdo_output_path}_rimes_sphere.png" %>
-		</td>
-		<td>
-			<%#= image_tag root_path+"#{@cdo_output_path}_rimes_lonlat.png" %>
-		</td>
 	</tr>
 	<tr>
 		<td style="width:50%;" align="center">
@@ -26,7 +20,6 @@
 		</td>
 	</tr>
 </table>
-<%#= render "cmip5s/graphs/map", area: @area, c_point: @c_point, dataset_v: @dataset_v, lon: @lon, lat: @lat, map_size: @map_size, dataset_g: @dataset_g %>
 <p/>
 
 <%= render "cmip5s/graphs/daily" %>
@@ -58,17 +51,11 @@
 			<td>Latitude Range: <%= @lat_r %></td>
 		</tr>
 		<tr>
-			<td>Min Value: <%= @min_set[1..-1].min*@rate %></td>
-			<td>Max Value: <%= @max_set[1..-1].max*@rate %></td>
-		</tr>
-		<tr>
 			<td>
-				<%= button_to "Download", root_path+@cdo_output_path.to_s, method: :get %>
+				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
 			</td>
 			<td>
-				<div class="buttons">
-					<input type="button" class="data" value="Hide Detail"/>
-				</div>
+				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
 			</td>
 		</tr>
 		</tbody>
@@ -82,7 +69,7 @@
 			<th>Dataset Analysis Operations</th>
 			<th>
 				<div class="buttons">
-					<input type="button" class="analysis" value="Show"/>
+					<input type="button" class="analysis" value="Show Operations"/>
 				</div>
 			</th>
 		</tr>

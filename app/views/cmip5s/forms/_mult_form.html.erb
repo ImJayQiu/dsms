@@ -8,17 +8,17 @@
 	</thead>
 	<tr>
 		<td>Model-1:</td>
-		<td><%= collection_select(:m1, params[:m1], Settings::Datamodel.all, :name, :name, {include_blank: "- Select Model 1 -"} ) rescue nil %></td>
+		<td><%= collection_select(:m1, params[:m1], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model 1 -"} ) rescue nil %></td>
 		<td>Model-2:</td>
-		<td><%= collection_select(:m2, params[:m2], Settings::Datamodel.all, :name, :name, {include_blank: "- Select Model 2 -"} ) rescue nil %></td>
+		<td><%= collection_select(:m2, params[:m2], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model 2 -"} ) rescue nil %></td>
 	</tr>
 	<tr>
 	</tr>
 	<tr>
 		<td>Model-3:</td>
-		<td><%= collection_select(:m3, params[:m3], Settings::Datamodel.all, :name, :name, {include_blank: "- Select Model 3 -"} ) rescue nil %></td>
+		<td><%= collection_select(:m3, params[:m3], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model 3 -"} ) rescue nil %></td>
 		<td>Model-4:</td>
-		<td><%= collection_select(:m4, params[:m4], Settings::Datamodel.all, :name, :name, {include_blank: "- Select Model 4 -"} ) rescue nil %></td>
+		<td><%= collection_select(:m4, params[:m4], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model 4 -"} ) rescue nil %></td>
 	</tr>
 </table>
 
@@ -31,9 +31,9 @@
 		</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select(:mip, params[:mip], Settings::Mip.all, :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></td>
-		<td><%= collection_select(:var, params[:var], Settings::Variable.all, :name, :name, {include_blank: "- Select Variable -"} ) rescue nil %></td>
-		<td><%= collection_select(:exp, params[:exp], Settings::Experiment.all, :name, :fullname, {include_blank: "- Select Experiment -"} ) rescue nil %></td>
+		<td><%= collection_select(:mip, params[:mip], Settings::Mip.all.order("name"), :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></td>
+		<td><%= collection_select(:var, params[:var], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"} ) rescue nil %></td>
+		<td><%= collection_select(:exp, params[:exp], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"} ) rescue nil %></td>
 	</tr>
 </table>
 
@@ -66,12 +66,12 @@
 	</thead>
 	<tr>
 		<% ["Jan.","Feb.","Mar.","Apr.","May","June"].each_with_index do |m,i|%>
-			<td><%= check_box_tag "months[#{i+1}]", i+1, checked: false, name: 'months[]' %><%= label_tag "months[#{i+1}]", " #{i+1}-#{m}"  %></td>
+			<td><%= check_box_tag "months[#{i+1}]", i+1, name: 'months[]' %><%= label_tag "months[#{i+1}]", " #{i+1}-#{m}", checked: false  %></td>
 	<% end %>
 	</tr>
 	<tr>
 		<% ["July","Aug.","Sep.","Oct.","Nov.","Dec."].each_with_index do |m,i|%>
-			<td><%= check_box_tag "months[#{i+7}]", i+7, checked: false, name: 'months[]' %><%= label_tag "months[#{i+7}]", " #{i+7}-#{m}"  %></td>
+			<td><%= check_box_tag "months[#{i+7}]", i+7, name: 'months[]' %><%= label_tag "months[#{i+7}]", " #{i+7}-#{m}" %></td>
 	<% end %>
 	</tr>
 </table>

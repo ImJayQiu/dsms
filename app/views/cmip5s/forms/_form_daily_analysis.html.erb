@@ -13,6 +13,8 @@
 			<%= hidden_field_tag :rate, @rate %>
 			<%= hidden_field_tag :rate2, @rate2 %>
 			<%= hidden_field_tag :unit, @unit %>
+			<%= hidden_field_tag :sdate, @sdate %>
+			<%= hidden_field_tag :edate, @edate %>
 			<%= submit_tag a.humanize+" Statistics", class: "submit" %>
 		<% end %>
 		</td>
@@ -41,7 +43,7 @@
 		<td>Select Specific Months :</td>
 		<td>
 		<% ["Jan.","Feb.","Mar.","Apr.","May","June","July","Aug.","Sep.","Oct.","Nov.","Dec."].each_with_index do |m,i|%>
-			<%= check_box_tag "months[#{i+1}]", i+1, checked: false, name: 'months[]' %><%= label_tag "months[#{i+1}]", " #{i+1}-#{m}"  %>
+			<%= check_box_tag "months[#{i+1}]", i+1, name: 'months[]' %><%= label_tag "months[#{i+1}]", " #{i+1}-#{m}" %>
 		<% end %>
 			<%= hidden_field_tag :dataset, @sel_data  %>
 			<%= hidden_field_tag :cdo_output_path, @cdo_output_path %>
@@ -51,6 +53,8 @@
 			<%= hidden_field_tag :rate, @rate %>
 			<%= hidden_field_tag :rate2, @rate2 %>
 			<%= hidden_field_tag :unit, @unit %>
+			<%= hidden_field_tag :sdate, @sdate %>
+			<%= hidden_field_tag :edate, @edate %>
 		</td>
 		<td>
 			<%= submit_tag "Analysis", class: "submit"  %>

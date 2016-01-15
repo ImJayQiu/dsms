@@ -1808,7 +1808,7 @@ input[type="checkbox"]:checked + label:before,
 input[type="radio"]:checked + label:before {
 	background: #2e3842; 
 	color: #FFF; 
-	content: 'X';
+	content: '√';
 }
 
 input[type="checkbox"]:focus + label:before,

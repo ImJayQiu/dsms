@@ -1,48 +1,27 @@
 <h2>Selected Months Analysis</h2>
 
-<%= Cdo.info(input: @sel_months) %>
-<%#= @months_data.to_a %>
-		<table>
-			<tr>
-				<td>Date</td>
-				<td>Min</td>
-				<td>Mean</td>
-				<td>Max</td>
-			</tr>
-			<%# @months_data[1..-1].each do |md| %>
-
-				<tr>
-				<td><%#= md.split(" ")[0] %></td>
-				<td><%#= md.split(" ")[1] %></td>
-				<td><%#= md.split(" ")[2] %></td>
-				<td><%#= md.split(" ")[3] %></td>
-			</tr>
-		<%# end %>
-		</table>
-
-
-<%#= line_chart [
-	{name: "Max", data: @max_min_h },
-	{name: "Min", data: @min_min_h },
-	{name: "Mean", data: @mean_min_h }
+<%= line_chart [
+	{name: "Max", data: @ymon_max_h },
+	{name: "Min", data: @ymon_min_h },
+	{name: "Mean", data: @ymon_mean_h }
 ], 
 discrete: true, 
 library: {
-	title: {text: "Seasonal Minimum Data Analysis"},
-	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
+	title: {text: "Monthly Data Analysis"},
+	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit} | #{@sdate.to_date.strftime('%Y-%m-%d')}--#{@edate.to_date.strftime('%Y-%m-%d')}"}
 } %>
 
 <p/>
 
-<%#= line_chart [
-	{name: "Max", data: @max_max_h },
-	{name: "Min", data: @min_max_h },
-	{name: "Mean", data: @mean_max_h }
+<%= line_chart [
+	{name: "Avg-Max", data: @yy_avg_max_h },
+	{name: "Avg-Mean", data: @yy_avg_mean_h },
+	{name: "Avg-Min", data: @yy_avg_min_h }
 ], 
 discrete: true, 
 library: {
-	title: {text: "Seasonal Maximum Data Analysis"},
-	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
+	title: {text: "Yearly Average Data Analysis"},
+	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit} | #{@sdate.to_date.strftime('%Y-%m-%d')}--#{@edate.to_date.strftime('%Y-%m-%d')}"}
 } %>
 
 <p/>

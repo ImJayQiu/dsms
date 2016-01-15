@@ -153,9 +153,9 @@ class Cmip5sController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.drop(1).each do |i|
-			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(2)
-			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(2)
-			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(2)
+			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(3)
+			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
+			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
@@ -251,7 +251,7 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("set clevs -10 -9 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 ")
 			grads_gs.puts('set ccols 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 85 87 88 89 90 91 26 25 24 23 22 21 20')
 		elsif @unit == "mm/d"
-			grads_gs.puts("set clevs 0 2 4 6 8 10 12 14 16 18 20 22")
+			grads_gs.puts("set clevs 0 2 4 6 8 10 20 50 100 200 300")
 			grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 		end
 
@@ -343,7 +343,7 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("set clevs -10 -9 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 ")
 			grads_gs.puts('set ccols 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 85 87 88 89 90 91 26 25 24 23 22 21 20')
 		elsif @unit == "mm/d"
-			grads_gs.puts("set clevs 0 2 4 6 8 10 12 14 16 18 20 22")
+			grads_gs.puts("set clevs 0 2 4 6 8 10 20 50 100 200 300")
 			grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 		end
 
@@ -618,7 +618,6 @@ class Cmip5sController < ApplicationController
 		f4_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4, output: f4_ll, options: '-f nc4') rescue nil
 		###############################################################
 
-		############# cut file by selected date range ##################
 		output_dir = "tmp_m_nc/#{current_user.id}/#{mip}/#{var}/#{exp}"
 		sys_output_pub = Rails.root.join("public")
 		sys_output_dir = Rails.root.join("public", output_dir)
@@ -626,14 +625,14 @@ class Cmip5sController < ApplicationController
 		##### to copy cbar.gs to output folder  #################
 		system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
 		#########################################################
-		
+
 		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
 
 		output_file_name = "#{var}_#{mip}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
-		#	@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}", options:'-f nc4')
+		############# cut file by selected date range ##################
 
 		@f1_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f1_ll, output:"public/#{@cdo_output_path}_#{m1}.nc", options:'-f nc4') rescue nil
 		@f2_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f2_ll, output:"public/#{@cdo_output_path}_#{m2}.nc", options:'-f nc4') rescue nil
@@ -734,11 +733,11 @@ class Cmip5sController < ApplicationController
 				grads_gs.puts('set clevs -10 -9 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35')
 				grads_gs.puts('set ccols 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 85 87 88 89 90 91 26 25 24 23 22 21 20')
 			elsif @unit == "mm/d"
-				grads_gs.puts("set clevs 0 2 4 6 8 10 12 14 16 18 20 22")
+				grads_gs.puts("set clevs 0 2 4 6 8 10 20 50 100 200 300")
 				grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 			end
 			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
-			grads_gs.puts('cbar.gs')
+			grads_gs.puts("cbar.gs")
 			grads_gs.puts("draw title #{m_name} Daily #{exp.humanize} #{stdname.humanize}") rescue nil
 			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{i+1}.png png white") rescue nil
 			grads_gs.puts("quit")

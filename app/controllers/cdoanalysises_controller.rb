@@ -23,8 +23,8 @@ class CdoanalysisesController < ApplicationController
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 
-		file = File.join(Rails.root, @dataset)
-		@s_lonlat = Cdo.remapnn(lon_lat, input: file, options: '-f nc4')
+		#	file = File.join(Rails.root, @dataset)
+		@s_lonlat = Cdo.remapnn(lon_lat, input: @dataset, options: '-f nc4')
 		@lonlat_info = Cdo.outputtab(['date','value'],input: @s_lonlat)
 
 		@date_set = [] 
@@ -62,10 +62,87 @@ class CdoanalysisesController < ApplicationController
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
+		@sdate = params[:sdate]
+		@edate = params[:edate]
 		@months = params[:months].values
-		sel_months = @months.to_s
-		@sel_months = Cdo.selmon("1,2,4,7", input: @dataset, options:"-f nc4")
-		#@month_data = Cdo.outputtab(['date','min','mean','max'],input: @sel_months)
+		sel_months = @months.join(",")
+		@var_std_name = Cdo.showstdname( input: @dataset)[0].to_s
+		@sel_months = Cdo.selmon(sel_months, input: @dataset, options:"-f nc4")
+
+		####### Monthly Statistics ##############
+		@ymonavg = Cdo.ymonavg(input: @sel_months)
+		@ymon_data = Cdo.info(input: @ymonavg)
+
+		@ymon_date = []
+		@ymon_min = [] 
+		@ymon_mean = [] 
+		@ymon_max = [] 
+		@ymon_data.drop(1).each do |i|
+			@ymon_date << i.split(" ")[2].to_date.strftime('%b')
+			@ymon_min << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(2)
+			@ymon_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(2)
+			@ymon_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(2)
+		end 
+		@ymon_min_h = Hash[@ymon_date.zip(@ymon_min)]
+		@ymon_mean_h = Hash[@ymon_date.zip(@ymon_mean)]
+		@ymon_max_h = Hash[@ymon_date.zip(@ymon_max)]
+		#######################
+		#
+		####### Yearly Average Statistics ##############
+		@yyavg = Cdo.yearavg(input: @sel_months)
+		@yy_avg_data = Cdo.info(input: @yyavg)
+		@yy_avg_date = []
+		@yy_avg_min = [] 
+		@yy_avg_mean = [] 
+		@yy_avg_max = [] 
+		@yy_avg_data.drop(1).each do |i|
+			@yy_avg_date << i.split(" ")[2].to_date.strftime('%Y')
+			@yy_avg_min << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(2)
+			@yy_avg_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(2)
+			@yy_avg_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(2)
+		end 
+		@yy_avg_min_h = Hash[@yy_avg_date.zip(@yy_avg_min)]
+		@yy_avg_mean_h = Hash[@yy_avg_date.zip(@yy_avg_mean)]
+		@yy_avg_max_h = Hash[@yy_avg_date.zip(@yy_avg_max)]
+		#######################
+
+		####### Yearly Max Statistics ##############
+		@yymax = Cdo.yearmax(input: @sel_months)
+		@yy_max_data = Cdo.info(input: @yymax)
+		@yy_max_date = []
+		@yy_max_min = [] 
+		@yy_max_mean = [] 
+		@yy_max_max = [] 
+		@yy_max_data.drop(1).each do |i|
+			@yy_max_date << i.split(" ")[2].to_date.strftime('%Y')
+			@yy_max_min << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(2)
+			@yy_max_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(2)
+			@yy_max_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(2)
+		end 
+		@yy_max_min_h = Hash[@yy_max_date.zip(@yy_max_min)]
+		@yy_max_mean_h = Hash[@yy_max_date.zip(@yy_max_mean)]
+		@yy_max_max_h = Hash[@yy_max_date.zip(@yy_max_max)]
+		#######################
+		#
+		####### Yearly Min Statistics ##############
+		@yymin = Cdo.yearmax(input: @sel_months)
+		@yy_min_data = Cdo.info(input: @yymin)
+		@yy_min_date = []
+		@yy_min_min = [] 
+		@yy_min_mean = [] 
+		@yy_min_max = [] 
+		@yy_min_data.drop(1).each do |i|
+			@yy_min_date << i.split(" ")[2].to_date.strftime('%Y')
+			@yy_min_min << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(2)
+			@yy_min_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(2)
+			@yy_min_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(2)
+		end 
+		@yy_min_min_h = Hash[@yy_min_date.zip(@yy_min_min)]
+		@yy_min_mean_h = Hash[@yy_min_date.zip(@yy_min_mean)]
+		@yy_min_max_h = Hash[@yy_min_date.zip(@yy_min_max)]
+		#######################
+
+
 	end
 
 
@@ -216,7 +293,6 @@ class CdoanalysisesController < ApplicationController
 		@ind = params[:indice].first.to_s
 		@cdo_output_path = params[:cdo_output_path].to_s
 
-		#@ind_output = Cdo.send(@ind, [1/@rate+@rate2], input: @file, options:'-f nc4' )
 		if @unit = "mm/d"
 			@ind_output = Cdo.send(@ind, [1/@rate+@rate2], input: @file, options:'-f nc4' )
 		else

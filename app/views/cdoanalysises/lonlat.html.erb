@@ -33,14 +33,12 @@
 		<table>
 			<tr>
 				<td>Date</td>
-				<td>Value</td>
 				<td>Value<br/>Unit:<%= @unit %></td>
 			</tr>
 			<% @lonlat_info[1..-1].each do |i| %>
 				<tr>
 				<td><%= i.split(" ")[0] %></td>
-				<td><%= i.split(" ")[1] %></td>
-				<td><%= (i.split(" ")[1].to_f * @rate).round(2) %></td>
+				<td><%= (i.split(" ")[1].to_f * @rate).round(3) %></td>
 			</tr>
 		<% end %>
 		</table>
