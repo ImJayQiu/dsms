@@ -257,7 +257,7 @@ class Cmip5sController < ApplicationController
 
 		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} | Mean")
+		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Mean #{@sdate.strftime('%Y%m%d')}:#{@edate.strftime('%Y%m%d')}")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_mean.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
@@ -349,7 +349,7 @@ class Cmip5sController < ApplicationController
 
 		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} | Max")
+		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Max #{@sdate.strftime('%Y%m%d')}:#{@edate.strftime('%Y%m%d')}")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_max.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
@@ -738,7 +738,7 @@ class Cmip5sController < ApplicationController
 			end
 			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 			grads_gs.puts("cbar.gs")
-			grads_gs.puts("draw title #{m_name} Daily #{exp.humanize} #{stdname.humanize}") rescue nil
+			grads_gs.puts("draw title #{m_name} Daily #{exp.humanize} #{stdname.humanize} #{@sdate.strftime('%Y%m%d')}:#{@edate.strftime('%Y%m%d')}") rescue nil
 			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{i+1}.png png white") rescue nil
 			grads_gs.puts("quit")
 			grads_gs.close
