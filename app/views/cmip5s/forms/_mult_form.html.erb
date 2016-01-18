@@ -65,14 +65,14 @@
 		</tr>
 	</thead>
 	<tr>
-		<% ["Jan.","Feb.","Mar.","Apr.","May","June"].each_with_index do |m,i|%>
-			<td><%= check_box_tag "months[#{i+1}]", i+1, name: 'months[]' %><%= label_tag "months[#{i+1}]", " #{i+1}-#{m}", checked: false  %></td>
-	<% end %>
+		<%# ["Jan.","Feb.","Mar.","Apr.","May","June"].each_with_index do |m,i|%>
+			<td><%#= check_box_tag "months[#{i+1}]", i+1, name: 'months[]' %><%#= label_tag "months[#{i+1}]", " #{i+1}-#{m}", checked: false  %></td>
+	<%# end %>
 	</tr>
 	<tr>
-		<% ["July","Aug.","Sep.","Oct.","Nov.","Dec."].each_with_index do |m,i|%>
-			<td><%= check_box_tag "months[#{i+7}]", i+7, name: 'months[]' %><%= label_tag "months[#{i+7}]", " #{i+7}-#{m}" %></td>
-	<% end %>
+		<%# ["July","Aug.","Sep.","Oct.","Nov.","Dec."].each_with_index do |m,i|%>
+			<td><%#= check_box_tag "months[#{i+7}]", i+7, name: 'months[]' %><%#= label_tag "months[#{i+7}]", " #{i+7}-#{m}" %></td>
+	<%# end %>
 	</tr>
 </table>
 
