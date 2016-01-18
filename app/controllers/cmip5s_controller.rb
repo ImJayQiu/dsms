@@ -163,7 +163,7 @@ class Cmip5sController < ApplicationController
 		@sel_file_path = root_path+@cdo_output_path.to_s
 
 		##### to copy cbar.gs to output folder  #################
-		system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
+		copy_cbar =	system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
 		#########################################################
 
 		@sel_data_ctl = Cdo.gradsdes(input: @sel_data)
@@ -622,11 +622,12 @@ class Cmip5sController < ApplicationController
 		sys_output_pub = Rails.root.join("public")
 		sys_output_dir = Rails.root.join("public", output_dir)
 
+		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
+
 		##### to copy cbar.gs to output folder  #################
-		system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
+		copy_cbar = system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
 		#########################################################
 
-		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
 
 		output_file_name = "#{var}_#{mip}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
