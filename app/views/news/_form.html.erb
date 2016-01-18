@@ -1,0 +1,63 @@
+<%= form_for(@news) do |f| %>
+	<% if @news.errors.any? %>
+	<div id="error_explanation">
+	<h2><%= pluralize(@news.errors.count, "error") %> prohibited this news from being saved:</h2>
+
+	<ul>
+		<% @news.errors.full_messages.each do |message| %>
+			<li><%= message %></li>
+	<% end %>
+	</ul>
+</div>
+  <% end %>
+
+<table class="alt" >
+	<tr></tr>
+	<tr>
+		<td>
+			Date:
+		</td>
+		<td>
+			<%= Time.now %>
+			<%= f.hidden_field :date, value: Time.now %>
+		</td>
+	</tr>
+	<tr></tr>
+
+	<tr>
+		<td>
+			Title:
+		</td>
+		<td>
+			<%= f.text_field :title %>
+		</td>
+	</tr>
+	<tr></tr>
+	<tr>
+		<td>
+			Content:
+		</td>
+		<td>
+			<%= f.text_area :content %>
+		</td>
+	</tr>
+	<tr></tr>
+	<tr>
+		<td>
+			Version:
+		</td>
+		<td>
+			<%= f.text_field :version %>
+		</td>
+	</tr>
+	<tr></tr>
+	<tr align=middle>
+		<td>
+			<%= f.submit "Submit" %>
+		<% end %>
+		</td>
+		<td>
+			<%= button_to 'Back', news_index_path, method: :get %>
+		</td>
+	</tr>
+</table>

@@ -1,13 +1,51 @@
-﻿<h3>About This Project</h3>
-<p></p>
+﻿<table>
+<tr></tr>
+<% @about.each do |news| %>
+	<tr>
+	<td width=80%><h3><%= news.title %></h3></td>
+	<% if can? :manage, :all %>
+			   <td width=20%>	
+			   <%= button_to 'Edit', edit_news_path(news), method: :get %>
+			   </td>
+		   <% end %>
 
-<h4>Admin User</h4>
-<p>Can management all</p>
-<p></p>
+			   <tr></tr>
+			   <tr>
+				   <td colspan=2><%= news.content %></td>
+			   </tr>
+		   <% end %>
+		   </table>
 
-<h4>Super User</h4>
-<p>Able to management basic settings</p>
-<p></p>
+		   <table class=alt>
+			   <tr align = middle>
+				   <td><%= button_to "CMIP5 Daily Analysis", daily_cmip5s_path, method: :get %></td>
+				   <td><%= button_to "Mult-Models Analysis", mult_cmip5s_path, method: :get %></td>
+			   </tr>
+		   </table>
 
-<h4>Normal User</h4>
-<p>Dataset analysis only</p>
+		   <p></p>
+
+		   <h2>News & Update notes</h2>
+
+		   <table>
+			   <thead>
+				   <tr>
+					   <th>Date</th>
+					   <th>Title</th>
+					   <th>Version</th>
+					   <th>Operstion</th>
+				   </tr>
+			   </thead>
+
+			   <tbody>
+			   <% @news.each do |news| %>
+				   <tr>
+				   <td><%= news.date.strftime("%Y-%m-%d") %></td>
+				   <td><%= news.title %></td>
+				   <td><%= news.version %></td>
+				   <td><%= button_to 'Show', news, method: :get %></td>
+			   </tr>
+		   <% end %>
+			   </tbody>
+		   </table>
+

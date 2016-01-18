@@ -179,7 +179,7 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
-		grads_gs.puts("draw string 4 0.2 CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
 
 		if @unit == "°C"
 			grads_gs.puts('set rgb 33 248 50 60')
@@ -257,7 +257,7 @@ class Cmip5sController < ApplicationController
 
 		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Mean #{@sdate.strftime('%Y%m%d')}:#{@edate.strftime('%Y%m%d')}")
+		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Mean ")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_mean.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
@@ -271,7 +271,7 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
-		grads_gs.puts("draw string 4 0.2 CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
 
 		if @unit == "°C"
 			grads_gs.puts('set rgb 33 248 50 60')
@@ -343,13 +343,13 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("set clevs -10 -9 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 ")
 			grads_gs.puts('set ccols 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 85 87 88 89 90 91 26 25 24 23 22 21 20')
 		elsif @unit == "mm/d"
-			grads_gs.puts("set clevs 0 2 4 6 8 10 20 50 100 200 300")
+			grads_gs.puts("set clevs 0 10 20 30 50 75 100 150 200 250 300")
 			grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 		end
 
 		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Max #{@sdate.strftime('%Y%m%d')}:#{@edate.strftime('%Y%m%d')}")
+		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Max")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_max.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
@@ -662,6 +662,10 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("open #{output_file_name}_#{m_name}.ctl")
 			grads_gs.puts("set grads off")
 			grads_gs.puts("set gxout shaded")
+			grads_gs.puts("set font 1")
+			grads_gs.puts("set strsiz 0.12")
+			grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+
 
 			if @unit == "°C"
 				grads_gs.puts('set rgb 33 248 50 60')
@@ -738,7 +742,7 @@ class Cmip5sController < ApplicationController
 			end
 			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 			grads_gs.puts("cbar.gs")
-			grads_gs.puts("draw title #{m_name} Daily #{exp.humanize} #{stdname.humanize} #{@sdate.strftime('%Y%m%d')}:#{@edate.strftime('%Y%m%d')}") rescue nil
+			grads_gs.puts("draw title #{m_name} Daily #{exp.humanize} #{stdname.humanize}") rescue nil
 			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{i+1}.png png white") rescue nil
 			grads_gs.puts("quit")
 			grads_gs.close

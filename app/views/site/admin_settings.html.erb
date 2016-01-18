@@ -4,6 +4,7 @@
 <%if can? :manage, :settings %>
 
 	<ul>
+	<li><%= link_to "News & Update notes Management", news_index_path %></li>
 	<li><%= link_to "Variables Management", settings_variables_path %></li>
 	<li><%= link_to "MIPs Management", settings_mips_path %></li>
 	<li><%= link_to "Models Management", settings_datamodels_path %></li>

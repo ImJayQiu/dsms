@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rinruby', '~> 2.0.3'
+gem 'will_paginate', '~> 3.0.6'
 
 # map library
 #gem "leaflet-rails"

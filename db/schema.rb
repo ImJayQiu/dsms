@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130035723) do
+ActiveRecord::Schema.define(version: 20160118041447) do
 
   create_table "cmip5s", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -30,6 +30,15 @@ ActiveRecord::Schema.define(version: 20151130035723) do
     t.string   "file_content_type", limit: 255
     t.integer  "file_file_size",    limit: 4
     t.datetime "file_updated_at"
+  end
+
+  create_table "news", force: :cascade do |t|
+    t.datetime "date"
+    t.string   "title",      limit: 255
+    t.string   "content",    limit: 255
+    t.string   "version",    limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "settings_datamodels", force: :cascade do |t|

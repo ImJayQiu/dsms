@@ -1,0 +1,53 @@
+<h2>Viewing News & Update note</h2>
+
+<p id="notice"><%= notice %></p>
+
+<table >
+	<tr></tr>
+	<tr>
+		<td>
+			Date:
+		</td>
+		<td>
+			<%= @news.date.strftime("%Y-%m-%d") %>
+		</td>
+	</tr>
+	<tr></tr>
+
+	<tr>
+		<td>
+			Title:
+		</td>
+		<td>
+			<%= @news.title.humanize %>
+		</td>
+	</tr>
+	<tr></tr>
+	<tr>
+		<td>
+			Content:
+		</td>
+		<td>
+			<%= @news.content %>
+		</td>
+	</tr>
+	<tr></tr>
+	<tr>
+		<td>
+			Version:
+		</td>
+		<td>
+			<%= @news.version %>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<% if can? :manage, :all%>
+			<td><%= button_to 'Edit current news', edit_news_path(@news), method: :get %></td>
+	<% end %>
+		<td><%= button_to 'Back to News list', news_index_path, method: :get %></td>
+		<td><%= button_to 'Back to landing page', home_site_index_path, method: :get %></td>
+	</tr>
+</table>

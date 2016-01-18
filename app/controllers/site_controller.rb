@@ -11,6 +11,8 @@ class SiteController < ApplicationController
 	end
 
 	def home
+		@news = News.order(id: :desc).first(5)
+		@about = News.order(id: :desc).last(1)
 	end
 
 	def admin_settings

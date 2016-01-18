@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-	get '/temps/:name' => 'cmip5s#temps', :as => :tmp_img
+	
+	resources :news
 
 	namespace :settings do
 		resources :inds
