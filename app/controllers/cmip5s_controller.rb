@@ -121,7 +121,7 @@ class Cmip5sController < ApplicationController
 		paramater = Cdo.showname(input: file)
 
 		############ cut file by selected location ###################
-		sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
+		#sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
 		###############################################################
 
 		############# cut file by selected date range ##################
@@ -135,7 +135,7 @@ class Cmip5sController < ApplicationController
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
-		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: sel_lonlat, output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
+		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
 		##############################################################
 
 
