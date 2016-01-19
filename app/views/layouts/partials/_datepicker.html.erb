@@ -23,5 +23,18 @@ $( "#s_date" ).datepicker( "option", "maxDate", selectedDate );
 }
 });
 });
+
+$(function() {
+		$( "#sel_date" ).datepicker({
+dateFormat: "yy-mm-dd",
+yearRange: "1970:2100",
+defaultDate: "2006-01-01",
+changeMonth: true,
+changeYear: true,
+numberOfMonths: 1
+});
+		});
+
+
 </script>
 

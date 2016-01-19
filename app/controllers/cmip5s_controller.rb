@@ -178,7 +178,6 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("open #{output_file_name}.ctl")
 		grads_gs.puts("set grads off")
 		grads_gs.puts("set gxout shaded")
-		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
 		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
@@ -257,6 +256,7 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 		end
 
+		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
 		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Mean ")
@@ -270,7 +270,6 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("open #{output_file_name}.ctl")
 		grads_gs.puts("set grads off")
 		grads_gs.puts("set gxout shaded")
-		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
 		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
@@ -349,6 +348,7 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 		end
 
+		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
 		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Max")
@@ -698,7 +698,6 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("set strsiz 0.12")
 			grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
 
-
 			if @unit == "°C"
 				grads_gs.puts('set rgb 33 248 50 60')
 				grads_gs.puts('set rgb 34 255 50 89')
@@ -772,6 +771,7 @@ class Cmip5sController < ApplicationController
 				grads_gs.puts("set clevs 0 2 4 6 8 10 20 50 100 200 300")
 				grads_gs.puts('set ccols 0 13 3 10 7 12 8 2 6 14 4')
 			end
+			grads_gs.puts("set mpdset hires")
 			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 			grads_gs.puts("cbar.gs")
 			grads_gs.puts("draw title #{m_name} Daily #{exp.humanize} #{stdname.humanize}") rescue nil

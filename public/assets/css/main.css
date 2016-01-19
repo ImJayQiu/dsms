@@ -1682,7 +1682,7 @@ textarea {
 	border-radius: 3px;
 	border: none;
 	color: inherit;
-	display: block;
+/*	display: block; */
 	outline: 0;
 	padding: 0 1em;
 	text-decoration: none;
@@ -1745,7 +1745,8 @@ input[type="text"],
 input[type="password"],
 input[type="email"],
 select {
-	height: 2.75em;
+	/* height: 2.75em; */
+	height: 1.8em;
 }
 
 textarea {

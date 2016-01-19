@@ -11,15 +11,17 @@
 </div>
   <% end %>
 
-<table class="alt" >
+<%= render "layouts/partials/datepicker"%>
+
+<table>
 	<tr></tr>
 	<tr>
 		<td>
 			Date:
 		</td>
 		<td>
-			<%= Time.now %>
-			<%= f.hidden_field :date, value: Time.now %>
+			<%#= Time.now %>
+			<%= f.text_field :date, id: "sel_date"  %>
 		</td>
 	</tr>
 	<tr></tr>
@@ -38,7 +40,7 @@
 			Content:
 		</td>
 		<td>
-			<%= f.text_area :content %>
+			<%= f.text_area :content, size: "10x5" %>
 		</td>
 	</tr>
 	<tr></tr>
