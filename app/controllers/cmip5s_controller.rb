@@ -3,6 +3,8 @@
 #require "numru/gphys"
 #include NumRu
 
+require "thread"
+require 'thwait'
 require "cdo"
 #require "gsl"
 #require "rinruby"
@@ -612,10 +614,14 @@ class Cmip5sController < ApplicationController
 		################################################################
 		#
 		############ cut file by selected location ###################
-		f1_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1, output: f1_ll, options: '-f nc4') rescue nil
-		f2_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2, output: f2_ll, options: '-f nc4') rescue nil
-		f3_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3, output: f3_ll, options: '-f nc4') rescue nil
-		f4_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4, output: f4_ll, options: '-f nc4') rescue nil
+=begin
+		cdo_threads=[]
+		cdo_threads << Thread.new{f1_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1, output: f1_ll, options: '-f nc4') rescue nil}
+		cdo_threads << Thread.new{f2_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2, output: f2_ll, options: '-f nc4') rescue nil}
+		cdo_threads << Thread.new{f3_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3, output: f3_ll, options: '-f nc4') rescue nil}
+		cdo_threads << Thread.new{f4_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4, output: f4_ll, options: '-f nc4') rescue nil}
+		ThreadsWait.all_waits(*cdo_threads)
+=end
 		###############################################################
 
 		output_dir = "tmp_m_nc/#{current_user.id}/#{mip}/#{var}/#{exp}"
@@ -634,12 +640,37 @@ class Cmip5sController < ApplicationController
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
 		############# cut file by selected date range ##################
+		cdo_threads=[]
 
+		cdo_threads << Thread.new{
+			@f1_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@cdo_output_path}_#{m1}.nc", options:'-f nc4') rescue nil  
+			f1_ctl = Cdo.gradsdes(input: @f1_data, output: f1_ctl, options:'-f ctl') rescue nil
+		}
+
+		cdo_threads << Thread.new{
+			@f2_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@cdo_output_path}_#{m2}.nc", options:'-f nc4') rescue nil  
+			f2_ctl = Cdo.gradsdes(input: @f2_data, output: f2_ctl, options:'-f ctl') rescue nil
+		}
+
+		cdo_threads << Thread.new{
+			@f3_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@cdo_output_path}_#{m3}.nc", options:'-f nc4') rescue nil 
+			f3_ctl = Cdo.gradsdes(input: @f3_data, output: f3_ctl, options:'-f ctl') rescue nil
+		}
+
+		cdo_threads << Thread.new{
+			@f4_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@cdo_output_path}_#{m4}.nc", options:'-f nc4') rescue nil  
+			f4_ctl = Cdo.gradsdes(input: @f4_data, output: f4_ctl, options:'-f ctl') rescue nil
+		}
+=begin
 		@f1_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f1_ll, output:"public/#{@cdo_output_path}_#{m1}.nc", options:'-f nc4') rescue nil
 		@f2_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f2_ll, output:"public/#{@cdo_output_path}_#{m2}.nc", options:'-f nc4') rescue nil
 		@f3_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f3_ll, output:"public/#{@cdo_output_path}_#{m3}.nc", options:'-f nc4') rescue nil
 		@f4_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f4_ll, output:"public/#{@cdo_output_path}_#{m4}.nc", options:'-f nc4') rescue nil
-
+=end
+		cdo_threads.each do |ct|
+			ct.join
+		end
+		ThreadsWait.all_waits(*cdo_threads)
 		##############################################################
 		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
@@ -655,7 +686,7 @@ class Cmip5sController < ApplicationController
 			end
 			ntime = Cdo.ntime(input: data)[0] rescue nil
 			stdname = Cdo.showstdname(input: data)[0] rescue nil
-			data_ctl = Cdo.gradsdes(input: data) rescue nil
+			#data_ctl = Cdo.gradsdes(input: data) rescue nil
 			gs_name_m = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_#{i+1}"
 
 			grads_gs = File.new("#{sys_output_dir}/#{gs_name_m}.gs", "w")
