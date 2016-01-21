@@ -1,0 +1,98 @@
+
+<p id="notice"><%= notice %></p>
+<h2>Data Analysis - Observation</h2>
+
+<table>
+	<tr>
+	</tr>
+	<tr>
+		<td style="width:50%;" align="center">
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_mean.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_mean.png", width: "100%" %>
+				<br/>Click image to enlarge
+			</a>
+		</td>
+		<td style="width:50%;" align="center">
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_max.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_max.png", width: "100%" %>
+				<br/>Click image to enlarge
+			</a>
+		</td>
+	</tr>
+</table>
+<p/>
+
+<%= render "cmip5s/graphs/daily" %>
+<p/>
+<table>
+	<thead>
+		<tr>
+			<th>Basic Information of <%= @file_name.humanize%></th>
+			<th>
+				<div class="buttons">
+					<input type="button" class="data" value="Show Detail"/>
+				</div>
+			</th>
+		</tr>
+	</thead>
+</table>
+
+<p/>
+<div class="content_data" style="display:none" >
+	<table>
+		<tbody>
+		<tr>
+			<td>Variable: <%= @var_std_name.humanize %></td>
+			<td>Date Range: <%= @sdate.strftime("%Y-%m-%d") %>--<%= @edate.strftime("%Y-%m-%d") %></td>
+		</tr>
+
+		<tr>
+			<td>Longitude Range: <%= @lon_r %></td>
+			<td>Latitude Range: <%= @lat_r %></td>
+		</tr>
+		<tr>
+			<td>
+				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
+			</td>
+			<td>
+				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+<p/>
+<table>
+	<thead>
+		<tr>
+			<th>Dataset Analysis Operations</th>
+			<th>
+				<div class="buttons">
+					<input type="button" class="analysis" value="Show Operations"/>
+				</div>
+			</th>
+		</tr>
+	</thead>
+</table>
+
+<div class="content_analysis" style="display:none" >
+
+
+	<%= render "cmip5s/forms/form_daily_analysis" %>
+
+	<table>
+		<tr>
+			<td align=center>
+				<div class="buttons">
+					<input type="button" class="analysis" value="Hide Analysis Operators"/>
+				</div>
+
+			</td>
+		</tr>
+	</table>
+</div>
+<p/>
+
+
+<%#= button_to 'Back', cmip5s_path, method: :get %>

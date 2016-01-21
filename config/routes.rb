@@ -3,6 +3,14 @@ Rails.application.routes.draw do
 	
 	resources :news
 
+	resources :obs do
+		collection do
+			get :obs
+			get :obs_analysis
+		end
+	end
+
+
 	namespace :settings do
 		resources :inds
 		resources :ensembles
