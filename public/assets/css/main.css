@@ -2620,6 +2620,7 @@ button:disabled,
 
 .wrapper > .inner {
 /*	width: 60em; */
+	width: 90%; 
 	margin: 0 auto;
 }
 
