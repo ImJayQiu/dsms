@@ -69,6 +69,6 @@ class Settings::DatamodelsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def settings_datamodel_params
-      params.require(:settings_datamodel).permit(:name, :stdname, :institute, :remark)
+      params.require(:settings_datamodel).permit(:name, :foldername, :institute, :remark)
     end
 end

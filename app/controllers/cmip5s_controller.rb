@@ -50,7 +50,7 @@ class Cmip5sController < ApplicationController
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
 		@experiment_path = Settings::Experiment.where(name: experiment).first.name
-		@model_path = Settings::Datamodel.where(name: model).first.stdname
+		@model_path = Settings::Datamodel.where(name: model).first.foldername
 
 		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
 		##############################################################
@@ -390,7 +390,7 @@ class Cmip5sController < ApplicationController
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
 		@experiment_path = Settings::Experiment.where(name: experiment).first.name
-		@model_path = Settings::Datamodel.where(name: model).first.stdname
+		@model_path = Settings::Datamodel.where(name: model).first.foldername
 
 		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
 		##############################################################
@@ -569,10 +569,10 @@ class Cmip5sController < ApplicationController
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path rescue nil
 		@exp_path = Settings::Experiment.where(name: exp).first.name rescue nil
-		@m1_path = Settings::Datamodel.where(name: m1).first.stdname rescue nil
-		@m2_path = Settings::Datamodel.where(name: m2).first.stdname rescue nil
-		@m3_path = Settings::Datamodel.where(name: m3).first.stdname rescue nil
-		@m4_path = Settings::Datamodel.where(name: m4).first.stdname rescue nil
+		@m1_path = Settings::Datamodel.where(name: m1).first.foldername rescue nil
+		@m2_path = Settings::Datamodel.where(name: m2).first.foldername rescue nil
+		@m3_path = Settings::Datamodel.where(name: m3).first.foldername rescue nil
+		@m4_path = Settings::Datamodel.where(name: m4).first.foldername rescue nil
 
 		f1=@root_file_path.to_s+'/'+@m1_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f1_name.to_s
 		f2=@root_file_path.to_s+'/'+@m2_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f2_name.to_s

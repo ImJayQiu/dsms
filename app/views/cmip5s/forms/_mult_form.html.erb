@@ -8,17 +8,17 @@
 	</thead>
 	<tr>
 		<td>Model-1:</td>
-		<td><%= collection_select(:m1, params[:m1], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model 1 -"} ) rescue nil %></td>
+		<td><%= collection_select(:m1, params[:m1], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 1 -"} ) rescue nil %></td>
 		<td>Model-2:</td>
-		<td><%= collection_select(:m2, params[:m2], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model 2 -"} ) rescue nil %></td>
+		<td><%= collection_select(:m2, params[:m2], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 2 -"} ) rescue nil %></td>
 	</tr>
 	<tr>
 	</tr>
 	<tr>
 		<td>Model-3:</td>
-		<td><%= collection_select(:m3, params[:m3], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model 3 -"} ) rescue nil %></td>
+		<td><%= collection_select(:m3, params[:m3], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 3 -"} ) rescue nil %></td>
 		<td>Model-4:</td>
-		<td><%= collection_select(:m4, params[:m4], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model 4 -"} ) rescue nil %></td>
+		<td><%= collection_select(:m4, params[:m4], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 4 -"} ) rescue nil %></td>
 	</tr>
 </table>
 

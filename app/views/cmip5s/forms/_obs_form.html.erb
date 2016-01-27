@@ -19,7 +19,7 @@
 		</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select(:part3, params[:part3], Settings::Datamodel.all.order("name"), :name, :name, {include_blank: "- Select Model -"} ) rescue nil %></td>
+		<td><%= collection_select(:part3, params[:part3], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model -"} ) rescue nil %></td>
 	</tr>
 </table>
 
