@@ -662,13 +662,13 @@ class Cmip5sController < ApplicationController
 
 		[@f1_data,@f2_data,@f3_data,@f4_data].each_with_index do |data,i|
 			if i+1==1
-				m_name = @m1_path.to_s
+				m_name = m1
 			elsif i+1==2
-				m_name = @m2_path.to_s
+				m_name = m2
 			elsif i+1==3
-				m_name = @m3_path.to_s
+				m_name = m3
 			elsif i+1==4
-				m_name = @m4_path.to_s
+				m_name = m4
 			end
 			ntime = Cdo.ntime(input: data)[0] rescue nil
 			stdname = Cdo.showstdname(input: data)[0] rescue nil
