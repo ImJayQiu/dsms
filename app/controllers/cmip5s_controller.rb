@@ -259,7 +259,7 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Mean ")
+		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} Mean ")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_mean.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
@@ -351,7 +351,7 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Max")
+		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} Max")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_max.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
@@ -613,15 +613,6 @@ class Cmip5sController < ApplicationController
 
 		################################################################
 		#
-		############ cut file by selected location ###################
-=begin
-		cdo_threads=[]
-		cdo_threads << Thread.new{f1_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1, output: f1_ll, options: '-f nc4') rescue nil}
-		cdo_threads << Thread.new{f2_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2, output: f2_ll, options: '-f nc4') rescue nil}
-		cdo_threads << Thread.new{f3_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3, output: f3_ll, options: '-f nc4') rescue nil}
-		cdo_threads << Thread.new{f4_ll = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4, output: f4_ll, options: '-f nc4') rescue nil}
-		ThreadsWait.all_waits(*cdo_threads)
-=end
 		###############################################################
 
 		output_dir = "tmp_m_nc/#{current_user.id}/#{mip}/#{var}/#{exp}"
@@ -661,12 +652,7 @@ class Cmip5sController < ApplicationController
 			@f4_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@cdo_output_path}_#{m4}.nc", options:'-f nc4') rescue nil  
 			f4_ctl = Cdo.gradsdes(input: @f4_data, output: f4_ctl, options:'-f ctl') rescue nil
 		}
-=begin
-		@f1_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f1_ll, output:"public/#{@cdo_output_path}_#{m1}.nc", options:'-f nc4') rescue nil
-		@f2_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f2_ll, output:"public/#{@cdo_output_path}_#{m2}.nc", options:'-f nc4') rescue nil
-		@f3_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f3_ll, output:"public/#{@cdo_output_path}_#{m3}.nc", options:'-f nc4') rescue nil
-		@f4_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: f4_ll, output:"public/#{@cdo_output_path}_#{m4}.nc", options:'-f nc4') rescue nil
-=end
+
 		cdo_threads.each do |ct|
 			ct.join
 		end
@@ -676,13 +662,13 @@ class Cmip5sController < ApplicationController
 
 		[@f1_data,@f2_data,@f3_data,@f4_data].each_with_index do |data,i|
 			if i+1==1
-				m_name = m1
+				m_name = @m1_path.to_s
 			elsif i+1==2
-				m_name = m2
+				m_name = @m2_path.to_s
 			elsif i+1==3
-				m_name = m3
+				m_name = @m3_path.to_s
 			elsif i+1==4
-				m_name = m4
+				m_name = @m4_path.to_s
 			end
 			ntime = Cdo.ntime(input: data)[0] rescue nil
 			stdname = Cdo.showstdname(input: data)[0] rescue nil

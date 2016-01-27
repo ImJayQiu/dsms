@@ -33,7 +33,7 @@ class ObsController < ApplicationController
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
 		@experiment_path = Settings::Experiment.where(name: experiment).first.name
-		@model_path = Settings::Datamodel.where(name: model).first.stdname
+		@model_path = Settings::Datamodel.where(name: model).first.foldername
 
 		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
 		##############################################################
@@ -103,8 +103,6 @@ class ObsController < ApplicationController
 
 		paramater = Cdo.showname(input: file)
 
-		############ cut file by selected location ###################
-		#sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
 		###############################################################
 
 		############# cut file by selected date range ##################
@@ -242,7 +240,7 @@ class ObsController < ApplicationController
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Mean ")
+		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} Mean ")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_mean.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
@@ -334,7 +332,7 @@ class ObsController < ApplicationController
 		grads_gs.puts("set mpdset hires")
 		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{model} Daily #{experiment.humanize} #{stdname.humanize} Max")
+		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} Max")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_max.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
