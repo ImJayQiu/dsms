@@ -663,12 +663,16 @@ class Cmip5sController < ApplicationController
 		[@f1_data,@f2_data,@f3_data,@f4_data].each_with_index do |data,i|
 			if i+1==1
 				m_name = m1
+				m_title = @m1_path.to_s
 			elsif i+1==2
 				m_name = m2
+				m_title = @m2_path.to_s
 			elsif i+1==3
 				m_name = m3
+				m_title = @m3_path.to_s
 			elsif i+1==4
 				m_name = m4
+				m_title = @m4_path.to_s
 			end
 			ntime = Cdo.ntime(input: data)[0] rescue nil
 			stdname = Cdo.showstdname(input: data)[0] rescue nil
@@ -760,7 +764,7 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("set mpdset hires")
 			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 			grads_gs.puts("cbar.gs")
-			grads_gs.puts("draw title #{m_name} Daily #{exp.humanize} #{stdname.humanize}") rescue nil
+			grads_gs.puts("draw title #{m_title} Daily #{exp.humanize} #{stdname.humanize}") rescue nil
 			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{i+1}.png png white") rescue nil
 			grads_gs.puts("quit")
 			grads_gs.close
