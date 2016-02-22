@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Settings Nexnasa Models</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Folder</th>
+      <th>Institute</th>
+      <th>Remark</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @settings_nexnasa_models.each do |settings_nexnasa_model| %>
+      <tr>
+        <td><%= settings_nexnasa_model.name %></td>
+        <td><%= settings_nexnasa_model.folder %></td>
+        <td><%= settings_nexnasa_model.institute %></td>
+        <td><%= settings_nexnasa_model.remark %></td>
+        <td><%= link_to 'Show', settings_nexnasa_model %></td>
+        <td><%= link_to 'Edit', edit_settings_nexnasa_model_path(settings_nexnasa_model) %></td>
+        <td><%= link_to 'Destroy', settings_nexnasa_model, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Nexnasa model', new_settings_nexnasa_model_path %>

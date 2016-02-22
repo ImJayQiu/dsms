@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
 	
+  namespace :settings do
+    resources :nexnasa_models
+  end
 	resources :news
 
 	resources :obs do
@@ -36,6 +39,19 @@ Rails.application.routes.draw do
 			get :info
 		end
 	end
+
+	resources :nexnasa do
+		collection do
+			get :daily
+			get :monthly
+			get :daily_analysis
+			get :monthly_analysis
+			get :mult
+			get :mult_analysis
+			get :info
+		end
+	end
+
 
 
 	resources :cdoanalysises do

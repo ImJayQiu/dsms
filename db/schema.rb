@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160118041447) do
+ActiveRecord::Schema.define(version: 20160222050708) do
 
   create_table "cmip5s", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(version: 20160118041447) do
   create_table "news", force: :cascade do |t|
     t.datetime "date"
     t.string   "title",      limit: 255
-    t.string   "content",    limit: 255
+    t.text     "content",    limit: 65535
     t.string   "version",    limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "settings_datamodels", force: :cascade do |t|
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20160118041447) do
     t.string   "remark",     limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-    t.string   "stdname",    limit: 50
+    t.string   "foldername", limit: 50
   end
 
   create_table "settings_datasetpaths", force: :cascade do |t|
@@ -97,6 +97,15 @@ ActiveRecord::Schema.define(version: 20160118041447) do
     t.string   "description", limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+  end
+
+  create_table "settings_nexnasa_models", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "folder",     limit: 255
+    t.string   "institute",  limit: 255
+    t.string   "remark",     limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "settings_temporals", force: :cascade do |t|

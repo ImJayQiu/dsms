@@ -1,0 +1,2 @@
+module Settings::NexnasaModelsHelper
+end
