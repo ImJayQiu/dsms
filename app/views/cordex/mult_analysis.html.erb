@@ -1,0 +1,60 @@
+
+<p id="notice"><%= notice %></p>
+<h2>CMIP5 Data Analysis - Mult-Models</h2>
+
+<table>
+	<tr>
+		<td style="width:50%;" align="center" colspan=3>
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_1.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_1.png", width: "100%" %>
+			</a>
+		</td>
+
+		<td style="width:50%;" align="center" colspan=3>
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_2.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_2.png", width: "100%" %>
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td>Download:</td>
+		<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m1}.nc", method: :get %></td>
+		<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m1}.ctl", method: :get %></td>
+		<td>Download:</td>
+		<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m2}.nc", method: :get %></td>
+		<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m2}.ctl", method: :get %></td>
+	</tr>
+	<tr>
+		<td style="width:50%;" align="center" colspan=3>
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_3.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_3.png", width: "100%" %>
+			</a>
+		</td>
+
+		<td style="width:50%;" align="center" colspan=3>
+			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_4.png" %> target = "_blank" >
+				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_4.png", width: "100%" %>
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td>Download:</td>
+		<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m3}.nc", method: :get %></td>
+		<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m3}.ctl", method: :get %></td>
+		<td>Download:</td>
+		<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m4}.nc", method: :get %></td>
+		<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m4}.ctl", method: :get %></td>
+	</tr>
+
+</table>
+<p/>
+
+<%#= render "cmip5s/graphs/mult_models" %>
+<p/>
+<p/>
+
+
+</div>
+<p/>
+
+

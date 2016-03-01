@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Listing Cordex Models</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Folder</th>
+			<th colspan="3"></th>
+		</tr>
+	</thead>
+
+	<tbody>
+	<% @settings_cordex_models.each do |settings_cordex_model| %>
+		<tr>
+		<td><%= settings_cordex_model.name %></td>
+		<td><%= settings_cordex_model.folder %></td>
+		<td><%= button_to 'Show', settings_cordex_model, method: :get %></td>
+		<% if can? :manage, :settings %>
+			<td><%= button_to 'Edit', edit_settings_cordex_model_path(settings_cordex_model), method: :get %></td>
+		<td><%= button_to 'Del', settings_cordex_model, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	<% end %>
+	</tr>
+<% end %>
+	</tbody>
+</table>
+
+<br>
+
+<%= button_to 'New Cordex model', new_settings_cordex_model_path, method: :get %>

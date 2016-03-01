@@ -1,0 +1,84 @@
+
+<script src="/d3/d3.v3.min.js"></script>
+<script src="/d3/d3.geo.projection.v0.min.js"></script> 
+<script src="/d3/topojson.v1.min.js"></script>
+
+<style>
+body {font-size:11px;}
+path {
+	stroke: black;
+	stroke-width: 0.25px;
+}
+</style>
+
+
+<div id='test2'></div>
+
+<script>
+
+var width = 960,
+	velocity = .005,  
+	then = Date.now() 
+	height = 475;
+
+	var projection = d3.geo.mercator()
+.center([0, 0])
+	.scale(1000);
+
+	var svg = d3.select("#test2").append("svg")
+	.attr("width", width)
+	.attr("height", height);
+
+var path = d3.geo.path()
+	.projection(projection);
+
+	var g = svg.append("g");
+
+
+	d3.json("/geo_json/world-110m.json", function(error, topology) {
+			g.selectAll("path")
+			.datum(topojson.feature(topology, topology.objects.countries).geometries)
+			.enter()
+			.append("path")
+			.attr("d", path)
+			.style("fill","black")
+
+
+			d3.timer(function() {  
+				var angle = velocity * (Date.now() - then);  
+				projection.rotate([angle,0,0]);  
+				svg.selectAll("path")  
+				.attr("d", path.projection(projection));  
+				}); 
+
+
+			var places = [
+			{
+name: "Wollongong, Australia",
+location: {
+latitude: -34.42507,
+		  longitude: 150.89315
+}
+},
+{
+name: "Newcastle, Australia",
+	  location: {
+latitude: -32.92669,
+		  longitude: 151.77892
+	  }
+}
+]
+	svg.selectAll(".pin")
+.data(places)
+	.enter().append("circle", ".pin")
+	.attr("r", 5)
+	.attr("transform", function(d) {
+			return "translate(" + projection([
+					d.location.longitude,
+					d.location.latitude
+					]) + ")"
+			});
+
+
+</script>
+

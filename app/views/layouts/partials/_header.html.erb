@@ -20,9 +20,9 @@
 				<% end %>
 
 					<% if user_signed_in? %>
-						<li><%#= link_to "Observation Analysis", obs_obs_path, method: :get %></li>
-					<li><%= link_to "NEX-NASA Daily Analysis", daily_nexnasa_index_path %></li>
 					<li><%= link_to "CMIP5 Daily Analysis", daily_cmip5s_path %></li>
+					<li><%= link_to "NEX-NASA Daily Analysis", daily_nexnasa_index_path %></li>
+						<li><%= link_to "CORDEX Daily Analysis", daily_cordex_index_path, method: :get %></li>
 					<li><%= link_to "Mult-Models Analysis", mult_cmip5s_path %></li>
 					<li><%= link_to "Edit Info.", edit_user_registration_path %></li>
 					<li><%= link_to('Log Out', destroy_user_session_path, :method => :delete) %></li>

@@ -1,0 +1,69 @@
+<%= form_tag({controller: "cordex", action: "daily_analysis" }, method: :get) do %>  
+	<table>
+	<thead>
+		<tr>
+			<th>1.Select Variable Name</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select(:part1, params[:part1], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"} ) rescue nil %></td>
+	</tr>
+</table>
+
+
+
+<table>
+	<thead>
+		<tr>
+			<th>2.Select Model</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select(:part3, params[:part3], Settings::CordexModel.all.order("name"), :name, :folder, {include_blank: "- Select Model -"} ) rescue nil %></td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>3.Select Experiment</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select(:part4, params[:part4], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"} ) rescue nil %></td>
+	</tr>
+</table>
+
+
+<%= render "layouts/partials/datepicker"%>
+
+<table>
+	<thead>
+		<tr>
+			<th colspan=2>4.Select Date</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>Date:</td>
+		<td>
+			<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "From" rescue nil %>
+		</td>
+		<td>-</td>
+		<td>
+			<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "To" rescue nil %>
+		</td>
+	</tr>
+</table>
+
+
+<div id="result">
+	<%= hidden_field :s_lon, params[:s_lon], class: "slon" rescue nil %>
+	<%= hidden_field :e_lon, params[:e_lon], class: "elon" rescue nil %>
+	<%= hidden_field :s_lat, params[:s_lat], class: "slat" rescue nil %>
+	<%= hidden_field :e_lat, params[:e_lat], class: "elat" rescue nil %>
+</div>
+
+
+<%= submit_tag "Submit", class: "submit" rescue nil %>
+<% end %>
+

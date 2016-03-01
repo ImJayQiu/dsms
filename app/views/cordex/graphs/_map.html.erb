@@ -1,0 +1,198 @@
+<style>
+
+.graticule {
+	fill: none;
+	stroke: #777;
+	stroke-opacity: .5;
+	stroke-width: .5px;
+}
+
+.land {
+	fill: #ccc;
+}
+
+.boundary {
+	fill: none;
+	stroke: #fff;
+	stroke-width: .5px;
+}
+
+</style>
+
+<div id='area_dataset'></div>
+
+<script src="/d3/d3.v3.min.js"></script>
+<script src="/d3/d3.geo.projection.v0.min.js"></script>
+<script src="/d3/topojson.v1.min.js"></script>
+
+<script>
+
+var width = 960,
+	height = 480;
+
+var projection = d3.geo.equirectangular()
+	//.scale(153)
+	.scale(<%= map_size*100 %>)
+.center(<%= c_point %>)
+//.translate([width / 2, height / 2])
+	.precision(.1);
+
+
+var path = d3.geo.path()
+	.projection(projection);
+
+	var graticule = d3.geo.graticule();
+
+	var svg = d3.select("#area_dataset").append("svg")
+	.attr("width", width)
+	.attr("height", height);
+
+	svg.append("path")
+.datum(graticule)
+	.attr("class", "graticule")
+	.attr("d", path);
+
+/*
+	var a = "#4575b4";
+	var b = "#ffffbf";
+	var c = "#a50026";
+
+	var max_value = <%#= @max_set.max %>;
+	var mean_value = <%#= @mean_set.sum/@mean_set.size %>;
+	var min_value = <%#= @min_set.min %>;
+	var linear = d3.scale.linear()
+.domain([min_value,mean_value,max_value])
+	.range([0,0.5,1]);
+
+	var p_color = d3.interpolate(a,c);
+
+
+	// for testing 
+	var color = d3.scale.linear()
+.domain([min_value,mean_value,max_value])
+	.range(["#4575b4", "#ffffbf", "#a50026"])
+	.interpolate(d3.interpolateHcl);
+	// testing code finish
+
+	var defs = svg.append("defs");
+
+	var linearGradient = defs.append("linearGradient")
+	.attr("id","linearColor")
+	.attr("x1","0%")
+	.attr("y1","0%")
+	.attr("x2","100%")
+	.attr("y2","0%");
+
+	var stop1 = linearGradient.append("stop")
+	.attr("offset","0%")
+	.style("stop-color",a.toString());
+
+	var stop2 = linearGradient.append("stop")
+	.attr("offset","50%")
+	.style("stop-color",b.toString());
+
+	var stop3 = linearGradient.append("stop")
+	.attr("offset","100%")
+	.style("stop-color",c.toString());
+
+
+	var dataset = [
+	<% @g_color = "%06x" % (rand * 0xffffff) %>
+	<%# dataset_g.each do |data| %>
+		<%# if data[:value].nil? or data[:value] == 0 then opacity = "0" else opacity = "1.0" end  %>
+
+	{
+value: <%#= data[:value].to_f %>,
+		   opacity: <%#= opacity %>,
+		   location: {
+lat: <%#= data[:lat].to_f  %>,
+	 lon: <%#= data[:lon].to_f %>
+	   }
+	},
+
+<%# end %>
+]
+*/
+	svg.selectAll(".pin")
+.data(dataset)
+	//	.attr("xlink:href", function(d){return d.url;})
+	.enter().append("rect", ".pin")
+	.attr('width', (width/180+2)*<%= map_size %>)
+	.attr('height', (height/90+2)*<%= map_size %>  )
+	.style("fill", function(d) { return color(d.value); })
+	.attr('opacity', function(d){ return d.opacity } )
+	.attr("transform", function(d) {
+			return "translate(" + projection([
+					d.location.lon,
+					d.location.lat
+					]) + ")"
+			});
+
+
+// map projection start
+d3.json("/geo_json/world-110m.json", function(error, world) {
+		if (error) throw error;
+
+		svg.insert("path", ".graticule")
+		.datum(topojson.feature(world, world.objects.land))
+		.attr("class", "land")
+		.attr("d", path);
+
+		svg.insert("path", ".graticule")
+		.datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+		.attr("class", "boundary")
+		.attr("d", path);
+		});
+
+d3.select(self.frameElement).style("height", height + "px");
+
+// map projection done
+
+
+/*
+var colorRect = svg.append("rect")
+.attr("x", 20)
+.attr("y", 425)
+.attr("width", 140)
+.attr("height", 20)
+.style("fill","url(#" + linearGradient.attr("id") + ")");
+
+var minValueText = svg.append("text")
+.attr("class","valueText")
+.attr("x", 20)
+.attr("y", 420)
+.attr("dy", "-0.3em")
+.text(function(){
+		return "Min"; //min_value;
+		});
+
+
+var maxValueText = svg.append("text")
+.attr("class","valueText")
+.attr("x", 75)
+.attr("y", 420)
+.attr("dy", "-0.3em")
+.text(function(){
+		return "Mean";//max_value;
+		});
+
+var maxValueText = svg.append("text")
+.attr("class","valueText")
+.attr("x", 160)
+.attr("y", 420)
+.attr("dy", "-0.3em")
+.text(function(){
+		return "Max";//max_value;
+		});
+ */
+
+d3.select("body").append("svg")
+.attr("class", "axis")
+.attr("width", 1440)
+.attr("height", 30)
+.append("g")
+.attr("transform", "translate(0,30)")
+.call(axis);
+
+</script>
+
