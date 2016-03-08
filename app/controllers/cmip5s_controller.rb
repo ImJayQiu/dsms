@@ -180,7 +180,7 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
-		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@date[0]} -- #{@date[-1]} by CDAAS RIMES.INT #{Time.now.year}")
 
 		if @unit == "°C"
 			grads_gs.puts('set rgb 33 248 50 60')
@@ -272,7 +272,7 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
-		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@date[0]} -- #{@date[-1]} by CDAAS RIMES.INT #{Time.now.year}")
 
 		if @unit == "°C"
 			grads_gs.puts('set rgb 33 248 50 60')
@@ -634,22 +634,22 @@ class Cmip5sController < ApplicationController
 		cdo_threads=[]
 
 		cdo_threads << Thread.new{
-			@f1_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@cdo_output_path}_#{m1}.nc", options:'-f nc4') rescue nil  
+			@f1_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@cdo_output_path}_#{@m1}.nc", options:'-f nc4') rescue nil  
 			f1_ctl = Cdo.gradsdes(input: @f1_data, output: f1_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f2_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@cdo_output_path}_#{m2}.nc", options:'-f nc4') rescue nil  
+			@f2_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@cdo_output_path}_#{@m2}.nc", options:'-f nc4') rescue nil  
 			f2_ctl = Cdo.gradsdes(input: @f2_data, output: f2_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f3_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@cdo_output_path}_#{m3}.nc", options:'-f nc4') rescue nil 
+			@f3_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@cdo_output_path}_#{@m3}.nc", options:'-f nc4') rescue nil 
 			f3_ctl = Cdo.gradsdes(input: @f3_data, output: f3_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f4_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@cdo_output_path}_#{m4}.nc", options:'-f nc4') rescue nil  
+			@f4_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@cdo_output_path}_#{@m4}.nc", options:'-f nc4') rescue nil  
 			f4_ctl = Cdo.gradsdes(input: @f4_data, output: f4_ctl, options:'-f ctl') rescue nil
 		}
 
@@ -658,35 +658,36 @@ class Cmip5sController < ApplicationController
 		end
 		ThreadsWait.all_waits(*cdo_threads)
 		##############################################################
-		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
+		#gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
 		[@f1_data,@f2_data,@f3_data,@f4_data].each_with_index do |data,i|
 			if i+1==1
-				m_name = m1
 				m_title = @m1_path.to_s
 			elsif i+1==2
-				m_name = m2
 				m_title = @m2_path.to_s
 			elsif i+1==3
-				m_name = m3
 				m_title = @m3_path.to_s
 			elsif i+1==4
-				m_name = m4
 				m_title = @m4_path.to_s
 			end
+
+			mdate = Cdo.showdate(input: data) rescue nil
+			date = mdate.first.split(" ").to_a rescue nil
 			ntime = Cdo.ntime(input: data)[0] rescue nil
 			stdname = Cdo.showstdname(input: data)[0] rescue nil
 			#data_ctl = Cdo.gradsdes(input: data) rescue nil
-			gs_name_m = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_#{i+1}"
+			#gs_name_m = "lon#{s_lon.to_i}_#{e_lon.to_i}lat#{s_lat.to_i}_#{e_lat.to_i}_#{date[0]}#{date[-1]}#{i+1}"
+			gs_name_m = "lon#{s_lon.to_i}_#{e_lon.to_i}_lat#{s_lat.to_i}_#{e_lat.to_i}_#{date[0].to_date.strftime('%Y%m%d') rescue nil}_#{date[-1].to_date.strftime('%Y%m%d') rescue nil}_#{i+1}"
 
 			grads_gs = File.new("#{sys_output_dir}/#{gs_name_m}.gs", "w")
 			grads_gs.puts("reinit")
-			grads_gs.puts("open #{output_file_name}_#{m_name}.ctl")
+			grads_gs.puts("open #{output_file_name}_#{m_title}.ctl")
 			grads_gs.puts("set grads off")
 			grads_gs.puts("set gxout shaded")
 			grads_gs.puts("set font 1")
 			grads_gs.puts("set strsiz 0.12")
-			grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+			#grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+			grads_gs.puts("draw string 1.8 0.1 Date Period: #{date[0]} -- #{date[-1]} by CDAAS RIMES.INT #{Time.now.year}") rescue nil 
 
 			if @unit == "°C"
 				grads_gs.puts('set rgb 33 248 50 60')
@@ -765,42 +766,50 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 			grads_gs.puts("cbar.gs")
 			grads_gs.puts("draw title #{m_title} Daily #{exp.humanize} #{stdname.humanize}") rescue nil
-			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{i+1}.png png white") rescue nil
+			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{m_title}.png png white") rescue nil
 			grads_gs.puts("quit")
 			grads_gs.close
+
+			@go_dir = "cd #{sys_output_dir.to_s}"
+
+			if data.nil?
+				@plot_cmd = ""
+			else
+				@plot_cmd = "grads -lbc 'exec #{gs_name_m}.gs'"
+			end
+			system("cd / && #{@go_dir} && #{@plot_cmd}") 
 		end
 
-		@go_dir = "cd #{sys_output_dir.to_s}"
-
+=begin
 		if @f1_data.nil?
 			@plot_m1_cmd = ""
 		else
-			@plot_m1_cmd = "grads -lbc 'exec #{gs_name}_1.gs'"
+			@plot_m1_cmd = "grads -lbc 'exec #{gs_name}1.gs'"
 		end
 
 		if @f2_data.nil?
 			@plot_m2_cmd = ""
 		else
-			@plot_m2_cmd = "grads -lbc 'exec #{gs_name}_2.gs'"
+			@plot_m2_cmd = "grads -lbc 'exec #{gs_name}2.gs'"
 		end
 
 		if @f3_data.nil?
 			@plot_m3_cmd = ""
 		else
-			@plot_m3_cmd = "grads -lbc 'exec #{gs_name}_3.gs'"
+			@plot_m3_cmd = "grads -lbc 'exec #{gs_name}3.gs'"
 		end
 
 		if @f4_data.nil?
 			@plot_m4_cmd = ""
 		else
-			@plot_m4_cmd = "grads -lbc 'exec #{gs_name}_4.gs'"
+			@plot_m4_cmd = "grads -lbc 'exec #{gs_name}4.gs'"
 		end
 
 		system("cd / && #{@go_dir} && #{@plot_m1_cmd}") 
 		system("cd / && #{@go_dir} && #{@plot_m2_cmd}") 
 		system("cd / && #{@go_dir} && #{@plot_m3_cmd}") 
 		system("cd / && #{@go_dir} && #{@plot_m4_cmd}") 
-
+=end
 
 	end
 

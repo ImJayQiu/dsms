@@ -149,7 +149,7 @@ class NexnasaController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
-		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@date[0]} -- #{@date[-1]} by CDAAS RIMES.INT #{Time.now.year}")
 
 		if @unit == "°C"
 			grads_gs.puts('set rgb 33 248 50 60')
@@ -241,7 +241,7 @@ class NexnasaController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
-		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@date[0]} -- #{@date[-1]} by CDAAS RIMES.INT #{Time.now.year}")
 
 		if @unit == "°C"
 			grads_gs.puts('set rgb 33 248 50 60')
