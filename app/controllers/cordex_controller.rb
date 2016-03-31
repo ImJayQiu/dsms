@@ -321,11 +321,24 @@ class CordexController < ApplicationController
 		grads_gs.puts("quit")
 		grads_gs.close
 
+
+		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_csv.gs", "w")
+		grads_gs.puts("reinit")
+		grads_gs.puts("open #{output_file_name}.ctl")
+		grads_gs.puts("set t 1 last")
+		grads_gs.puts("/opt/grads/Resources/SupportData/fprintf.gs")
+		grads_gs.puts("#{var}*#{@rate}+#{@rate2}")
+		grads_gs.puts("#{output_file_name}_sel_lonlat_grads_csv.csv %g 10 ")
+		grads_gs.puts("quit")
+		grads_gs.close
+
 		@go_dir = "cd #{sys_output_dir.to_s}"
 		@plot_mean = "grads -lbc 'exec #{gs_name}_mean.gs'"
 		@plot_max = "grads -lbc 'exec #{gs_name}_max.gs'"
+		@csv = "grads -lbc 'exec #{gs_name}_csv.gs'"
 		@plot_mean_cmd = system("cd / && #{@go_dir} && #{@plot_mean} ") 
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
+		@csv_cmd = system("cd / && #{@go_dir} && #{@csv} ") 
 	end
 
 
