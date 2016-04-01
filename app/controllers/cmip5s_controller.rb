@@ -360,7 +360,8 @@ class Cmip5sController < ApplicationController
 		grads_gs.puts("reinit")
 		grads_gs.puts("open #{output_file_name}.ctl")
 		grads_gs.puts("set t 1 last")
-		grads_gs.puts("/opt/grads/Resources/SupportData/fprintf.gs #{var}*#{@rate}+#{@rate2} #{output_file_name}_sel_lonlat_grads_csv.txt %g 100 ")
+		grads_gs.puts("#{sys_output_pub}/fprintf.gs #{var}*#{@rate}+#{@rate2} #{output_file_name}_sel_lonlat_grads_csv.csv %1.2f 100 ") 
+		grads_gs.puts("!sed -i /Printing/d #{var}*#{@rate}+#{@rate2} #{output_file_name}_sel_lonlat_grads_csv.csv")
 		grads_gs.puts("quit")
 		grads_gs.close
 
