@@ -322,15 +322,19 @@ class CordexController < ApplicationController
 		grads_gs.close
 
 
+		########## generate csv file ########################
+		@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
+		@sel_data_griddes = Cdo.griddes(input: @sel_data)
+		@gridsize = @sel_data_griddes[4].split(" ")[-1].to_i
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_csv.gs", "w")
 		grads_gs.puts("reinit")
 		grads_gs.puts("open #{output_file_name}.ctl")
 		grads_gs.puts("set t 1 last")
-		grads_gs.puts("/opt/grads/Resources/SupportData/fprintf.gs")
-		grads_gs.puts("#{var}*#{@rate}+#{@rate2}")
-		grads_gs.puts("#{output_file_name}_sel_lonlat_grads_csv.csv %g 10 ")
+		grads_gs.puts("#{sys_output_pub}/fprintf.gs #{var}*#{@rate}+#{@rate2} #{output_file_name}.csv %1.2f #{@gridsize}") 
+		grads_gs.puts("!sed -i /Printing/d #{var}*#{@rate}+#{@rate2} #{output_file_name}.csv")
 		grads_gs.puts("quit")
 		grads_gs.close
+
 
 		@go_dir = "cd #{sys_output_dir.to_s}"
 		@plot_mean = "grads -lbc 'exec #{gs_name}_mean.gs'"
