@@ -592,7 +592,8 @@ class Cmip5sController < ApplicationController
 
 		############# File path and  name ################################
 		var = params[:var].first.to_s
-		mip = params[:mip].first.to_s
+		#mip = params[:mip].first.to_s
+		mip = "day"
 		@m1 = m1 = params[:m1].first.to_s
 		@m2 = m2 = params[:m2].first.to_s
 		@m3 = m3 = params[:m3].first.to_s

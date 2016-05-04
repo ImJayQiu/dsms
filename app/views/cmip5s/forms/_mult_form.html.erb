@@ -31,7 +31,7 @@
 		</tr>
 	</thead>
 	<tr>
-		<td><%= collection_select(:mip, params[:mip], Settings::Mip.all.order("name"), :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></td>
+		<td>CMIP5 Daily<%#= collection_select(:mip, params[:mip], Settings::Mip.all.order("name"), :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></td>
 		<td><%= collection_select(:var, params[:var], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"} ) rescue nil %></td>
 		<td><%= collection_select(:exp, params[:exp], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"} ) rescue nil %></td>
 	</tr>
