@@ -1,7 +1,6 @@
-
 <div class="inner">
 	<h2>CDAAS.RIMES<br/>Forgot Your Password?</h2>
-	<em><%= devise_error_messages! %></em>
+	<%= devise_error_messages! %>
 	<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
 		<div align=center>
 		<div class="6u 12u$(xsmall)">
