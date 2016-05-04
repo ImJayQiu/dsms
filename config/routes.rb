@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :settings do
     resources :cordex_models
   end
+
 	resources :news
 
 	resources :obs do
