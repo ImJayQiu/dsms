@@ -344,7 +344,7 @@ class NexnasaController < ApplicationController
 		@output_csv = "grads -lbc 'exec #{gs_name}_csv.gs'"
 		@plot_mean_cmd = system("cd / && #{@go_dir} && #{@plot_mean} ") 
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
-		@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
+		#@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
 	end
 
 

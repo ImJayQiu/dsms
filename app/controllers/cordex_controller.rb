@@ -321,6 +321,23 @@ class CordexController < ApplicationController
 		grads_gs.puts("quit")
 		grads_gs.close
 
+    	################### plot grid start ######################
+		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_grid.gs", "w")
+		grads_gs.puts("reinit")
+		grads_gs.puts("open #{output_file_name}.ctl")
+		grads_gs.puts("set grid off")
+		grads_gs.puts("set gxout grid")
+		grads_gs.puts("set font 1")
+		grads_gs.puts("set strsiz 0.12")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@date[0]} -- #{@date[-1]} by CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
+		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} ")
+		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_grid.png png white")
+		grads_gs.puts("quit")
+		grads_gs.close
+		################# plot grid done ############################
+
+
 
 		########## generate csv file ########################
 		@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
@@ -339,9 +356,11 @@ class CordexController < ApplicationController
 		@go_dir = "cd #{sys_output_dir.to_s}"
 		@plot_mean = "grads -lbc 'exec #{gs_name}_mean.gs'"
 		@plot_max = "grads -lbc 'exec #{gs_name}_max.gs'"
+		@plot_grid = "grads -lbc 'exec #{gs_name}_grid.gs'"
 		@csv = "grads -lbc 'exec #{gs_name}_csv.gs'"
 		@plot_mean_cmd = system("cd / && #{@go_dir} && #{@plot_mean} ") 
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
+		@plot_grid_cmd = system("cd / && #{@go_dir} && #{@plot_grid} ") 
 		@csv_cmd = system("cd / && #{@go_dir} && #{@csv} ") 
 	end
 

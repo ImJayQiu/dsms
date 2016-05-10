@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :feedbacks
   namespace :settings do
     resources :cordex_models
   end
