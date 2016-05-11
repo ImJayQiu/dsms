@@ -9,6 +9,7 @@
 		</th>
 	</tr>
 </table>
+
 <table>
 	<thead>
 		<tr>
@@ -17,7 +18,7 @@
 			<% if can? :manage, :feedback %>
 				<th>User</th>
 			<% end #can %>
-			<th colspan="3"></th>
+			<th colspan="4"></th>
 		</tr>
 	</thead>
 
@@ -38,11 +39,15 @@
 
 		<td><%= button_to 'Show', feedback, method: :get %></td>
 
-		<% if current_user.email == feedback.user OR can? :manage, :feedback %>
+		<% if current_user.email == feedback.user %>
 			<td><%= button_to 'Edit', edit_feedback_path(feedback), method: :get %></td>
 	<% else %>
 			<td></td>
 		<% end #if current_user %>
+
+		<% if can? :manage, :feedback %>
+			<td><%= button_to 'Ans.', edit_feedback_path(feedback), method: :get %></td>
+		<% end #can %>
 
 		<% if can? :manage, :feedback %>
 			<td><%= button_to 'Del', feedback, method: :delete, data: { confirm: 'Are you sure?' } %></td>
