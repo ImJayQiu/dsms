@@ -13,7 +13,10 @@
 	<thead>
 		<tr>
 			<th>Title</th>
-			<th>User</th>
+			<th>Answer</th>
+			<% if can? :manage, :feedback %>
+				<th>User</th>
+			<% end #can %>
 			<th colspan="3"></th>
 		</tr>
 	</thead>
@@ -22,6 +25,12 @@
 	<% @feedbacks.each do |feedback| %>
 		<tr>
 		<td><%= feedback.title %></td>
+
+		<% if feedback.answer.blank? %>
+			<td></td>
+	<% else %>
+			<td>Yes</td>
+		<% end #if feedback.answer.blank?%>
 
 		<% if can? :manage, :feedback %>
 			<td><%= feedback.user %></td>
