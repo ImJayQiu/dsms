@@ -4,7 +4,7 @@ class FeedbacksController < ApplicationController
   # GET /feedbacks
   # GET /feedbacks.json
   def index
-    @feedbacks = Feedback.all
+    @feedbacks = Feedback.order(id: :desc).paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /feedbacks/1
