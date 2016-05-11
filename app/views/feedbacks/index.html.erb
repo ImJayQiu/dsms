@@ -38,7 +38,7 @@
 
 		<td><%= button_to 'Show', feedback, method: :get %></td>
 
-		<% if current_user.email == feedback.user %>
+		<% if current_user.email == feedback.user OR can? :manage, :feedback %>
 			<td><%= button_to 'Edit', edit_feedback_path(feedback), method: :get %></td>
 	<% else %>
 			<td></td>
