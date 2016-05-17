@@ -1,8 +1,5 @@
 <h2>Editing Feedback</h2>
 
-<% if current_user.email == feedback.user OR can? :manage, :feedback %>
 	<%= render 'form' %>
-<% else %>
-	Sorry, you cannot edit the feedback of another user !
-<% end %>
+
 
