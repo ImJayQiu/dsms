@@ -19,9 +19,11 @@
 				<input type="button" class="data" value="Show Detail"/>
 			</div>
 		</td>
-		<td>
+		<% if can? :download, :csv %>
+			<td>
 			<a href="#" class="export">Export CSV</a>
 		</td>
+		<% end # if can? :download, :csv %>
 	</tr>
 </table>
 
@@ -53,7 +55,8 @@
 
 
 
-<script>
+<% if can? :download, :csv %>
+	<script>
 
 $(document).ready(function () {
 
@@ -110,3 +113,4 @@ $(this)
 
 </script>
 
+<% end # if can? :download, :csv %>

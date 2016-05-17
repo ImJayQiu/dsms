@@ -8,7 +8,7 @@
 	</tr>
 	<tr>
 		<td>
-		Select Specific Location :
+			Select Specific Location :
 		</td>
 		<td>
 			<%= text_field_tag :lon, params[:lon], placeholder: "Longitude" rescue nil %>
@@ -44,9 +44,11 @@
 				<input type="button" class="data" value="Show Detail"/>
 			</div>
 		</td>
-		<td>
+		<% if can? :download, :csv %>
+			<td>
 			<a href="#" class="export">Export CSV</a>
 		</td>
+		<% end # if can? :download, :csv %>
 	</tr>
 </table>
 
@@ -76,7 +78,8 @@
 <br/>
 
 
-<script>
+<% if can? :download, :csv %>
+	<script>
 
 $(document).ready(function () {
 
@@ -133,3 +136,4 @@ $(this)
 
 </script>
 
+<% end # if can? :download, :csv %>

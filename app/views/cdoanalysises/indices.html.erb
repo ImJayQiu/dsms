@@ -12,9 +12,12 @@
 				<input type="button" class="data" value="Show Detail"/>
 			</div>
 		</td>
-		<td>
+
+		<% if can? :download, :csv %>
+			<td>
 			<a href="#" class="export">Export CSV</a>
 		</td>
+		<% end # if can? :download, :csv %>
 	</tr>
 </table>
 
@@ -41,7 +44,8 @@
 	</hr>
 </div>
 
-<script>
+<% if can? :download, :csv %>
+	<script>
 $(document).ready(function () {
 		function exportTableToCSV($table, filename) {
 		var $rows = $table.find('tr:has(td)'),
@@ -94,3 +98,4 @@ $(this)
 });
 
 </script>
+<% end # if can? :download, :csv %>

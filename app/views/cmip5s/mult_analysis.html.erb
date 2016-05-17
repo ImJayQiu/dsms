@@ -2,7 +2,9 @@
 <p id="notice"><%= notice %></p>
 <h2>CMIP5 Data Analysis - Mult-Models</h2>
 
-<table>
+<% if can? :analyze, :multmodels %>
+
+	<table>
 	<tr>
 		<td style="width:50%;" align="center" colspan=3>
 			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@m1.to_s}.png" %> target = "_blank" >
@@ -18,11 +20,19 @@
 	</tr>
 	<tr>
 		<td>Download:</td>
-		<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m1}.nc", method: :get %></td>
-		<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m1}.ctl", method: :get %></td>
+		<% if can? :download, :nc %>
+			<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m1}.nc", method: :get %></td>
+		<% end # if can? :download, :nc %>
+		<% if can? :download, :ctl %>
+			<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m1}.ctl", method: :get %></td>
+		<% end # if can? :download, :ctl %>
 		<td>Download:</td>
-		<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m2}.nc", method: :get %></td>
-		<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m2}.ctl", method: :get %></td>
+		<% if can? :download, :nc %>
+			<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m2}.nc", method: :get %></td>
+		<% end # if can? :download, :nc %>
+		<% if can? :download, :ctl %>
+			<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m2}.ctl", method: :get %></td>
+		<% end # if can? :download, :ctl %>
 	</tr>
 	<tr>
 		<td style="width:50%;" align="center" colspan=3>
@@ -39,11 +49,19 @@
 	</tr>
 	<tr>
 		<td>Download:</td>
-		<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m3}.nc", method: :get %></td>
-		<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m3}.ctl", method: :get %></td>
+		<% if can? :download, :nc %>
+			<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m3}.nc", method: :get %></td>
+		<% end # if can? :download, :nc %>
+		<% if can? :download, :ctl %>
+			<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m3}.ctl", method: :get %></td>
+		<% end # if can? :download, :nc %>
 		<td>Download:</td>
-		<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m4}.nc", method: :get %></td>
-		<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m4}.ctl", method: :get %></td>
+		<% if can? :download, :nc %>
+			<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@m4}.nc", method: :get %></td>
+		<% end # if can? :download, :nc %>
+		<% if can? :download, :ctl %>
+			<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@m4}.ctl", method: :get %></td>
+		<% end # if can? :download, :nc %>
 	</tr>
 
 </table>
@@ -58,3 +76,10 @@
 <p/>
 
 
+<% else %>
+<p/>
+Permission Denied ! 
+<p/>
+Please upgrade your account to use this function !
+
+<% end %>

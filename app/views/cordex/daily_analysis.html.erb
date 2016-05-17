@@ -2,7 +2,9 @@
 <p id="notice"><%= notice %></p>
 <h2>CORDEX Data Analysis - Daily</h2>
 
-<table>
+<%if can? :analyze, :cordex %>
+
+	<table>
 	<tr>
 	</tr>
 	<tr>
@@ -57,15 +59,24 @@
 			<td>Latitude Range: <%= @lat_r %></td>
 		</tr>
 		<tr>
-			<td>
+			<% if can? :download, :nc %>
+				<td>
 				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
 			</td>
-			<td>
+			<% end # if can? :download, :nc %>
+
+			<% if can? :download, :ctl %>
+				<td>
 				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
 			</td>
-			<td>
+			<% end # if can? :download, :ctl %>
+
+			<% if can? :download, :csv %>
+				<td>
 				<%= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
 			</td>
+			<% end #if can? :download, :csv %>
+
 		</tr>
 		</tbody>
 	</table>
@@ -103,3 +114,10 @@
 </div>
 <p/>
 
+<% else %>
+	<p/>
+Permission Denied ! 
+<p/>
+Please upgrade your account to use this function !
+
+<% end %>

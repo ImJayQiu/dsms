@@ -13,10 +13,29 @@ class Ability
 			can :manage, :setting
 			can :manage, :root_path
 			can :manage, :analysis
+			can :analyze, :cordex
+			can :analyze, :nexnasa
+			can :analyze, :multmodels
+			can :input, :location
+			can :download, :nc
+			can :download, :ctl
+			can :download, :csv
+		end
+
+		if user.role == "expert"
+			can :analyze, :cordex
+			can :analyze, :nexnasa
+			can :analyze, :multmodels
+			can :input, :location
+			can :download, :nc
+			can :download, :ctl
+			can :download, :csv
 		end
 
 		if user.role == "normal"
-			can :manage, :analysis
+			can :analyze, :cordex
+			can :analyze, :nexnasa
+			can :analyze, :multmodels
 		end
 
 		#

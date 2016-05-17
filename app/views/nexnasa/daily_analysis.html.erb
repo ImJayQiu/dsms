@@ -1,8 +1,10 @@
-
 <p id="notice"><%= notice %></p>
+
 <h2>NEX-NASA Data Analysis - Daily</h2>
 
-<table>
+<% if can? :analyze, :nexnasa %>
+
+	<table>
 	<tr>
 	</tr>
 	<tr>
@@ -23,6 +25,7 @@
 <p/>
 
 <%= render "nexnasa/graphs/daily" %>
+
 <p/>
 <table>
 	<thead>
@@ -51,21 +54,28 @@
 			<td>Latitude Range: <%= @lat_r %></td>
 		</tr>
 		<tr>
-			<td>
+			<% if can? :download, :nc %>
+				<td>
 				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
 			</td>
-			<td>
+			<% end # if can? :download, :nc %>
+			<% if can? :download, :ctl %>
+				<td>
 				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
 			</td>
-			<td>
-				<%= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
+			<% end # if can? :download, :ctl %>
+			<% if can? :download, :csv %>
+				<td>
+				<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
 			</td>
+			<% end # if can? :download, :csv %>
 		</tr>
 		</tbody>
 	</table>
 </div>
 
 <p/>
+
 <table>
 	<thead>
 		<tr>
@@ -80,7 +90,6 @@
 </table>
 
 <div class="content_analysis" style="display:none" >
-
 
 	<%= render "nexnasa/forms/form_daily_analysis" %>
 
@@ -97,3 +106,10 @@
 </div>
 <p/>
 
+<% else %>
+	<p/>
+Permission Denied ! 
+<p/>
+Please upgrade your account to use this function !
+
+<% end %>

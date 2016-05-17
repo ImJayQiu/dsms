@@ -7,11 +7,16 @@
 
 <h2>CMIP5 Data Analysis - Daily</h2>
 
-<div id="pagewidth">
+<%= form_tag({controller: "cmip5s", action: "daily_analysis" }, method: :get) do %>  
+
+	<div id="pagewidth">
+
 	<div id="wrapper" class="clearfix">
 
-		<div id="maincol">
+		<div id="maincol" align=center>
+
 			<h3>Select Region</h3>
+
 			<table>
 				<tr></tr>
 				<tr><td>
@@ -19,9 +24,9 @@
 				</td></tr>
 			</table>
 
-			<p/>
+			<%if can? :input, :location %>
+				<table id="result">
 
-			<table id="result">
 				<tr>
 					<th colspan=5>Location Region</th>
 				</tr>
@@ -29,19 +34,58 @@
 				<tr>
 					<td>Lon.</td>
 					<td>W:</td>
-					<td><input type="text" class="slon" ></td>
+					<td>
+						<%= text_field :s_lon, params[:s_lon], class: "slon", required: true rescue nil %>
+					</td>
 					<td>E:</td>
-					<td><input type="text" class="elon" ></td>
+					<td>
+						<%= text_field :e_lon, params[:e_lon], class: "elon", required: true rescue nil %>
+					</td>
 				</tr>
 				<tr>
 					<td>Lat.</td>
 					<td>S:</td>
-					<td><input type="text" class="slat" ></td>
+					<td>
+						<%= text_field :s_lat, params[:s_lat], class: "slat", required: true rescue nil %>
+					</td>
 					<td>N:</td>
-					<td><input type="text" class="elat" ></td>
+					<td>
+						<%= text_field :e_lat, params[:e_lat], class: "elat", required: true rescue nil %>
+					</td>
 				</tr>
 			</table>
 
+		<% else %>
+
+				<table id="result">
+
+				<tr>
+					<th colspan=5>Location Region</th>
+				</tr>
+
+				<tr>
+					<td>Lon.</td>
+					<td>W:</td>
+					<td><input type="text" class="slon" DISABLED ></td>
+					<td>E:</td>
+					<td><input type="text" class="elon" DISABLED ></td>
+				</tr>
+
+				<tr>
+					<td>Lat.</td>
+					<td>S:</td>
+					<td><input type="text" class="slat" DISABLED></td>
+					<td>N:</td>
+					<td><input type="text" class="elat" DISABLED></td>
+				</tr>
+			</table>
+			<div id="result">
+				<%= hidden_field :s_lon, params[:s_lon], class: "slon" rescue nil %>
+				<%= hidden_field :e_lon, params[:e_lon], class: "elon" rescue nil %>
+				<%= hidden_field :s_lat, params[:s_lat], class: "slat" rescue nil %>
+				<%= hidden_field :e_lat, params[:e_lat], class: "elat" rescue nil %>
+			</div>
+			<% end # if can%>
 
 		</div>
 
@@ -53,7 +97,15 @@
 	</div>
 </div>
 
+<table>
+	<tr>
+		<td align=center>
+			<%= submit_tag "Submit & Analyze", class: "submit" rescue nil %>
+		</td>
+	</tr>
+</table>
 
+<% end #form %>
 
 
 <script src="/assets/leaflet/leaflet.js"></script>

@@ -56,15 +56,21 @@
 			<td>Latitude Range: <%= @lat_r %></td>
 		</tr>
 		<tr>
+			<% if can? :download, :nc %>
 			<td>
 				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
 			</td>
+			<% end # if can? :download, :nc %>
+			<% if can? :download, :ctl %>
 			<td>
 				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
 			</td>
+			<% end # if can? :download, :ctl %>
+			<% if can? :download, :csv %>
 			<td>
 				<%= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
 			</td>
+			<% end # if can? :download, :csv %>
 		</tr>
 		</tbody>
 	</table>
@@ -103,4 +109,3 @@
 <p/>
 
 
-<%#= button_to 'Back', cmip5s_path, method: :get %>
