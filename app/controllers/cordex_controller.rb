@@ -359,7 +359,7 @@ class CordexController < ApplicationController
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
 		@plot_grid_cmd = system("cd / && #{@go_dir} && #{@plot_grid} ") 
 		if can? :download, :csv
-			@csv_cmd = system("cd / && #{@go_dir} && #{@csv} ") 
+		#	@csv_cmd = system("cd / && #{@go_dir} && #{@csv} ") 
 		end
 	end
 

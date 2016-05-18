@@ -73,7 +73,7 @@
 
 			<% if can? :download, :csv %>
 				<td>
-				<%= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
+				<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
 			</td>
 			<% end #if can? :download, :csv %>
 
