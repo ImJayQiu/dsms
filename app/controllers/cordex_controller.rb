@@ -48,7 +48,8 @@ class CordexController < ApplicationController
 				@rate2 = @variable_setting.c_rate.to_f 
 				@unit = @variable_setting.c_unit
 			else
-				@rate = @variable_setting.c_rate.to_f 
+				@rate = 1.to_i
+				#@rate = @variable_setting.c_rate.to_f 
 				@rate2 = 0.to_i 
 				@unit = @variable_setting.c_unit
 			end
