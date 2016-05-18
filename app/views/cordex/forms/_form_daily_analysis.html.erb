@@ -3,7 +3,7 @@
 	<tr align=center>
 		<% ["info", "seasonal", "yearly"].each do |a|  %>
 			<td>
-			<%= form_tag({controller: "cdoanalysises", action: a }, target: '_blank', method: :get) do %>  
+			<%= form_tag({controller: "cdoanalysises", action: a }, target: '_blank', method: :post) do %>  
 				<%= hidden_field_tag :dataset, @sel_data %>
 			<%= hidden_field_tag :file_name, @file_name %>
 			<%= hidden_field_tag :var_name, @var_name %>
@@ -24,7 +24,7 @@
 	<tr></tr>
 	<tr align=center>
 		<td>
-			<%= form_tag({controller: "cdoanalysises", action: "ymonmean" }, target: '_blank', method: :get) do %>  
+			<%= form_tag({controller: "cdoanalysises", action: "ymonmean" }, target: '_blank', method: :post) do %>  
 				<%= hidden_field_tag :dataset, @sel_data %>
 			<%= hidden_field_tag :var_std_name, @var_std_name %>
 			<%= hidden_field_tag :rate, @rate %>
@@ -38,7 +38,7 @@
 	</tr>
 
 	<tr></tr>
-	<%= form_tag({controller: "cdoanalysises", action: "sma" }, target: '_blank' , method: :get) do %>  
+	<%= form_tag({controller: "cdoanalysises", action: "sma" }, target: '_blank' , method: :post) do %>  
 		<tr align=center>
 		<td>Select Specific Months :</td>
 		<td>
@@ -66,7 +66,7 @@
 	<tr></tr>
 	<tr align=center>
 
-		<%= form_tag({controller: "cdoanalysises", action: "indices" }, target: '_blank' , method: :get) do %>  
+		<%= form_tag({controller: "cdoanalysises", action: "indices" }, target: '_blank' , method: :post) do %>  
 			<td>Climate Index :</td>
 		<td>
 			<%= collection_select(:indice, params[:indice], Settings::Ind.all, :cdocmd, :name, {include_blank: "- Select -"} ) rescue nil %>
