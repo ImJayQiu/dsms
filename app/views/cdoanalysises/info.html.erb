@@ -1,6 +1,6 @@
 <h2>Information of Dataset</h2>
 <p/>
-<%= form_tag({controller: "cdoanalysises", action: "lonlat" }, target: '_blank', method: :get) do %>  
+<%= form_tag({controller: "cdoanalysises", action: "lonlat" }, target: '_blank', method: :post) do %>  
 	<table>
 	<tr>
 		<td colspan=5 >
@@ -11,11 +11,11 @@
 			Select Specific Location :
 		</td>
 		<td>
-			<%= text_field_tag :lon, params[:lon], placeholder: "Longitude" rescue nil %>
+			<%= text_field_tag :lon, params[:lon], placeholder: "Lon: #{@lon_r}" rescue nil %>
 		</td>
 		<td>--</td>
 		<td>
-			<%= text_field_tag :lat, params[:lat], placeholder: "Latitude" rescue nil %>
+			<%= text_field_tag :lat, params[:lat], placeholder: "Lat: #{@lat_r}" rescue nil %>
 		</td>
 		<%= hidden_field_tag :file_name, @file_name %>
 		<%= hidden_field_tag :var_name, @var_name %>
@@ -29,7 +29,6 @@
 		</td>
 	</tr>
 </table>
-*Remark : Longitude Range:<%= @lon_r %> | Latitude Range:<%= @lat_r %>
 <% end %>
 
 <p/>
@@ -65,9 +64,9 @@
 			<% @info[1..-1].each do |info| %>
 				<tr>
 				<td><%= info.split(" ")[2] %></td>
-				<td><%= (info.split(" ")[8].to_f * @rate).to_f.round(1) %></td>
-				<td><%= (info.split(" ")[9].to_f * @rate).to_f.round(1) %></td>
-				<td><%= (info.split(" ")[10].to_f * @rate).to_f.round(1) %></td>
+				<td><%= (info.split(" ")[8].to_f * @rate + @rate2).to_f.round(1) %></td>
+				<td><%= (info.split(" ")[9].to_f * @rate + @rate2 ).to_f.round(1) %></td>
+				<td><%= (info.split(" ")[10].to_f * @rate + @rate2).to_f.round(1) %></td>
 			</tr>
 		<% end %>
 		</table>

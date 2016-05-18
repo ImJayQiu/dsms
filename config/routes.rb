@@ -34,50 +34,37 @@ Rails.application.routes.draw do
 		collection do
 			get :checkfiles
 			get :daily
-			get :monthly
-			get :daily_analysis
-			get :monthly_analysis
+			post :daily_analysis
 			get :mult
-			get :mult_analysis
-			get :info
+			post :mult_analysis
 		end
 	end
 
 	resources :nexnasa do
 		collection do
 			get :daily
-			get :monthly
-			get :daily_analysis
-			get :monthly_analysis
-			get :mult
-			get :mult_analysis
-			get :info
+			post :daily_analysis
 		end
 	end
 
 	resources :cordex do
 		collection do
 			get :daily
-			get :monthly
-			get :daily_analysis
-			get :monthly_analysis
-			get :mult
-			get :mult_analysis
-			get :info
+			post :daily_analysis
 		end
 	end
 
 
 	resources :cdoanalysises do
 		collection do
-			get :indices
-			get :info
-			get :seasonal
-			get :sma
-			get :yearly
-			get :map
-			get :ymonmean
-			get :lonlat
+			post :indices
+			post :info
+			post :seasonal
+			post :sma
+			post :yearly
+			post :map
+			post :ymonmean
+			post :lonlat
 		end
 	end
 

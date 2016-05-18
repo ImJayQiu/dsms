@@ -8,7 +8,7 @@
 
 <% if can? :analyze, :multmodels %>
 
-	<%= form_tag({controller: "cmip5s", action: "mult_analysis" }, method: :get) do %>  
+	<%= form_tag({controller: "cmip5s", action: "mult_analysis" }, method: :post) do %>  
 
 	<h3>Step 1. Select Region</h3>
 <table>

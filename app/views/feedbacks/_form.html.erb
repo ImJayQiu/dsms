@@ -1,4 +1,6 @@
-<%= form_for(@feedback) do |f| %>
+<% if @feedback.user == current_user.email || @feedback.user.blank? %>
+
+	<%= form_for(@feedback) do |f| %>
 	<% if @feedback.errors.any? %>
 	<div id="error_explanation">
 	<h2><%= pluralize(@feedback.errors.count, "error") %> prohibited this feedback from being saved:</h2>
@@ -22,8 +24,23 @@
 	Answer: <%= f.text_area :answer %>
   </div>
 <% end #can %>
-<%= f.hidden_field :user, value: current_user.email %>
+
+<% if @feedback.user.blank? %>
+	<%= f.hidden_field :user, value: current_user.email %>
+<% end # if @feedback.user.blank? %>
+
 <div class="actions">
 	<%= f.submit %>
 </div>
 <% end %>
+
+<% else %>
+
+	<p/>
+Sorry!
+<p/>
+This is not your feedback! 
+<p/>
+You don't have permission to edit!
+<p/>
+<% end # if @feedback.user = current_user.email || @feedback.user.blank? %>

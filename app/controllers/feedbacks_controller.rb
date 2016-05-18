@@ -19,6 +19,7 @@ class FeedbacksController < ApplicationController
 
   # GET /feedbacks/1/edit
   def edit
+    @feedback = Feedback.find(params[:id])
   end
 
   # POST /feedbacks
@@ -56,7 +57,7 @@ class FeedbacksController < ApplicationController
   def destroy
     @feedback.destroy
     respond_to do |format|
-      format.html { redirect_to feedbacks_url, notice: 'Feedback was successfully destroyed.' }
+      format.html { redirect_to feedbacks_url, notice: 'Feedback was successfully removed!' }
       format.json { head :no_content }
     end
   end

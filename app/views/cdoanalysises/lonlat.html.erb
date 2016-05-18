@@ -27,7 +27,6 @@
 	</tr>
 </table>
 
-<%#=@lonlat_info%>
 <div class="content_data" style="display:none" >
 	<hr>
 	<div id="dvData">
@@ -40,7 +39,7 @@
 			<% @lonlat_info[1..-1].each do |i| %>
 				<tr>
 				<td><%= i.split(" ")[0] %></td>
-				<td><%= (i.split(" ")[1].to_f * @rate).round(3) %></td>
+				<td><%= (i.split(" ")[1].to_f * @rate + @rate2).round(3) %></td>
 			</tr>
 		<% end %>
 		</table>
