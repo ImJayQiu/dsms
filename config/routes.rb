@@ -41,7 +41,7 @@ Rails.application.routes.draw do
 	resources :nexnasa do
 		collection do
 			get :daily
-			get :daily_analysis
+			post :daily_analysis
 		end
 	end
 

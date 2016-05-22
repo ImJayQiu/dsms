@@ -87,9 +87,6 @@ class NexnasaController < ApplicationController
 
 		paramater = Cdo.showname(input: file)
 
-		############ cut file by selected location ###################
-		#sel_lonlat = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
-		###############################################################
 
 		############# cut file by selected date range ##################
 		output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}/#{experiment}"
@@ -118,14 +115,17 @@ class NexnasaController < ApplicationController
 		@date = date.first.split(" ").to_a
 
 		#group max min mean
+
 		@max_set = [] 
 		@min_set = [] 
 		@mean_set = [] 
+
 		@dataset_infon.drop(1).each do |i|
 			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(3)
 			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
+
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
 		@min_h = Hash[@date.zip(@min_set)]
@@ -324,7 +324,7 @@ class NexnasaController < ApplicationController
 		grads_gs.close
 
 		################ generate csv file ####################
-@sel_data_griddes = Cdo.griddes(input: @sel_data)
+		@sel_data_griddes = Cdo.griddes(input: @sel_data)
 		@gridsize = @sel_data_griddes[4].split(" ")[-1].to_i
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_csv.gs", "w")
 		grads_gs.puts("reinit")
@@ -346,3 +346,4 @@ class NexnasaController < ApplicationController
 	end
 
 end
+
