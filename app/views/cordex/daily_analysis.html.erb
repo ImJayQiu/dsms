@@ -2,27 +2,21 @@
 <p id="notice"><%= notice %></p>
 <h2>CORDEX Data Analysis - Daily</h2>
 
-<%if can? :analyze, :cordex %>
+<% if can? :analyze, :cordex %>
 
 	<table>
 	<tr>
 	</tr>
 	<tr>
-		<td style="width:33%;" align="center">
+		<td style="width:50%;" align="center">
 			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_mean.png" %> target = "_blank" >
 				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_mean.png", width: "100%" %>
 				<br/>Click image to enlarge
 			</a>
 		</td>
-		<td style="width:33%;" align="center">
+		<td style="width:50%;" align="center">
 			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_max.png" %> target = "_blank" >
 				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_max.png", width: "100%" %>
-				<br/>Click image to enlarge
-			</a>
-		</td>
-		<td style="width:33%;" align="center">
-			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_grid.png" %> target = "_blank" >
-				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_grid.png", width: "100%" %>
 				<br/>Click image to enlarge
 			</a>
 		</td>
@@ -31,7 +25,9 @@
 <p/>
 
 <%= render "cordex/graphs/daily" %>
+
 <p/>
+
 <table>
 	<thead>
 		<tr>
@@ -46,6 +42,7 @@
 </table>
 
 <p/>
+
 <div class="content_data" style="display:none" >
 	<table>
 		<tbody>
@@ -59,23 +56,23 @@
 			<td>Latitude Range: <%= @lat_r %></td>
 		</tr>
 		<tr>
-			<% if can? :download, :nc %>
-				<td>
-				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
+			<td>
+				<% if can? :download, :nc %>
+					<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
+				<% end # if can? :download, :nc %>
 			</td>
-			<% end # if can? :download, :nc %>
 
-			<% if can? :download, :ctl %>
-				<td>
-				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
+			<td>
+				<% if can? :download, :ctl %>
+					<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
+				<% end # if can? :download, :ctl %>
 			</td>
-			<% end # if can? :download, :ctl %>
 
-			<% if can? :download, :csv %>
-				<td>
-				<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
+			<td>
+				<% if can? :download, :csv %>
+					<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
+				<% end #if can? :download, :csv %>
 			</td>
-			<% end #if can? :download, :csv %>
 
 		</tr>
 		</tbody>

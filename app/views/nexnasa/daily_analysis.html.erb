@@ -41,6 +41,7 @@
 </table>
 
 <p/>
+
 <div class="content_data" style="display:none" >
 	<table>
 		<tbody>
@@ -54,21 +55,21 @@
 			<td>Latitude Range: <%= @lat_r %></td>
 		</tr>
 		<tr>
-			<% if can? :download, :nc %>
-				<td>
-				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
+			<td>
+				<% if can? :download, :nc %>
+					<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
+				<% end # if can? :download, :nc %>
 			</td>
-			<% end # if can? :download, :nc %>
-			<% if can? :download, :ctl %>
-				<td>
-				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
+			<td>
+				<% if can? :download, :ctl %>
+					<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
+				<% end # if can? :download, :ctl %>
 			</td>
-			<% end # if can? :download, :ctl %>
-			<% if can? :download, :csv %>
-				<td>
-				<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
+			<td>
+				<% if can? :download, :csv %>
+					<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
+				<% end # if can? :download, :csv %>
 			</td>
-			<% end # if can? :download, :csv %>
 		</tr>
 		</tbody>
 	</table>
@@ -103,13 +104,14 @@
 			</td>
 		</tr>
 	</table>
+
 </div>
-<p/>
 
 <% else %>
-	<p/>
+
+	<p><p/>
 Permission Denied ! 
-<p/>
+<p><p/>
 Please upgrade your account to use this function !
 
 <% end %>
