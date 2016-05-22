@@ -1,10 +1,7 @@
 Rails.application.routes.draw do
 
 
-  resources :feedbacks
-  namespace :settings do
-    resources :cordex_models
-  end
+	resources :feedbacks
 
 	resources :news
 
@@ -26,6 +23,7 @@ Rails.application.routes.draw do
 		resources :variables
 		resources :mips
 		resources :nexnasa_models
+		resources :cordex_models
 	end
 
 	resources :datasets
@@ -43,7 +41,7 @@ Rails.application.routes.draw do
 	resources :nexnasa do
 		collection do
 			get :daily
-			post :daily_analysis
+			get :daily_analysis
 		end
 	end
 
