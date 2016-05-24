@@ -58,6 +58,7 @@ class CdoanalysisesController < ApplicationController
 	# specific_monthly_analysis 
 	def sma
 		@dataset = params[:dataset]
+		@cdo_output_path = params[:cdo_output_path]
 		@file_name = params[:file_name]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
@@ -67,7 +68,7 @@ class CdoanalysisesController < ApplicationController
 		@months = params[:months].values
 		sel_months = @months.join(",")
 		@var_std_name = Cdo.showstdname( input: @dataset)[0].to_s
-		@sel_months = Cdo.selmon(sel_months, input: @dataset, options:"-f nc4")
+		@sel_months = Cdo.selmon(sel_months, input: @dataset, output: "public/#{@cdo_output_path}_sma.nc", options:"-f nc4")
 
 		####### Monthly Statistics ##############
 		@ymonavg = Cdo.ymonavg(input: @sel_months)

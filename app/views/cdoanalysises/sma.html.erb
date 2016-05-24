@@ -1,5 +1,13 @@
 <h2>Selected Months Analysis</h2>
 
+<table>
+	<tr>
+		<td>
+			<%= button_to "Download NC", root_path+@cdo_output_path.to_s+"_sma.nc", method: :get %>
+		</td>
+	</tr>
+</table>
+
 <%= line_chart [
 	{name: "Max", data: @ymon_max_h },
 	{name: "Min", data: @ymon_min_h },
