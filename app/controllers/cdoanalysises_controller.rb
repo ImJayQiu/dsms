@@ -272,7 +272,8 @@ class CdoanalysisesController < ApplicationController
 		@min_ymmean = [] 
 		@mean_ymmean = [] 
 		@ymonmean.drop(1).each do |i|
-			@months << i.split(" ")[2].to_date.strftime("%B")
+			#@months << i.split(" ")[2].to_date.strftime("%B")
+			@months << i.split(" ")[2].to_s[5..6].to_i
 			@min_ymmean << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(3)
 			@mean_ymmean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@max_ymmean << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
