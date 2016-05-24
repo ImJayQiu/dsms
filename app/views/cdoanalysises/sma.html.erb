@@ -5,6 +5,9 @@
 		<td>
 			<%= button_to "Download NC", root_path+@cdo_output_path.to_s+"_sma.nc", method: :get %>
 		</td>
+		<td>
+			<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+"_sma.ctl", method: :get %>
+		</td>
 	</tr>
 </table>
 

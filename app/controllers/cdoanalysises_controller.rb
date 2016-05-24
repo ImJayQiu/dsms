@@ -70,6 +70,8 @@ class CdoanalysisesController < ApplicationController
 		@var_std_name = Cdo.showstdname( input: @dataset)[0].to_s
 		@sel_months = Cdo.selmon(sel_months, input: @dataset, output: "public/#{@cdo_output_path}_sma.nc", options:"-f nc4")
 
+		@sel_data_ctl = Cdo.gradsdes(input: @sel_months)
+
 		####### Monthly Statistics ##############
 		@ymonavg = Cdo.ymonavg(input: @sel_months)
 		@ymon_data = Cdo.info(input: @ymonavg)
