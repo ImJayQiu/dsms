@@ -38,6 +38,10 @@ class CordexController < ApplicationController
 		############# convert rate & unit ############################
 		@variable_setting = Settings::Variable.where(name: var).first
 		o_unit = @variable_setting.unit
+
+		#CORDEX models using different units
+		actual_unit = Cdo.showunit(input: file)
+
 		if @variable_setting.c_rate.blank?
 			@rate = 1.to_i
 			@rate2 = 0.to_i 
@@ -48,10 +52,16 @@ class CordexController < ApplicationController
 				@rate2 = @variable_setting.c_rate.to_f 
 				@unit = @variable_setting.c_unit
 			else
-				@rate = 1.to_i
-				#@rate = @variable_setting.c_rate.to_f 
-				@rate2 = 0.to_i 
-				@unit = @variable_setting.c_unit
+				if actual_unit.to_s == "mm"
+					@rate = 1.to_i
+					#@rate = @variable_setting.c_rate.to_f 
+					@rate2 = 0.to_i 
+					@unit = @variable_setting.c_unit
+				else
+					@rate = @variable_setting.c_rate.to_f 
+					@rate2 = 0.to_i 
+					@unit = @variable_setting.c_unit
+				end
 			end
 		end
 
@@ -360,7 +370,7 @@ class CordexController < ApplicationController
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
 		@plot_grid_cmd = system("cd / && #{@go_dir} && #{@plot_grid} ") 
 		if can? :download, :csv
-		#	@csv_cmd = system("cd / && #{@go_dir} && #{@csv} ") 
+			#	@csv_cmd = system("cd / && #{@go_dir} && #{@csv} ") 
 		end
 	end
 
