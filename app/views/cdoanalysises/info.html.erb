@@ -64,9 +64,9 @@
 			<% @info[1..-1].each do |info| %>
 				<tr>
 				<td><%= info.split(" ")[2] %></td>
-				<td><%= (info.split(" ")[8].to_f * @rate + @rate2).to_f.round(1) %></td>
-				<td><%= (info.split(" ")[9].to_f * @rate + @rate2 ).to_f.round(1) %></td>
-				<td><%= (info.split(" ")[10].to_f * @rate + @rate2).to_f.round(1) %></td>
+				<td><%= (info.split(" ")[8].to_f * @rate + @rate2).to_f.round(10) %></td>
+				<td><%= (info.split(" ")[9].to_f * @rate + @rate2 ).to_f.round(10) %></td>
+				<td><%= (info.split(" ")[10].to_f * @rate + @rate2).to_f.round(10) %></td>
 			</tr>
 		<% end %>
 		</table>
