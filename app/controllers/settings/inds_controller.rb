@@ -28,7 +28,7 @@ class Settings::IndsController < ApplicationController
 
     respond_to do |format|
       if @settings_ind.save
-        format.html { redirect_to @settings_ind, notice: 'Ind was successfully created.' }
+        format.html { redirect_to @settings_ind, notice: 'Index was successfully created.' }
         format.json { render :show, status: :created, location: @settings_ind }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class Settings::IndsController < ApplicationController
   def update
     respond_to do |format|
       if @settings_ind.update(settings_ind_params)
-        format.html { redirect_to @settings_ind, notice: 'Ind was successfully updated.' }
+        format.html { redirect_to @settings_ind, notice: 'Index was successfully updated.' }
         format.json { render :show, status: :ok, location: @settings_ind }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class Settings::IndsController < ApplicationController
   def destroy
     @settings_ind.destroy
     respond_to do |format|
-      format.html { redirect_to settings_inds_url, notice: 'Ind was successfully destroyed.' }
+      format.html { redirect_to settings_inds_url, notice: 'Index was successfully removed.' }
       format.json { head :no_content }
     end
   end
@@ -69,6 +69,6 @@ class Settings::IndsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def settings_ind_params
-      params.require(:settings_ind).permit(:name, :cdocmd, :description, :remark)
+      params.require(:settings_ind).permit(:name, :cdocmd, :var, :description, :remark)
     end
 end

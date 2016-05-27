@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160510075338) do
+ActiveRecord::Schema.define(version: 20160527045031) do
 
   create_table "cmip5s", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 20160510075338) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.string   "cdocmd",      limit: 255
+    t.string   "var",         limit: 255
   end
 
   create_table "settings_mips", force: :cascade do |t|

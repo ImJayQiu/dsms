@@ -104,7 +104,7 @@
 <table>
 	<tr>
 		<td align=center>
-			<%= submit_tag "Submit & Analyze", class: "submit" rescue nil %>
+			<%= submit_tag "Submit & Analyze", class: "submit", :data => { :disable_with => 'Data processing, Please wait ...' } %>
 		</td>
 	</tr>
 </table>

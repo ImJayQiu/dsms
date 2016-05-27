@@ -30,6 +30,15 @@
 	</tr>
 	<tr>
 		<td>
+			Variable	
+		</td>
+
+		<td>
+			<%= f.collection_select :var , Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"}, required: true rescue nil %>
+		</td>
+	</tr>
+	<tr>
+		<td>
 			Description	
 		</td>
 		<td>

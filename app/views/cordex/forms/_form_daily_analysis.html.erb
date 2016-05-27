@@ -69,7 +69,8 @@
 		<%= form_tag({controller: "cdoanalysises", action: "indices" }, target: '_blank' , method: :post) do %>  
 			<td>Climate Index :</td>
 		<td>
-			<%= collection_select(:indice, params[:indice], Settings::Ind.all, :cdocmd, :name, {include_blank: "- Select -"} ) rescue nil %>
+			<%#= collection_select(:indice, params[:indice], Settings::Ind.all, :cdocmd, :name, {include_blank: "- Select -"} ) rescue nil %>
+			<%= select(:indice, params[:indice], options_for_select(Settings::Ind.where(var: @var_name).all.map{|i| [i.name, i.cdocmd, {'title'=>i.description} ]}), {include_blank: "- Select Index -"}) rescue nil %>
 			<%= hidden_field_tag :dataset, @sel_data  %>
 			<%= hidden_field_tag :cdo_output_path, @cdo_output_path %>
 			<%= hidden_field_tag :var_name, @var_name %>
