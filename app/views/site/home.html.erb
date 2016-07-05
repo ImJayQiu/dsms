@@ -1,4 +1,12 @@
 ﻿<table>
+<tr>
+<td>
+<%= @welcome_user %>
+</td>
+</tr>
+</table>
+
+<table>
 <tr></tr>
 <% @about.each do |news| %>
 	<tr>
@@ -19,9 +27,15 @@
 		   <table class=alt>
 			   <tr align = center>
 				   <td><%= link_to "CMIP5<br/>Daily Analysis".html_safe, daily_cmip5s_path, method: :get %></td>
-				   <td><%= link_to "CORDEX<br/>Daily Analysis".html_safe, daily_cordex_index_path, method: :get %></td>
-				   <td><%= link_to "NEX-NASA<br/>Daily Analysis".html_safe, daily_nexnasa_index_path, method: :get %></td>
-				   <td><%= link_to "Mult-Models<br/>Analysis".html_safe, mult_cmip5s_path, method: :get %></td>
+				   <% if can? :analyze, :cordex %>
+					   <td><%= link_to "CORDEX<br/>Daily Analysis".html_safe, daily_cordex_index_path, method: :get %></td>
+			   <% end %>
+				   <% if can? :analyze, :nexnasa %>
+					   <td><%= link_to "NEX-NASA<br/>Daily Analysis".html_safe, daily_nexnasa_index_path, method: :get %></td>
+			   <% end %>
+				   <% if can? :analyze, :multmodels %>
+					   <td><%= link_to "Mult-Models<br/>Analysis".html_safe, mult_cmip5s_path, method: :get %></td>
+			   <% end %>
 			   </tr>
 		   </table>
 

@@ -38,12 +38,12 @@
 	</tr>
 
 	<tr></tr>
-	<%= form_tag({controller: "cdoanalysises", action: "sma" }, target: '_blank' , method: :post) do %>  
-		<tr align=center>
-		<td>Select Months :</td>
+	<tr align=center>
+		<%= form_tag({controller: "cdoanalysises", action: "sma" }, target: '_blank' , method: :post) do %>  
+			<td>Select Months :</td>
 		<td>
-		<% ["Jan.","Feb.","Mar.","Apr.","May","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."].each_with_index do |m,i|%>
-			<%= check_box_tag "months[#{i+1}]", i+1, name: 'months[]' %><%= label_tag "months[#{i+1}]", " #{i+1}-#{m}" %>
+			<% ["Jan.","Feb.","Mar.","Apr.","May","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."].each_with_index do |m,i|%>
+				<%= check_box_tag "months[#{i+1}]", i+1, name: 'months[]' %><%= label_tag "months[#{i+1}]", " #{i+1}-#{m}" %>
 		<% end %>
 			<%= hidden_field_tag :dataset, @sel_data  %>
 			<%= hidden_field_tag :cdo_output_path, @cdo_output_path %>
@@ -59,9 +59,9 @@
 		<td>
 			<%= submit_tag "Analysis", class: "submit"  %>
 		</td>
-	</tr>
-<% end %>
+	<% end %>
 
+	</tr>
 
 	<tr></tr>
 	<tr align=center>
@@ -69,8 +69,7 @@
 		<%= form_tag({controller: "cdoanalysises", action: "indices" }, target: '_blank' , method: :post) do %>  
 			<td>Climate Index :</td>
 		<td>
-			<%= select(:indice, params[:indice], options_for_select(Settings::Ind.where(var: @var_name).all.map{|i| [i.name, i.cdocmd, {'title'=>i.description} ]}), {include_blank: "- Select Index -"}) rescue nil %>
-			<%#= collection_select(:indice, params[:indice], Settings::Ind.where(var: @var_name), :cdocmd, :name, {include_blank: "- Select Index -"}) rescue nil %>
+			<%= select(:indice, params[:indice], options_for_select(Settings::Ind.where(var: @var_name).all.map{|i| [i.name, i.cdocmd, {'title'=>i.description} ]}), {include_blank: "- Select Index -"}, required: true) rescue nil %>
 			<%= hidden_field_tag :dataset, @sel_data  %>
 			<%= hidden_field_tag :cdo_output_path, @cdo_output_path %>
 			<%= hidden_field_tag :var_name, @var_name %>
@@ -85,4 +84,27 @@
 		</td>
 	<% end %>
 	</tr>
+
+	<tr></tr>
+	<tr align=center>
+
+		<%= form_tag({controller: "cdoanalysises", action: "shape"}, target: '_blank', method: :post, multipart: true) do %>  
+			<td>Select shape file :</td>
+			<td>
+			<%= file_field_tag :shape, value: "Please choose a shape file", required: true %>
+			<%= hidden_field_tag :dataset, @sel_data  %>
+			<%= hidden_field_tag :cdo_output_path, @cdo_output_path %>
+			<%= hidden_field_tag :var_name, @var_name %>
+			<%= hidden_field_tag :file_name, @file_name %>
+			<%= hidden_field_tag :var_std_name, @var_std_name %>
+			<%= hidden_field_tag :rate, @rate %>
+			<%= hidden_field_tag :rate2, @rate2 %>
+			<%= hidden_field_tag :unit, @unit %>
+		</td>
+		<td>
+			<%= submit_tag "Analysis", class: "submit"  %>
+		</td>
+	<% end %>
+	</tr>
+
 </table>

@@ -63,6 +63,7 @@ Rails.application.routes.draw do
 			post :map
 			post :ymonmean
 			post :lonlat
+			post :shape
 		end
 	end
 

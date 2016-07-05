@@ -18,11 +18,23 @@
 
 	<tr>
 		<td>User Name:</td>
-		<td><%= f.text_field :username %></td>
+		<td><%= f.text_field :username, required: true  %></td>
 	</tr>
 	<tr>
 		<td>E-Mail:</td>
-		<td><%= f.text_field :email %></td>
+		<td><%= f.text_field :email, required: true  %></td>
+	</tr>
+	<tr>
+		<td>Research Interesting:</td>
+		<td><%= f.text_field :research_int, required: true  %></td>
+	</tr>
+		<tr>
+		<td>Organization:</td>
+		<td><%= f.text_field :organization, required: true  %></td>
+	</tr>
+		<tr>
+		<td>Country:</td>
+		<td><%= f.text_field :country, required: true  %></td>
 	</tr>
 	<tr>
 		<td>Role:</td>

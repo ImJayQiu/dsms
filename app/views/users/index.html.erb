@@ -1,5 +1,14 @@
 <h2>User Management</h2>
 <%if can? :manage, :users%>
+
+<table>
+	<tr>
+		<th>
+			<%= will_paginate @users %>
+		</th>
+	</tr>
+</table>
+
 	<table class="alt" >
 	<thead>
 		<tr>
@@ -23,7 +32,15 @@
 	</tbody>
 </table>
 
-<br>
+<table>
+	<tr>
+		<th>
+			<%= will_paginate @users %>
+		</th>
+	</tr>
+</table>
+
+<br/>
 
 <%#= button_to 'New User', new_registration_path(:user), method: :get %>
 <% else %>

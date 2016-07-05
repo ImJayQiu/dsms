@@ -308,4 +308,29 @@ class CdoanalysisesController < ApplicationController
 
 	end
 
+	def shape
+		@shape = params[:shape]
+		@var_name = params[:var_name]
+		@file = params[:dataset]
+		@rate = params[:rate].to_f
+		@rate2 = params[:rate2].to_f
+		@unit = params[:unit]
+		@cdo_output_path = params[:cdo_output_path].to_s
+
+
+		############### generate csv file ################
+		@sel_data_griddes = Cdo.griddes(input: @file)
+		@gridsize = @sel_data_griddes[4].split(" ")[-1].to_i
+		grads_gs = File.new("public/#{@cdo_output_path}_shape.gs", "w")
+		grads_gs.puts("reinit")
+		grads_gs.puts("open #{@cdo_output_path}.ctl")
+		grads_gs.puts("set t 1 last")
+		grads_gs.puts("public/fprintf.gs #{@var_name}*#{@rate}+#{@rate2} #{@cdo_output_path}_shape.csv %1.2f #{@gridsize}") 
+		grads_gs.puts("!sed -i /Printing/d #{@var_name}*#{@rate}+#{@rate2} #{@output_file_name}_shape.csv")
+		grads_gs.puts("quit")
+		grads_gs.close
+		####################### generate csv done ##################
+		
+	end
+
 end

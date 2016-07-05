@@ -4,13 +4,31 @@
 		<%= devise_error_messages! %>
 	<div align=center>
 		<div class="6u 12u$(xsmall)">
-			<%= f.text_field :username, autofocus: true, placeholder: "Username" %>
+			<%= f.text_field :username, autofocus: true, placeholder: "Username", required: true %>
 		</div>
 
 		<p/>
 
 		<div class="6u 12u$(xsmall)">
-			<%= f.email_field :email, autofocus: true, placeholder: "Email" %>
+			<%= f.email_field :email, autofocus: true, placeholder: "Email", required: true %>
+		</div>
+
+		<p/>
+		
+		<div class="6u 12u$(xsmall)">
+			<%= f.text_field :country, autofocus: true, placeholder: "Country", required: true  %>
+		</div>
+
+		<p/>
+
+		<div class="6u 12u$(xsmall)">
+			<%= f.text_field :organization, autofocus: true, placeholder: "Organization", required: true  %>
+		</div>
+
+		<p/>
+
+		<div class="6u 12u$(xsmall)">
+			<%= f.text_field :research_int, autofocus: true, placeholder: "Research Interesting", required: true  %>
 		</div>
 
 		<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>

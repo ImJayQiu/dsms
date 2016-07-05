@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160527045031) do
+ActiveRecord::Schema.define(version: 20160705074714) do
 
   create_table "cmip5s", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -160,6 +160,9 @@ ActiveRecord::Schema.define(version: 20160527045031) do
     t.datetime "updated_at"
     t.string   "username",               limit: 255
     t.string   "role",                   limit: 255
+    t.string   "research_int",           limit: 255
+    t.string   "organization",           limit: 255
+    t.string   "country",                limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

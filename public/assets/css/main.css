@@ -1412,7 +1412,8 @@ body.is-loading *, body.is-loading *:before, body.is-loading *:after {
 }
 
 body, input, select, textarea {
-	color: #fff;
+/*	color: #fff; */
+	color: #333; 
 	font-family: "Open Sans", Helvetica, sans-serif;
 	font-size: 15pt;
 	font-weight: 400;
@@ -3393,7 +3394,7 @@ body.is-menu-visible #menu {
 	-ms-justify-content: center;
 	justify-content: center;
 	cursor: default;
-	height: 100vh;
+	/* height: 100vh; */
 	min-height: 35em;
 	overflow: hidden;
 	position: relative;
