@@ -52,7 +52,7 @@ class CordexController < ApplicationController
 				@rate2 = @variable_setting.c_rate.to_f 
 				@unit = @variable_setting.c_unit
 			else
-				if actual_unit.to_s == "mm"
+				if actual_unit.first.to_s == "mm"
 					@rate = 1.to_i
 					@rate2 = 0.to_i 
 					@unit = @variable_setting.c_unit
