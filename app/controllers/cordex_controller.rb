@@ -128,9 +128,9 @@ class CordexController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.drop(1).each do |i|
-			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(3)
-			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
-			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
+			@min_set << (i.split(" ")[8].to_f + @rate2).to_f.round(3)
+			@mean_set << (i.split(" ")[9].to_f + @rate2).to_f.round(3)
+			@max_set << (i.split(" ")[10].to_f + @rate2).to_f.round(3)
 		end 
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
