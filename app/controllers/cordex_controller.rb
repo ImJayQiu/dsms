@@ -54,7 +54,6 @@ class CordexController < ApplicationController
 			else
 				if actual_unit.to_s == "mm"
 					@rate = 1.to_i
-					#@rate = @variable_setting.c_rate.to_f 
 					@rate2 = 0.to_i 
 					@unit = @variable_setting.c_unit
 				else
@@ -128,9 +127,9 @@ class CordexController < ApplicationController
 		@min_set = [] 
 		@mean_set = [] 
 		@dataset_infon.drop(1).each do |i|
-			@min_set << (i.split(" ")[8].to_f + @rate2).to_f.round(3)
-			@mean_set << (i.split(" ")[9].to_f + @rate2).to_f.round(3)
-			@max_set << (i.split(" ")[10].to_f + @rate2).to_f.round(3)
+			@min_set << (i.split(" ")[8].to_f * @rate.to_i + @rate2).to_f.round(3)
+			@mean_set << (i.split(" ")[9].to_f * @rate.to_i + @rate2).to_f.round(3)
+			@max_set << (i.split(" ")[10].to_f * @rate.to_i + @rate2).to_f.round(3)
 		end 
 		@max_h = Hash[@date.zip(@max_set)]
 		@mean_h = Hash[@date.zip(@mean_set)]
@@ -230,7 +229,7 @@ class CordexController < ApplicationController
 		end
 
 		grads_gs.puts("set mpdset hires")
-		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
+		grads_gs.puts("d ave(#{var}*#{@rate.to_i}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
 		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} Mean ")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_mean.png png white")
@@ -322,7 +321,7 @@ class CordexController < ApplicationController
 		end
 
 		grads_gs.puts("set mpdset hires")
-		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
+		grads_gs.puts("d max(#{var}*#{@rate.to_i}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
 		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} Max")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_max.png png white")
@@ -338,7 +337,7 @@ class CordexController < ApplicationController
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
 		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@date[0]} -- #{@date[-1]} by CDAAS RIMES.INT #{Time.now.year}")
-		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
+		grads_gs.puts("d max(#{var}*#{@rate.to_i}+#{@rate2},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} ")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_grid.png png white")
 		grads_gs.puts("quit")
@@ -355,8 +354,8 @@ class CordexController < ApplicationController
 		grads_gs.puts("reinit")
 		grads_gs.puts("open #{output_file_name}.ctl")
 		grads_gs.puts("set t 1 last")
-		grads_gs.puts("#{sys_output_pub}/fprintf.gs #{var}*#{@rate}+#{@rate2} #{output_file_name}.csv %1.2f #{@gridsize}") 
-		grads_gs.puts("!sed -i /Printing/d #{var}*#{@rate}+#{@rate2} #{output_file_name}.csv")
+		grads_gs.puts("#{sys_output_pub}/fprintf.gs #{var}*#{@rate.to_i}+#{@rate2} #{output_file_name}.csv %1.2f #{@gridsize}") 
+		grads_gs.puts("!sed -i /Printing/d #{var}*#{@rate.to_i}+#{@rate2} #{output_file_name}.csv")
 		grads_gs.puts("quit")
 		grads_gs.close
 
