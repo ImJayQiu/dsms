@@ -148,6 +148,7 @@ class Cmip5sController < ApplicationController
 		@date = date.first.split(" ").to_a
 
 		#group max min mean
+		@start_date_utc = DateTime.parse(@date.first)
 		@max_set = [] 
 		@min_set = [] 
 		@mean_set = [] 
@@ -156,9 +157,19 @@ class Cmip5sController < ApplicationController
 			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@max_h = Hash[@date.zip(@max_set)]
-		@mean_h = Hash[@date.zip(@mean_set)]
-		@min_h = Hash[@date.zip(@min_set)]
+
+
+		@chart = LazyHighCharts::HighChart.new('graph') do |f|
+			f.title(text: "CMIP5 DAILY Analysis | #{model} | #{experiment} ")
+			f.xAxis(type: 'line' )
+			f.yAxis [{title: {text: "#{@var_std_name.humanize} ( #{@unit} ) " }}]
+			f.tooltip(borderColor: 'gray', valueSuffix: @unit )
+			f.rangeSelector( selected: 4 ) 
+			f.series(name: "Max", color: 'indianred', data: @max_set, pointStart: @start_date_utc, pointInterval: 1.day)
+			f.series(name: "Mean", color: 'lightgreen', data: @mean_set,  pointStart: @start_date_utc, pointInterval: 1.day)
+			f.series(name: "Min", color: 'lightblue', data: @min_set, pointStart: @start_date_utc, pointInterval: 1.day)
+		end
+
 		@sel_file_path = root_path+@cdo_output_path.to_s
 
 		##### to copy cbar.gs to output folder  #################
@@ -395,7 +406,7 @@ class Cmip5sController < ApplicationController
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
 		@plot_grid_cmd = system("cd / && #{@go_dir} && #{@plot_grid} ") 
 		if can? :download, :csv
-			@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
+			#@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
 		end
 	end
 

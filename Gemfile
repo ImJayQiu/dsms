@@ -10,6 +10,7 @@ gem 'will_paginate', '~> 3.0.6'
 gem "paperclip", "~> 4.3"
 
 # charting
+gem 'lazy_high_charts'
 gem "chartkick"
 
 # Climate data operator

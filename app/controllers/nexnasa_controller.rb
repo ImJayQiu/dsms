@@ -126,9 +126,22 @@ class NexnasaController < ApplicationController
 			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
 
-		@max_h = Hash[@date.zip(@max_set)]
-		@mean_h = Hash[@date.zip(@mean_set)]
-		@min_h = Hash[@date.zip(@min_set)]
+#		@max_h = Hash[@date.zip(@max_set)]
+#		@mean_h = Hash[@date.zip(@mean_set)]
+#		@min_h = Hash[@date.zip(@min_set)]
+
+
+		@chart = LazyHighCharts::HighChart.new('graph') do |f|
+			f.title(text: "NEX-NASA DAILY Analysis | #{model} | #{experiment} ")
+			f.xAxis(categories: @date )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @max_set)
+			f.series(name: "Mean", color: 'lightgreen', data: @mean_set)
+			f.series(name: "Min", color: 'indianred', data: @min_set)
+		end
+
 		@sel_file_path = root_path+@cdo_output_path.to_s
 
 		##### to copy cbar.gs to output folder  #################

@@ -1,16 +1,9 @@
 <h2>Year Month Mean Analysis</h2>
-<%= line_chart [
-	{name: "Max", data: @max_ymmean_h },
-	{name: "Min", data: @min_ymmean_h },
-	{name: "Mean", data: @mean_ymmean_h }
-], 
-discrete: true, 
-library: {
-	title: {text: "Year Month Mean Analysis"},
-	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
-} %>
 
 <p/>
+<%= high_chart("ymm", @chart_ymm) %>
+<p/>
+
 <button class="btn btn-success">Export to Excel</button></div>
 <p/>
 <table id="t2e" >

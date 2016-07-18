@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html>
 
@@ -17,28 +16,34 @@
 		<header>
 			<h2>CDAAS.RIMES</h2>
 			<p><font color=#fff>Climate Data Access & Analysis System @ RIMES</p>
-		</header>
+			</header>
 
-		<section class="wrapper style5">
-			<div class="inner">
+			<section class="wrapper style5">
+				<div class="inner">
 
 
-				<p class="notice"><%= notice %></p>  
-				<p class="alert"><%= alert %></p>
+					<p class="notice"><%= notice %></p>  
+					<p class="alert"><%= alert %></p>
 
-				<%= yield %>
-			</div>
-		</section>
-	</article>
+					<%= yield %>
+
+				</div>
+
+			</section>
+
+		</article>
+
+	</div>
+
 	<!-- Footer -->
+
 	<%= render "layouts/partials/footer"%>
 
 
 
-</div>
 
-<!-- Scripts -->
-<%= render "layouts/partials/scripts"%>
+	<!-- Scripts -->
+	<%= render "layouts/partials/scripts"%>
 
-</body>
-</html>
+	</body>
+	</html>

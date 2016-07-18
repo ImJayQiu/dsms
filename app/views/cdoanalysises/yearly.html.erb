@@ -1,64 +1,9 @@
 <h2>Yearly Analysis</h2>
 
-
-<%= line_chart [
-	{name: "Max of Min", data: @ymax_min_h },
-	{name: "Min of Min", data: @ymin_min_h },
-	{name: "Mean of Min", data: @ymean_min_h },
-	{name: "Max of Mean", data: @ymax_mean_h },
-	{name: "Min of Mean", data: @ymin_mean_h },
-	{name: "Mean of Mean", data: @ymean_mean_h },
-	{name: "Max of Max", data: @ymax_max_h },
-	{name: "Min of Max", data: @ymin_max_h },
-	{name: "Mean of Max", data: @ymean_max_h }
-], 
-discrete: true, 
-library: {
-	title: {text: "Yearly Data Analysis"},
-	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
-} %>
-
 <p/>
-
-<%= line_chart [
-	{name: "Max of Min", data: @ymax_min_h },
-	{name: "Min of Min", data: @ymin_min_h },
-	{name: "Mean of Min", data: @ymean_min_h }
-], 
-discrete: true, 
-library: {
-	title: {text: "Yearly Minimum Data Analysis"},
-	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
-} %>
-
+<%= high_chart("y_min", @chart_y_min) %>
 <p/>
-
-<%= line_chart [
-	{name: "Max of Mean", data: @ymax_mean_h },
-	{name: "Min of Mean", data: @ymin_mean_h },
-	{name: "Mean of Mean", data: @ymean_mean_h }
-], 
-discrete: true, 
-library: {
-	title: {text: "Yearly Mean Data Analysis"},
-	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
-} %>
-
-
+<%= high_chart("y_mean", @chart_y_mean) %>
 <p/>
-
-<%= line_chart [
-	{name: "Max of Max", data: @ymax_max_h },
-	{name: "Min of Max", data: @ymin_max_h },
-	{name: "Mean of Max", data: @ymean_max_h }
-], 
-discrete: true, 
-library: {
-	title: {text: "Yearly Maximum Data Analysis"},
-	subtitle: {text: "#{@var_std_name.humanize} | Unit: #{@unit}"}
-} %>
-
-
-<p/>
-
+<%= high_chart("y_max", @chart_y_max) %>
 <p/>

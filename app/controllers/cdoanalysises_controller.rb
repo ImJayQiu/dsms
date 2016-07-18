@@ -26,6 +26,7 @@ class CdoanalysisesController < ApplicationController
 		#	file = File.join(Rails.root, @dataset)
 		@s_lonlat = Cdo.remapnn(lon_lat, input: @dataset, options: '-f nc4')
 		@lonlat_info = Cdo.outputtab(['date','value'],input: @s_lonlat)
+		@var_std_name = Cdo.showstdname( input: @dataset)[0].to_s
 
 		@date_set = [] 
 		@value_set = [] 
@@ -33,7 +34,17 @@ class CdoanalysisesController < ApplicationController
 			@date_set << i.split(" ")[0]
 			@value_set << (i.split(" ")[1].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@dv_h = Hash[@date_set.zip(@value_set)]
+		# @dv_h = Hash[@date_set.zip(@value_set)]
+
+		@chart = LazyHighCharts::HighChart.new('graph') do |f|
+			f.title(text: "NEX-NASA DAILY Analysis | #{@lon},#{@lat} ")
+			f.subtitle(text: "#{@file_name}")
+			f.xAxis(categories: @date_set )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Value", color: 'lightblue', data: @value_set)
+		end
 
 	end
 
@@ -86,9 +97,19 @@ class CdoanalysisesController < ApplicationController
 			@ymon_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@ymon_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@ymon_min_h = Hash[@ymon_date.zip(@ymon_min)]
-		@ymon_mean_h = Hash[@ymon_date.zip(@ymon_mean)]
-		@ymon_max_h = Hash[@ymon_date.zip(@ymon_max)]
+
+		@chart_ymon = LazyHighCharts::HighChart.new('ymon') do |f|
+			f.title(text: "Monthly Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit} | #{@sdate.to_date.strftime('%Y-%m-%d')}--#{@edate.to_date.strftime('%Y-%m-%d')}")
+			f.xAxis(categories: @ymon_date )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @ymon_max)
+			f.series(name: "Mean", color: 'lightgreen', data: @ymon_mean)
+			f.series(name: "Min", color: 'indianred', data: @ymon_min)
+		end
+
 		#######################
 		#
 		####### Yearly Average Statistics ##############
@@ -104,9 +125,18 @@ class CdoanalysisesController < ApplicationController
 			@yy_avg_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@yy_avg_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@yy_avg_min_h = Hash[@yy_avg_date.zip(@yy_avg_min)]
-		@yy_avg_mean_h = Hash[@yy_avg_date.zip(@yy_avg_mean)]
-		@yy_avg_max_h = Hash[@yy_avg_date.zip(@yy_avg_max)]
+
+		@chart_yy_avg = LazyHighCharts::HighChart.new('yy_avg') do |f|
+			f.title(text: "Yearly Average Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit} | #{@sdate.to_date.strftime('%Y-%m-%d')}--#{@edate.to_date.strftime('%Y-%m-%d')}")
+			f.xAxis(categories: @yy_avg_date )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @yy_avg_max)
+			f.series(name: "Mean", color: 'lightgreen', data: @yy_avg_mean)
+			f.series(name: "Min", color: 'indianred', data: @yy_avg_min)
+		end
 		#######################
 
 		####### Yearly Max Statistics ##############
@@ -122,13 +152,22 @@ class CdoanalysisesController < ApplicationController
 			@yy_max_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@yy_max_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@yy_max_min_h = Hash[@yy_max_date.zip(@yy_max_min)]
-		@yy_max_mean_h = Hash[@yy_max_date.zip(@yy_max_mean)]
-		@yy_max_max_h = Hash[@yy_max_date.zip(@yy_max_max)]
+
+		@chart_yy_max = LazyHighCharts::HighChart.new('yy_max') do |f|
+			f.title(text: "Yearly Maximum Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit} | #{@sdate.to_date.strftime('%Y-%m-%d')}--#{@edate.to_date.strftime('%Y-%m-%d')}")
+			f.xAxis(categories: @yy_max_date )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @yy_max_max)
+			f.series(name: "Mean", color: 'lightgreen', data: @yy_max_mean)
+			f.series(name: "Min", color: 'indianred', data: @yy_max_min)
+		end
 		#######################
 		#
 		####### Yearly Min Statistics ##############
-		@yymin = Cdo.yearmax(input: @sel_months)
+		@yymin = Cdo.yearmin(input: @sel_months)
 		@yy_min_data = Cdo.info(input: @yymin)
 		@yy_min_date = []
 		@yy_min_min = [] 
@@ -140,9 +179,18 @@ class CdoanalysisesController < ApplicationController
 			@yy_min_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@yy_min_max << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@yy_min_min_h = Hash[@yy_min_date.zip(@yy_min_min)]
-		@yy_min_mean_h = Hash[@yy_min_date.zip(@yy_min_mean)]
-		@yy_min_max_h = Hash[@yy_min_date.zip(@yy_min_max)]
+
+		@chart_yy_min = LazyHighCharts::HighChart.new('yy_min') do |f|
+			f.title(text: "Yearly Minimum Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit} | #{@sdate.to_date.strftime('%Y-%m-%d')}--#{@edate.to_date.strftime('%Y-%m-%d')}")
+			f.xAxis(categories: @yy_min_date )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @yy_min_max)
+			f.series(name: "Mean", color: 'lightgreen', data: @yy_min_mean)
+			f.series(name: "Min", color: 'indianred', data: @yy_min_min)
+		end
 		#######################
 
 
@@ -176,9 +224,18 @@ class CdoanalysisesController < ApplicationController
 			@mean_min << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@max_min << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@max_min_h = Hash[@quarter.zip(@max_min[1..-1])]
-		@mean_min_h = Hash[@quarter.zip(@mean_min[1..-1])]
-		@min_min_h = Hash[@quarter.zip(@min_min[1..-1])]
+
+		@chart_s_min = LazyHighCharts::HighChart.new('s_min') do |f|
+			f.title(text: "Seasonal Minimum Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit}")
+			f.xAxis(categories: @quarter )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @max_min)
+			f.series(name: "Mean", color: 'lightgreen', data: @mean_min)
+			f.series(name: "Min", color: 'indianred', data: @min_min)
+		end
 		####################################################
 
 		####### seasmax group ###############  
@@ -190,11 +247,19 @@ class CdoanalysisesController < ApplicationController
 			@mean_max << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@max_max << (i.split(" ")[10].to_f * @rate +@rate2).to_f.round(3)
 		end 
-		@max_max_h = Hash[@quarter.zip(@max_max[1..-1])]
-		@mean_max_h = Hash[@quarter.zip(@mean_max[1..-1])]
-		@min_max_h = Hash[@quarter.zip(@min_max[1..-1])]
-		####################################################
 
+		@chart_s_max = LazyHighCharts::HighChart.new('s_max') do |f|
+			f.title(text: "Seasonal Maximum Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit}")
+			f.xAxis(categories: @quarter )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @max_max)
+			f.series(name: "Mean", color: 'lightgreen', data: @mean_max)
+			f.series(name: "Min", color: 'indianred', data: @min_max)
+		end
+		####################################################
 
 	end
 
@@ -224,9 +289,18 @@ class CdoanalysisesController < ApplicationController
 			@ymean_min << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@ymax_min << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@ymax_min_h = Hash[@year.zip(@ymax_min[1..-1])]
-		@ymean_min_h = Hash[@year.zip(@ymean_min[1..-1])]
-		@ymin_min_h = Hash[@year.zip(@ymin_min[1..-1])]
+
+		@chart_y_min = LazyHighCharts::HighChart.new('y_min') do |f|
+			f.title(text: "Yearly Minimum Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit}")
+			f.xAxis(categories: @year )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @ymax_min)
+			f.series(name: "Mean", color: 'lightgreen', data: @ymean_min)
+			f.series(name: "Min", color: 'indianred', data: @ymin_min)
+		end
 		####################################################
 
 		####### yearly mean group ###############  
@@ -238,9 +312,18 @@ class CdoanalysisesController < ApplicationController
 			@ymean_mean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@ymax_mean << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@ymax_mean_h = Hash[@year.zip(@ymax_mean[1..-1])]
-		@ymean_mean_h = Hash[@year.zip(@ymean_mean[1..-1])]
-		@ymin_mean_h = Hash[@year.zip(@ymin_mean[1..-1])]
+
+		@chart_y_mean = LazyHighCharts::HighChart.new('y_mean') do |f|
+			f.title(text: "Yearly Average Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit}")
+			f.xAxis(categories: @year )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @ymax_mean)
+			f.series(name: "Mean", color: 'lightgreen', data: @ymean_mean)
+			f.series(name: "Min", color: 'indianred', data: @ymin_mean)
+		end
 		####################################################
 
 
@@ -256,6 +339,18 @@ class CdoanalysisesController < ApplicationController
 		@ymax_max_h = Hash[@year.zip(@ymax_max[1..-1])]
 		@ymean_max_h = Hash[@year.zip(@ymean_max[1..-1])]
 		@ymin_max_h = Hash[@year.zip(@ymin_max[1..-1])]
+
+		@chart_y_max = LazyHighCharts::HighChart.new('y_max') do |f|
+			f.title(text: "Yearly Maximum Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit}")
+			f.xAxis(categories: @year )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @ymax_max)
+			f.series(name: "Mean", color: 'lightgreen', data: @ymean_max)
+			f.series(name: "Min", color: 'indianred', data: @ymin_max)
+		end
 		####################################################
 
 	end
@@ -281,9 +376,18 @@ class CdoanalysisesController < ApplicationController
 			@mean_ymmean << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
 			@max_ymmean << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		@max_ymmean_h = Hash[@months.zip(@max_ymmean)]
-		@mean_ymmean_h = Hash[@months.zip(@mean_ymmean)]
-		@min_ymmean_h = Hash[@months.zip(@min_ymmean)]
+
+		@chart_ymm = LazyHighCharts::HighChart.new('ymm') do |f|
+			f.title(text: "Year-Monthly Average Data Analysis")
+			f.subtitle(text: "#{@var_std_name.humanize} | Unit: #{@unit}")
+			f.xAxis(categories: @months )
+			f.tooltip(valueSuffix: @unit )
+			f.yAxis [{title: {text: @var_std_name.to_s }}]
+			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
+			f.series(name: "Max", color: 'lightblue', data: @max_ymmean)
+			f.series(name: "Mean", color: 'lightgreen', data: @mean_ymmean)
+			f.series(name: "Min", color: 'indianred', data: @min_ymmean)
+		end
 		####################################################
 
 	end
@@ -330,7 +434,7 @@ class CdoanalysisesController < ApplicationController
 		grads_gs.puts("quit")
 		grads_gs.close
 		####################### generate csv done ##################
-		
+
 	end
 
 end

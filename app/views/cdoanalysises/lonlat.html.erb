@@ -1,14 +1,15 @@
 <h2>Data of Specific location </h2>
+
 <p/>
+
 <table>
 	<tr>
 		<td>
-			<%= line_chart [
-				{name: "Value", data: @dv_h },
-			], library: {title: {text: "Value of Specific Location (Unit: #{@unit} | Lon: #{@lon} | Lat: #{@lat} )" }, subtitle:{text: "#{@file_name.humanize} "} } %>
-	</td>
+			<%= high_chart("lonlat", @chart) %>
+		</td>
 	</tr>
 </table>
+
 <table>
 	<tr>
 		<td>
