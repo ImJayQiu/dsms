@@ -113,6 +113,7 @@ class NexnasaController < ApplicationController
 
 		date = Cdo.showdate(input: @sel_data)
 		@date = date.first.split(" ").to_a
+		@start_date_utc = DateTime.parse(@date.first)
 
 		#group max min mean
 
@@ -133,13 +134,13 @@ class NexnasaController < ApplicationController
 
 		@chart = LazyHighCharts::HighChart.new('graph') do |f|
 			f.title(text: "NEX-NASA DAILY Analysis | #{model} | #{experiment} ")
-			f.xAxis(categories: @date )
-			f.tooltip(valueSuffix: @unit )
-			f.yAxis [{title: {text: @var_std_name.to_s }}]
-			f.legend(align: 'right', verticalAlign: 'top', y: 75, x: -50, layout: 'vertical', borderWidth: 0)
-			f.series(name: "Max", color: 'lightblue', data: @max_set)
-			f.series(name: "Mean", color: 'lightgreen', data: @mean_set)
-			f.series(name: "Min", color: 'indianred', data: @min_set)
+			f.xAxis(type: 'line' )
+			f.yAxis [{title: {text: "#{@var_std_name.humanize} ( #{@unit} ) " }}]
+			f.tooltip(borderColor: 'gray', valueSuffix: @unit )
+			f.rangeSelector( selected: 4 ) 
+			f.series(name: "Max", color: 'indianred', data: @max_set, pointStart: @start_date_utc, pointInterval: 1.day)
+			f.series(name: "Mean", color: 'lightgreen', data: @mean_set,  pointStart: @start_date_utc, pointInterval: 1.day)
+			f.series(name: "Min", color: 'lightblue', data: @min_set, pointStart: @start_date_utc, pointInterval: 1.day)
 		end
 
 		@sel_file_path = root_path+@cdo_output_path.to_s
