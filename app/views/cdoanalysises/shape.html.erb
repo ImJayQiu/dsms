@@ -1,4 +1,6 @@
 <h2>Shape File Analysis</h2>
 
-<%= @shape %>
+<a href= <%= root_path+"#{@output_dir}/#{@output_file_name}_shape.png" %> target = "_blank" >
+	<%= image_tag root_path+"#{@output_dir}/#{@output_file_name}_shape.png", width: "100%" %>
+	<br/>Click image to enlarge
 

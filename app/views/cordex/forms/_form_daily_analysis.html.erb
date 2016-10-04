@@ -85,4 +85,28 @@
 		</td>
 	<% end %>
 	</tr>
+
+	<tr></tr>
+	<tr align=center>
+
+		<%= form_tag({controller: "cdoanalysises", action: "shape"}, target: '_blank', method: :post, multipart: true) do %>  
+			<td>Select shape file (.zip) :</td>
+			<td>
+			<%= file_field_tag :shape, value: "Please choose a shape files (.zip)", required: true %>
+			<%= hidden_field_tag :dataset, @sel_data  %>
+			<%= hidden_field_tag :cdo_output_path, @cdo_output_path %>
+			<%= hidden_field_tag :output_dir, @output_dir %>
+			<%= hidden_field_tag :output_file_name, @output_file_name %>
+			<%= hidden_field_tag :var_name, @var_name %>
+			<%= hidden_field_tag :file_name, @file_name %>
+			<%= hidden_field_tag :var_std_name, @var_std_name %>
+			<%= hidden_field_tag :rate, @rate %>
+			<%= hidden_field_tag :rate2, @rate2 %>
+			<%= hidden_field_tag :unit, @unit %>
+		</td>
+		<td>
+			<%= submit_tag "Analysis", class: "submit"  %>
+		</td>
+	<% end %>
+	</tr>
 </table>

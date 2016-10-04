@@ -1,0 +1,56 @@
+<table>
+	<thead>
+		<tr>
+			<th>1.Select Variable Name</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select(:part1, params[:part1], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"}, required: true ) rescue nil %></td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>2.Select Model</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select(:part3, params[:part3], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model -"}, required: true ) rescue nil %></td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>3.Select Forcasting Type</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			<%= select(:part4, params[:part4], options_for_select(Ecmwf::Type.all.map{|i| [i.name, i.folder, {'title': i.remark } ]}), {include_blank: "- Select Forcasting -"}, required: true) rescue nil %>
+		</td>
+	</tr>
+</table>
+
+<%= render "layouts/partials/datepicker"%>
+
+<table>
+	<thead>
+		<tr>
+			<th>4.Select Date</th>
+		</tr>
+	</thead>
+
+	<tr>
+		<td>
+			<%= text_field :date, params[:date], id: "sel_date", value: Date.yesterday.to_s, required: true rescue nil %>
+		</td>
+		<!--td>-</td>
+		<td>
+			<%#= text_field :e_date, params[:e_date], id: "e_date", placeholder: "End Date", required: true rescue nil %>
+		</td-->
+	</tr>
+</table>
+
+

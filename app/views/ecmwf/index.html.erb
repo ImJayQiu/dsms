@@ -1,0 +1,134 @@
+<link rel="stylesheet" href="/assets/css/1574105.css" type="text/css"/>
+<link rel="stylesheet" href="/assets/leaflet/leaflet.css" />
+<link rel="stylesheet" href="/assets/leaflet/style.css">
+<link rel="stylesheet" href="/assets/leaflet/leaflet-areaselect.css">
+
+<p id="notice"><%= notice %></p>
+
+<h2>ECMWF Analysis</h2>
+
+<%= form_tag({controller: "ecmwf", action: "analysis" }, method: :post) do %>  
+
+	<div id="pagewidth">
+
+	<div id="wrapper" class="clearfix">
+
+		<div id="maincol" align=center>
+
+			<h3>Select Region</h3>
+
+			<table>
+				<tr></tr>
+				<tr><td>
+						<div id="map">map</div>
+				</td></tr>
+			</table>
+
+			<%if can? :input, :location %>
+				<table id="result">
+
+				<tr>
+					<th colspan=5>Location Region</th>
+				</tr>
+
+				<tr>
+					<td>Lon.</td>
+					<td>W:</td>
+					<td>
+						<%= text_field :s_lon, params[:s_lon], class: "slon", required: true rescue nil %>
+					</td>
+					<td>E:</td>
+					<td>
+						<%= text_field :e_lon, params[:e_lon], class: "elon", required: true rescue nil %>
+					</td>
+				</tr>
+				<tr>
+					<td>Lat.</td>
+					<td>S:</td>
+					<td>
+						<%= text_field :s_lat, params[:s_lat], class: "slat", required: true rescue nil %>
+					</td>
+					<td>N:</td>
+					<td>
+						<%= text_field :e_lat, params[:e_lat], class: "elat", required: true rescue nil %>
+					</td>
+				</tr>
+			</table>
+
+		<% else %>
+
+				<table id="result">
+
+				<tr>
+					<th colspan=5>Location Region</th>
+				</tr>
+
+				<tr>
+					<td>Lon.</td>
+					<td>W:</td>
+					<td><input type="text" class="slon" DISABLED ></td>
+					<td>E:</td>
+					<td><input type="text" class="elon" DISABLED ></td>
+				</tr>
+
+				<tr>
+					<td>Lat.</td>
+					<td>S:</td>
+					<td><input type="text" class="slat" DISABLED></td>
+					<td>N:</td>
+					<td><input type="text" class="elat" DISABLED></td>
+				</tr>
+			</table>
+			<div id="result">
+				<%= hidden_field :s_lon, params[:s_lon], class: "slon" rescue nil %>
+				<%= hidden_field :e_lon, params[:e_lon], class: "elon" rescue nil %>
+				<%= hidden_field :s_lat, params[:s_lat], class: "slat" rescue nil %>
+				<%= hidden_field :e_lat, params[:e_lat], class: "elat" rescue nil %>
+			</div>
+			<% end # if can%>
+
+		</div>
+
+		<div id="leftcol">
+			<h3>Select Dataset</h3>
+			<%= render "ecmwf/forms/form" %>
+		</div>
+
+	</div>
+</div>
+
+<table>
+	<tr>
+		<td align=center>
+			<%= submit_tag "Submit & Analyze", class: "submit", :data => { :disable_with => 'Data processing, Please wait ...' } %>
+		</td>
+	</tr>
+</table>
+
+<% end #form %>
+
+
+<script src="/assets/leaflet/leaflet.js"></script>
+<script src="/assets/leaflet/leaflet-areaselect.js"></script>
+<script>
+// initialize map
+var map = L.map('map').setView([14.876178, 90.792253], 3);
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+$(window).on("resize", function() {
+		$("#map").height($(window).height()*0.45).width($(window).width()*0.45);
+		map.invalidateSize();
+		}).trigger("resize");
+
+var areaSelect = L.areaSelect({width:150, height:150});
+areaSelect.on("change", function() {
+		var bounds = this.getBounds();
+		$("#result .slat").val(bounds.getSouthWest().lat.toFixed(3));
+		$("#result .elat").val(bounds.getNorthEast().lat.toFixed(3));
+		$("#result .slon").val(bounds.getSouthWest().lng.toFixed(3));
+		$("#result .elon").val(bounds.getNorthEast().lng.toFixed(3));
+		});
+areaSelect.addTo(map);
+</script>

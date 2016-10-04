@@ -122,13 +122,15 @@ class Cmip5sController < ApplicationController
 		###############################################################
 
 		############# cut file by selected date range ##################
-		output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}/#{experiment}"
+		@output_dir = output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}/#{experiment}"
 		sys_output_pub = Rails.root.join("public")
 		sys_output_dir = Rails.root.join("public", output_dir)
 
 		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
 
-		output_file_name = "#{var}_#{mip}_#{model}_#{experiment}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+		@output_file_name = output_file_name = "#{var}_#{mip}_#{model}_#{experiment}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+
+		@output_file_name = output_file_name 
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 

@@ -1,6 +1,16 @@
 Rails.application.routes.draw do
 
 
+  namespace :ecmwf do
+    resources :types
+  end
+	resources :ecmwf do
+		collection do
+			get 'index'
+			post 'analysis'
+		end
+	end
+
 	resources :feedbacks
 
 	resources :news

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @ecmwf_type.name %>
+</p>
+
+<p>
+  <strong>Folder:</strong>
+  <%= @ecmwf_type.folder %>
+</p>
+
+<p>
+  <strong>Remark:</strong>
+  <%= @ecmwf_type.remark %>
+</p>
+
+<%= link_to 'Edit', edit_ecmwf_type_path(@ecmwf_type) %> |
+<%= link_to 'Back', ecmwf_types_path %>
