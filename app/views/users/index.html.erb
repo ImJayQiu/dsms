@@ -15,6 +15,8 @@
 			<th>User Name</th>
 			<th>E-mail</th>
 			<th>Role</th>
+			<th>Login Count</th>
+			<th>Last Login at</th>
 			<th colspan="3">Operations</th>
 		</tr>
 	</thead>
@@ -24,6 +26,8 @@
 		<td><%= user.username %></td>
 		<td><%= user.email %></td>
 		<td><%= user.role %></td>
+		<td><%= user.sign_in_count %></td>
+		<td><%= user.current_sign_in_ip %></td>
 		<td><%= button_to 'Show', user, method: :get %></td>
 		<td><%= button_to 'Edit', edit_user_path(user) , method: :get%></td>
 		<td><%= button_to 'Del', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
