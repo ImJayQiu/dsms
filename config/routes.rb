@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
 
 
-  namespace :ecmwf do
-    resources :types
-  end
+	namespace :ecmwf do
+		resources :types
+	end
 	resources :ecmwf do
 		collection do
 			get 'index'
@@ -76,6 +76,10 @@ Rails.application.routes.draw do
 			post :shape
 		end
 	end
+
+	get '/pakistan', to: 'site#pakistan'
+	get '/myanmar', to: 'site#myanmar'
+	get '/srilanka', to: 'site#srilanka'
 
 	resources :site do
 		collection do
