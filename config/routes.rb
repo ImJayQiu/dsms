@@ -80,6 +80,9 @@ Rails.application.routes.draw do
 	resources :site do
 		collection do
 			get 'index'
+			get 'pakistan'
+			get 'myanmar'
+			get 'srilanka'
 			get 'home' 
 			get 'admin_settings' 
 		end

@@ -1,0 +1,39 @@
+
+<!DOCTYPE HTML>
+<html>
+
+<%= render "layouts/partials/head_myanmar"%>
+
+<body class="landing">
+
+<!-- Page Wrapper -->
+<div id="page-wrapper">
+
+	<!-- Header -->
+	<%= render "layouts/partials/header" %>
+
+	<!-- Banner -->
+	<section id="banner">
+
+		<p class="notice"><%= notice %></p>  
+		<p class="alert"><%= alert %></p>
+
+		<%= yield %>
+
+
+
+		<!-- Footer -->
+
+
+	</section>
+
+</div>
+
+<%= render "layouts/partials/footer" %>
+
+<!-- Scripts -->
+
+<%= render "layouts/partials/scripts" %>
+
+</body>
+</html>

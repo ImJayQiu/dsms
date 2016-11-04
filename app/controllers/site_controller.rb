@@ -1,7 +1,7 @@
 class SiteController < ApplicationController
 
 	#before_action :authenticate_user!
-	
+
 	skip_before_filter :authenticate_user!, :except => [:home, :admin_settings]
 
 	layout :resolve_layout
@@ -11,6 +11,15 @@ class SiteController < ApplicationController
 	protect_from_forgery with: :exception
 
 	def index
+	end
+
+	def srilanka 
+	end
+
+	def myanmar 
+	end
+
+	def pakistan 
 	end
 
 	def home
@@ -29,12 +38,25 @@ class SiteController < ApplicationController
 	private 
 
 	def resolve_layout
+
 		case action_name
+
 		when "index"
 			"index"
+
+		when "pakistan"
+			"index_pakistan"
+
+		when "myanmar"
+			"index_myanmar"
+
+		when "srilanka"
+			"index_srilanka"
+
 		else
 			"home"
 		end
+
 	end 
 
 end

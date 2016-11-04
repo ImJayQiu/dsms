@@ -21,6 +21,6 @@ set :output, "/home/jay/Projects/whenever/cron_log.log"
 #
 
 
-every 1.minute do
-	command "mkdir /home/jay/Projects/whenever/#{Time.now.strftime('%Y-%m-%d(%H:%M:%S)')}"
+every 1.minutes do
+	command "mkdir /CLIMDATA/ECMWF/whenever/" + Time.now.strftime("%Y-%m-%d(%H:%M:%S)")
 end
