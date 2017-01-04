@@ -27,8 +27,8 @@ def ecmwf_check
 
 	@ens.each do |ens|
 
-		system("cp #{@ecmwf_source_dir}/#{ens}#{@month}#{@day}* #{@ecmwf_daily_dir}/#{ens}") 	# cp files of the day 
-		system("rm #{@ecmwf_daily_dir}/#{ens}/*.temp") 	# rm temp files
+		cp_file = system("cp #{@ecmwf_source_dir}/#{ens}#{@month}#{@day}* #{@ecmwf_daily_dir}/#{ens}") 	# cp files of the day 
+		rm_temp = system("rm #{@ecmwf_daily_dir}/#{ens}/*.temp") 	# rm temp files
 		grib_copy = `bash -ic 'grib_copy #{@ecmwf_daily_dir}/#{ens}/#{ens}* #{@ecmwf_daily_dir}/#{ens}/all'` 	# merge files
 		grib_to_netcdf = `bash -ic 'grib_to_netcdf -k 3 -o #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/all'` 	# grib to nc
 		splitvar = `bash -ic 'cdo -f nc4 splitvar #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/var'` # extract vars
