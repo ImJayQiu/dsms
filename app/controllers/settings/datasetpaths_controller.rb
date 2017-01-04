@@ -69,6 +69,6 @@ class Settings::DatasetpathsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def settings_datasetpath_params
-      params.require(:settings_datasetpath).permit(:name, :path, :remark)
+      params.require(:settings_datasetpath).permit(:name, :path, :source, :remark)
     end
 end

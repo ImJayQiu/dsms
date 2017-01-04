@@ -1,0 +1,2 @@
+module Ecmwf::VarsHelper
+end

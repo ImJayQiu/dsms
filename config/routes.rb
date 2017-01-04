@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
 
+  namespace :ecmwf do
+    resources :vars
+  end
 	namespace :ecmwf do
 		resources :types
 	end

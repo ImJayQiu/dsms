@@ -1,0 +1,29 @@
+<%= form_for(@ecmwf_var) do |f| %>
+  <% if @ecmwf_var.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ecmwf_var.errors.count, "error") %> prohibited this ecmwf_var from being saved:</h2>
+
+      <ul>
+      <% @ecmwf_var.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :var %><br>
+    <%= f.text_field :var %>
+  </div>
+  <div class="field">
+    <%= f.label :remark %><br>
+    <%= f.text_field :remark %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

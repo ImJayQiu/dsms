@@ -18,10 +18,13 @@
 	<li><%= link_to "Temporal Subsets Management", settings_temporals_path %></li>
 	<li><%= link_to "Climate Indices Management", settings_inds_path %></li>
 	<li><%= link_to "ECMWF Types Management", ecmwf_types_path %></li>
+	<li><%= link_to "ECMWF Variables Management", ecmwf_vars_path %></li>
 <% end %>
 
-<%if can? :manage, :root_path %>
-	<li><%= link_to "Dataset Root Path Management", settings_datasetpaths_path %></li>
+	<p>	</p>
+
+	<%if can? :manage, :root_path %>
+		<li><%= link_to "Dataset Root Path Management", settings_datasetpaths_path %></li>
 <% end %>
 
 </ul>

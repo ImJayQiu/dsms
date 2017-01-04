@@ -7,8 +7,9 @@ class EcmwfController < ApplicationController
 	def analysis 
 		################ date ##################################
 
+		@ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
 		@date = params[:date].first.to_date
-		date_folder = @date.strftime("%Y/%m/%d").to_s
+		date_folder = @date.strftime("/%Y/%m/%d/").to_s
 
 		############# Selected location  #############################
 
@@ -22,21 +23,19 @@ class EcmwfController < ApplicationController
 		##############################################################
 
 		############# paramaters  ################################
-		var = "var40" #params[:part1].first.to_s
+		var = params[:part1].first.to_s
 		mip = 'ECMWF' 
 		#model = params[:part3].first.to_s
 		type = params[:part4].first.to_s
 
-		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
-
 		###########################################
 
 		### related file names
-		@data_file = var + ".128.grb" 
+		@data_file = "var"+var+".nc"  
 		###########################################
 
 		### location of raw data
-		folder_path = @root_file_path.to_s + '/' + date_folder + '/' + type + '/' 
+		folder_path = @ecmwf_dir.to_s + date_folder + type + '/' 
 		data_path = folder_path + @data_file.to_s
 		###########################################
 
@@ -55,7 +54,7 @@ class EcmwfController < ApplicationController
 
 		@cdo_output_path = output_dir.to_s + "/" + lon_lat 
 
-		@sel_data = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: data_path, output: "public/#{@cdo_output_path}.grb")
+		@sel_data = Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: data_path, output: "public/#{@cdo_output_path}")
 		#########################################
 
 		@data = Cdo.sinfon(input: @sel_data)
@@ -90,7 +89,7 @@ class EcmwfController < ApplicationController
 
 =begin
 
-	  			 ##############################################################
+				 ##############################################################
 
 
 								 @lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s

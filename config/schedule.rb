@@ -5,7 +5,7 @@
 
 # Example:
 #
-set :output, "/home/jay/Projects/whenever/cron_log.log"
+#set :output, "/home/jay/Projects/whenever/cron_log.log"
 #
 # every 2.hours do
 #   command "/usr/bin/some_great_command"
@@ -21,6 +21,7 @@ set :output, "/home/jay/Projects/whenever/cron_log.log"
 #
 
 
-every 1.minutes do
-	command "mkdir /CLIMDATA/ECMWF/whenever/" + Time.now.strftime("%Y-%m-%d(%H:%M:%S)")
-end
+#every 1.minute do
+#	command "mkdir /CLIMDATA/ECMWF/whenever/#{Time.now.strftime('%Y-%m-%d(%H:%M:%S)')}"
+#	runner "Schedule.mkdir"
+#end

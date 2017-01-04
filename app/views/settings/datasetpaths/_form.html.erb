@@ -17,7 +17,9 @@
 	<li>MIP: <%#= f.text_field :name %>
 <%= f.collection_select(:name, Settings::Mip.all, :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></li>
 	<p/>
-	<li>Path: <%= f.text_field :path %></li>
+	<li>Source: <%= f.text_field :source, placeholder: "The location of the original datasets, can be null." %></li>
+	<p/>
+	<li>Path: <%= f.text_field :path, placeholder: "The location where CDAAS find there datasets" %></li>
 	<p/>
 	<li>Remark: <%= f.text_field :remark %></li>
 	<p/>

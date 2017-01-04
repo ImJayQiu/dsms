@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @ecmwf_var.name %>
+</p>
+
+<p>
+  <strong>Var:</strong>
+  <%= @ecmwf_var.var %>
+</p>
+
+<p>
+  <strong>Remark:</strong>
+  <%= @ecmwf_var.remark %>
+</p>
+
+<%= link_to 'Edit', edit_ecmwf_var_path(@ecmwf_var) %> |
+<%= link_to 'Back', ecmwf_vars_path %>
