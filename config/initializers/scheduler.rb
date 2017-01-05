@@ -33,7 +33,7 @@ def ecmwf_check
 		%x[cp #{@ecmwf_source_dir}/#{ens}#{@month}#{@day}* #{@ecmwf_daily_dir}/#{ens}] 
 
 		# 2.rm temp files
-		%x[rm #{@ecmwf_daily_dir}/#{ens}/*.temp]	
+	#	%x[rm #{@ecmwf_daily_dir}/#{ens}/*.temp]	
 
 		# 3.merge files
 	#	%x[bash -ic 'grib_copy #{@ecmwf_daily_dir}/#{ens}/#{ens}* #{@ecmwf_daily_dir}/#{ens}/all'] 	
