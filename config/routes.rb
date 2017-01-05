@@ -92,6 +92,7 @@ Rails.application.routes.draw do
 			get 'srilanka'
 			get 'home' 
 			get 'admin_settings' 
+			get 'debug'
 		end
 	end
 	devise_for :users #, controllers: { sessions: "users/sessions" }

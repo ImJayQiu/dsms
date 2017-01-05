@@ -1,0 +1,36 @@
+﻿<%
+
+		#@year = Time.now.year 	# catch year 
+	#@month = Time.now.strftime("%m") # catch month 
+	#@day = Time.now.strftime("%d") 	# catch day
+
+	@year = "2017" 	# catch year 
+@month = "01" # catch month 
+@day = "01"	# catch day
+
+@time = Time.now 	# catch day
+@ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
+@ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
+@ecmwf_daily_dir = "#{@ecmwf_dir}/#{@year}/#{@month}/#{@day}"
+
+#@ens = ["R1D", "R1E", "R1H", "R1L", "R2D", "R2P", "R2U", "R2Y"]
+
+ens = "R1D"
+
+cp_file = `cp #{@ecmwf_source_dir}/#{ens}#{@month}#{@day}* #{@ecmwf_daily_dir}/#{ens}` 	# cp files of the day 
+
+rm_temp = `rm #{@ecmwf_daily_dir}/#{ens}/*.temp` 	# rm temp files
+grib_copy = `bash -ic 'grib_copy #{@ecmwf_daily_dir}/#{ens}/#{ens}* #{@ecmwf_daily_dir}/#{ens}/all'` 	# merge files
+grib_to_netcdf = `bash -ic 'grib_to_netcdf -k 3 -o #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/all'` 	# grib to nc
+splitvar = `bash -ic 'cdo -f nc4 splitvar #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/var'` # extract vars
+
+
+%>
+<p/>
+cp:<%= cp_file %><p/>
+rm:<%= rm_temp %><p/>
+copy:<%= grib_copy %><p/>
+gtn:<%= grib_to_netcdf %><p/>
+split:<%= splitvar %><p/>
+source:<%= @ecmwf_source_dir %><p/>
+Des:<%= @ecmwf_daily_dir %>
