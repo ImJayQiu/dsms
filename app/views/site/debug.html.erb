@@ -17,7 +17,7 @@
 
 ens = "R1D"
 
-cp_file = `cp #{@ecmwf_source_dir}/#{ens}#{@month}#{@day}* #{@ecmwf_daily_dir}/#{ens}` 	# cp files of the day 
+%x[cp #{@ecmwf_source_dir}/#{ens}#{@month}#{@day}* #{@ecmwf_daily_dir}/#{ens}] 	# cp files of the day 
 
 rm_temp = `rm #{@ecmwf_daily_dir}/#{ens}/*.temp` 	# rm temp files
 grib_copy = `bash -ic 'grib_copy #{@ecmwf_daily_dir}/#{ens}/#{ens}* #{@ecmwf_daily_dir}/#{ens}/all'` 	# merge files
@@ -27,7 +27,7 @@ splitvar = `bash -ic 'cdo -f nc4 splitvar #{@ecmwf_daily_dir}/#{ens}/all.nc #{@e
 
 %>
 <p/>
-cp:<%= cp_file %><p/>
+cp:<%#= cp_file %><p/>
 rm:<%= rm_temp %><p/>
 copy:<%= grib_copy %><p/>
 gtn:<%= grib_to_netcdf %><p/>
