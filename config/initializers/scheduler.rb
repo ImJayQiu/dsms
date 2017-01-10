@@ -27,29 +27,35 @@ end
 
 def ecmwf_check 
 
-	@enss = ["R1D", "R1E", "R1H", "R1L", "R2D", "R2P", "R2U", "R2Y"]
-	@enss.to_a.each do |ens|
-
-		# 1.cp files of the day
+	# 1.cp files of the day
+	@ens.to_a.each do |ens|
 		%x[cp #{@ecmwf_source_dir}/#{ens}#{@month}#{@day}* #{@ecmwf_daily_dir}/#{ens}] 
-
-		# 2.rm temp files
-		%x[rm #{@ecmwf_daily_dir}/#{ens}/*.temp]	
-
-		# 3.merge files
-		%x[bash -ic 'grib_copy #{@ecmwf_daily_dir}/#{ens}/#{ens}* #{@ecmwf_daily_dir}/#{ens}/all'] 	
-
-		# 4.grib to nc
-		%x[bash -ic 'grib_to_netcdf -k 3 -o #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/all']
-
-		# 5.extract var
-		%x[bash -ic 'cdo -f nc4 splitvar #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/var']
-
 	end
+
+	# 2.rm temp files
+	@ens.to_a.each do |ens|
+		%x[rm #{@ecmwf_daily_dir}/#{ens}/*.temp]	
+	end
+
+	# 3.merge files
+	@ens.to_a.each do |ens|
+		%x[bash -ic 'grib_copy #{@ecmwf_daily_dir}/#{ens}/#{ens}* #{@ecmwf_daily_dir}/#{ens}/all'] 	
+	end
+
+	# 4.grib to nc
+	@ens.to_a.each do |ens|
+		%x[bash -ic 'grib_to_netcdf -k 3 -o #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/all']
+	end
+
+	# 5.extract var
+	@ens.to_a.each do |ens|
+		%x[bash -ic 'cdo -f nc4 splitvar #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/var']
+	end
+
 end
 
 
-scheduler.every '10s' do
+scheduler.every '1000s' do
 	mkdir()
 end
 
