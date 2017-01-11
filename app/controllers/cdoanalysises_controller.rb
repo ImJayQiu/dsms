@@ -11,7 +11,7 @@ require "zip"
 
 
 
-class cdo_runanalysisesController < ApplicationController
+class cdoanalysisesController < ApplicationController
 
 	def lonlat
 		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_lonlat.log')
