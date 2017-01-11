@@ -30,7 +30,7 @@ class Cmip5sController < ApplicationController
 
 	def daily_analysis
 
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_cmip5.log')
+		cdo_run = Cdo.new(debug: true)
 
 		################ date range ##################################
 
@@ -420,7 +420,7 @@ class Cmip5sController < ApplicationController
 
 	def mult_analysis
 
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_mult.log')
+		cdo_run = Cdo.new(debug: true)
 
 		################ date range ##################################
 

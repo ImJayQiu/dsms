@@ -12,7 +12,7 @@ class CordexController < ApplicationController
 
 	def daily_analysis
 
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_cordex.log')
+		cdo_run = Cdo.new(debug: true)
 
 		################ date range ##################################
 

@@ -14,7 +14,7 @@ require "zip"
 class CdoanalysisesController < ApplicationController
 
 	def lonlat
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_lonlat.log')
+		cdo_run = Cdo.new(debug: true)
 		@lon = params[:lon].to_f
 		@lat = params[:lat].to_f
 		lon_lat = 'lon='+@lon.to_s+'_lat='+@lat.to_s
@@ -53,7 +53,7 @@ class CdoanalysisesController < ApplicationController
 
 
 	def info
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_info.log')
+		cdo_run = Cdo.new(debug: true)
 		@var_name = params[:var_name]
 		@dataset = params[:dataset]
 		@file_name = params[:file_name]
@@ -71,7 +71,7 @@ class CdoanalysisesController < ApplicationController
 
 	# specific_monthly_analysis 
 	def sma
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_sma.log')
+		cdo_run = Cdo.new(debug: true)
 		@dataset = params[:dataset]
 		@cdo_output_path = params[:cdo_output_path]
 		@file_name = params[:file_name]
@@ -203,7 +203,7 @@ class CdoanalysisesController < ApplicationController
 
 	### Seasonal analysis 
 	def seasonal
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_seasonal.log')
+		cdo_run = Cdo.new(debug: true)
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
@@ -269,7 +269,7 @@ class CdoanalysisesController < ApplicationController
 	end
 
 	def yearly
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_yearly.log')
+		cdo_run = Cdo.new(debug: true)
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
@@ -363,7 +363,7 @@ class CdoanalysisesController < ApplicationController
 
 	############### Year Monthly Mean ####################
 	def ymonmean 
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_ymonmean.log')
+		cdo_run = Cdo.new(debug: true)
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
@@ -400,7 +400,7 @@ class CdoanalysisesController < ApplicationController
 	end
 
 	def indices 
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_indices.log')
+		cdo_run = Cdo.new(debug: true)
 		@var_name = params[:var_name]
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
@@ -421,7 +421,7 @@ class CdoanalysisesController < ApplicationController
 	end
 
 	def shape
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_shape.log')
+		cdo_run = Cdo.new(debug: true)
 		@shape_zip = params[:shape]
 		@var_name = params[:var_name]
 		@file = params[:dataset]

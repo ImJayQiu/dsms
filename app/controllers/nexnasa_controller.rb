@@ -4,16 +4,13 @@ require "cdo"
 
 class NexnasaController < ApplicationController
 
-
-
-
 	def daily 
 	end
 
 
 	def daily_analysis
 
-		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_nexnasa.log')
+		cdo_run = Cdo.new(debug: true)
 
 		################ date range ##################################
 
