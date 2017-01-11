@@ -506,7 +506,7 @@ class Cmip5sController < ApplicationController
 
 		output_file_name = "#{var}_#{mip}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
-		@cdo_run.output_path = output_dir.to_s + "/" + output_file_name
+		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
 		############# cut file by selected date range ##################
 		cdo_run.threads=[]
