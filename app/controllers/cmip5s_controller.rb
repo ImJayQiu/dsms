@@ -176,7 +176,7 @@ class Cmip5sController < ApplicationController
 			f.series(name: "Min", color: 'lightblue', data: @min_set, pointStart: @start_date_utc, pointInterval: 1.day)
 		end
 
-		@sel_file_path = root_path+@cdo_run.output_path.to_s
+		@sel_file_path = root_path + @cdo_output_path.to_s
 
 		##### to copy cbar.gs to output folder  #################
 		copy_cbar =	system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
