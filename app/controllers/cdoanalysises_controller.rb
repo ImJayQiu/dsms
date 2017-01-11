@@ -11,9 +11,10 @@ require "zip"
 
 
 
-class CdoanalysisesController < ApplicationController
+class cdo_runanalysisesController < ApplicationController
 
 	def lonlat
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_lonlat.log')
 		@lon = params[:lon].to_f
 		@lat = params[:lat].to_f
 		lon_lat = 'lon='+@lon.to_s+'_lat='+@lat.to_s
@@ -25,9 +26,9 @@ class CdoanalysisesController < ApplicationController
 		@unit = params[:unit]
 
 		#	file = File.join(Rails.root, @dataset)
-		@s_lonlat = Cdo.remapnn(lon_lat, input: @dataset, options: '-f nc4')
-		@lonlat_info = Cdo.outputtab(['date','value'],input: @s_lonlat)
-		@var_std_name = Cdo.showstdname( input: @dataset)[0].to_s
+		@s_lonlat = cdo_run.remapnn(lon_lat, input: @dataset, options: '-f nc4')
+		@lonlat_info = cdo_run.outputtab(['date','value'],input: @s_lonlat)
+		@var_std_name = cdo_run.showstdname( input: @dataset)[0].to_s
 
 		@date_set = [] 
 		@value_set = [] 
@@ -52,6 +53,7 @@ class CdoanalysisesController < ApplicationController
 
 
 	def info
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_info.log')
 		@var_name = params[:var_name]
 		@dataset = params[:dataset]
 		@file_name = params[:file_name]
@@ -60,7 +62,7 @@ class CdoanalysisesController < ApplicationController
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
-		@info = Cdo.info(input: @dataset)
+		@info = cdo_run.info(input: @dataset)
 
 
 	end
@@ -69,6 +71,7 @@ class CdoanalysisesController < ApplicationController
 
 	# specific_monthly_analysis 
 	def sma
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_sma.log')
 		@dataset = params[:dataset]
 		@cdo_output_path = params[:cdo_output_path]
 		@file_name = params[:file_name]
@@ -79,14 +82,14 @@ class CdoanalysisesController < ApplicationController
 		@edate = params[:edate]
 		@months = params[:months].values
 		sel_months = @months.join(",")
-		@var_std_name = Cdo.showstdname( input: @dataset)[0].to_s
-		@sel_months = Cdo.selmon(sel_months, input: @dataset, output: "public/#{@cdo_output_path}_sma.nc", options:"-f nc4")
+		@var_std_name = cdo_run.showstdname( input: @dataset)[0].to_s
+		@sel_months = cdo_run.selmon(sel_months, input: @dataset, output: "public/#{@cdo_output_path}_sma.nc", options:"-f nc4")
 
-		@sel_data_ctl = Cdo.gradsdes(input: @sel_months)
+		@sel_data_ctl = cdo_run.gradsdes(input: @sel_months)
 
 		####### Monthly Statistics ##############
-		@ymonavg = Cdo.ymonavg(input: @sel_months)
-		@ymon_data = Cdo.info(input: @ymonavg)
+		@ymonavg = cdo_run.ymonavg(input: @sel_months)
+		@ymon_data = cdo_run.info(input: @ymonavg)
 
 		@ymon_date = []
 		@ymon_min = [] 
@@ -114,8 +117,8 @@ class CdoanalysisesController < ApplicationController
 		#######################
 		#
 		####### Yearly Average Statistics ##############
-		@yyavg = Cdo.yearavg(input: @sel_months)
-		@yy_avg_data = Cdo.info(input: @yyavg)
+		@yyavg = cdo_run.yearavg(input: @sel_months)
+		@yy_avg_data = cdo_run.info(input: @yyavg)
 		@yy_avg_date = []
 		@yy_avg_min = [] 
 		@yy_avg_mean = [] 
@@ -141,8 +144,8 @@ class CdoanalysisesController < ApplicationController
 		#######################
 
 		####### Yearly Max Statistics ##############
-		@yymax = Cdo.yearmax(input: @sel_months)
-		@yy_max_data = Cdo.info(input: @yymax)
+		@yymax = cdo_run.yearmax(input: @sel_months)
+		@yy_max_data = cdo_run.info(input: @yymax)
 		@yy_max_date = []
 		@yy_max_min = [] 
 		@yy_max_mean = [] 
@@ -168,8 +171,8 @@ class CdoanalysisesController < ApplicationController
 		#######################
 		#
 		####### Yearly Min Statistics ##############
-		@yymin = Cdo.yearmin(input: @sel_months)
-		@yy_min_data = Cdo.info(input: @yymin)
+		@yymin = cdo_run.yearmin(input: @sel_months)
+		@yy_min_data = cdo_run.info(input: @yymin)
 		@yy_min_date = []
 		@yy_min_min = [] 
 		@yy_min_mean = [] 
@@ -200,21 +203,22 @@ class CdoanalysisesController < ApplicationController
 
 	### Seasonal analysis 
 	def seasonal
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_seasonal.log')
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 		@var_std_name = params[:var_std_name]
-		@seasmin_f = Cdo.seasmin(input: @file)
-		@seasmax_f = Cdo.seasmax(input: @file)
-		date = Cdo.showdate(input: @seasmin_f)
+		@seasmin_f = cdo_run.seasmin(input: @file)
+		@seasmax_f = cdo_run.seasmax(input: @file)
+		date = cdo_run.showdate(input: @seasmin_f)
 		@date = date.first.split(" ").to_a
 		@quarter=[]
 		@date.each do |d|
 			@quarter << "Q#{((d.to_date.month-1)/3 + 1)}:#{d.to_date.strftime('%Y')}".to_s
 		end
-		@seasmax = Cdo.info(input: @seasmax_f)
-		@seasmin = Cdo.info(input: @seasmin_f)
+		@seasmax = cdo_run.info(input: @seasmax_f)
+		@seasmin = cdo_run.info(input: @seasmin_f)
 
 		####### seasmin group ###############  
 		@max_min = [] 
@@ -265,20 +269,21 @@ class CdoanalysisesController < ApplicationController
 	end
 
 	def yearly
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_yearly.log')
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 		@var_std_name = params[:var_std_name]
-		@yearmin = Cdo.info(input: Cdo.yearmin(input: @file))
-		@yearmax = Cdo.info(input: Cdo.yearmax(input: @file))
-		@yearmean = Cdo.info(input: Cdo.yearmean(input: @file))
-		@yearavg = Cdo.info(input: Cdo.yearavg(input: @file))
-		@yearstd = Cdo.info(input: Cdo.yearstd(input: @file))
-		@yearvar = Cdo.info(input: Cdo.yearvar(input: @file))
+		@yearmin = cdo_run.info(input: cdo_run.yearmin(input: @file))
+		@yearmax = cdo_run.info(input: cdo_run.yearmax(input: @file))
+		@yearmean = cdo_run.info(input: cdo_run.yearmean(input: @file))
+		@yearavg = cdo_run.info(input: cdo_run.yearavg(input: @file))
+		@yearstd = cdo_run.info(input: cdo_run.yearstd(input: @file))
+		@yearvar = cdo_run.info(input: cdo_run.yearvar(input: @file))
 
 		################ year ########################
-		@year = Cdo.showyear(input: @file).first.split(" ")
+		@year = cdo_run.showyear(input: @file).first.split(" ")
 		###########################################
 
 		####### yearly min group ###############  
@@ -358,13 +363,14 @@ class CdoanalysisesController < ApplicationController
 
 	############### Year Monthly Mean ####################
 	def ymonmean 
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_ymonmean.log')
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 		@var_std_name = params[:var_std_name]
-		@ymonmean_f = Cdo.ymonmean(input: @file)
-		@ymonmean = Cdo.info(input: @ymonmean_f)
+		@ymonmean_f = cdo_run.ymonmean(input: @file)
+		@ymonmean = cdo_run.info(input: @ymonmean_f)
 		####### year month mean group ###############  
 		@months = [] 
 		@max_ymmean = [] 
@@ -394,6 +400,7 @@ class CdoanalysisesController < ApplicationController
 	end
 
 	def indices 
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_indices.log')
 		@var_name = params[:var_name]
 		@file = params[:dataset]
 		@rate = params[:rate].to_f
@@ -403,17 +410,18 @@ class CdoanalysisesController < ApplicationController
 		@cdo_output_path = params[:cdo_output_path].to_s
 
 		if @unit = "mm/d"
-			@ind_output = Cdo.send(@ind, [1/@rate+@rate2], input: @file, options:'-f nc4' )
+			@ind_output = cdo_run.send(@ind, [1/@rate+@rate2], input: @file, options:'-f nc4' )
 		else
-			@ind_output = Cdo.send(@ind, input: @file, options:'-f nc4' )
+			@ind_output = cdo_run.send(@ind, input: @file, options:'-f nc4' )
 		end
 
-		@var = Cdo.showname(input: @ind_output) 
-		@indice = Cdo.outputtab(['date','lon','lat','value'], input: @ind_output) 
+		@var = cdo_run.showname(input: @ind_output) 
+		@indice = cdo_run.outputtab(['date','lon','lat','value'], input: @ind_output) 
 
 	end
 
 	def shape
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_shape.log')
 		@shape_zip = params[:shape]
 		@var_name = params[:var_name]
 		@file = params[:dataset]
@@ -436,7 +444,7 @@ class CdoanalysisesController < ApplicationController
 		end
 		@shp_file = @shape_name.select {|s|s.include? '.shp'}
 
-		ntime = Cdo.ntime(input: @file)[0]
+		ntime = cdo_run.ntime(input: @file)[0]
 		############### generate csv file ################
 		grads_gs = File.new("public/#{@output_dir}/upload_shape.gs", "w")
 		grads_gs.puts("reinit")

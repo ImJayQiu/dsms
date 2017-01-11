@@ -420,6 +420,8 @@ class Cmip5sController < ApplicationController
 
 	def mult_analysis
 
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_mult.log')
+
 		################ date range ##################################
 
 		@sdate = params[:s_date].first.to_date

@@ -12,6 +12,8 @@ class CordexController < ApplicationController
 
 	def daily_analysis
 
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_cordex.log')
+
 		################ date range ##################################
 
 		@sdate = params[:s_date].first.to_date
@@ -40,7 +42,7 @@ class CordexController < ApplicationController
 		o_unit = @variable_setting.unit
 
 		#CORDEX models using different units
-		actual_unit = Cdo.showunit(input: file)
+		actual_unit = cdo_run.showunit(input: file)
 
 		if @variable_setting.c_rate.blank?
 			@rate = 1.to_i
@@ -94,7 +96,7 @@ class CordexController < ApplicationController
 
 		#################### CDO operations  #########################
 
-		paramater = Cdo.showname(input: file)
+		paramater = cdo_run.showname(input: file)
 
 		############# cut file by selected date range ##################
 		@output_dir = output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}/#{experiment}"
@@ -108,19 +110,19 @@ class CordexController < ApplicationController
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
-		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
+		@sel_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
 		##############################################################
 
 
 		################ Data from CDO ###########################
 
-		@dataset_infon = Cdo.info(input: @sel_data)
-		@var_name = Cdo.showname(input: @sel_data).first.to_s
-		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
+		@dataset_infon = cdo_run.info(input: @sel_data)
+		@var_name = cdo_run.showname(input: @sel_data).first.to_s
+		@var_std_name = cdo_run.showstdname(input: @sel_data).first.to_s
 
 		###########################################################
 
-		date = Cdo.showdate(input: @sel_data)
+		date = cdo_run.showdate(input: @sel_data)
 		@date = date.first.split(" ").to_a
 		@start_date_utc = DateTime.parse(@date.first)
 
@@ -155,9 +157,9 @@ class CordexController < ApplicationController
 		copy_cbar =	system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
 		#########################################################
 
-		@sel_data_ctl = Cdo.gradsdes(input: @sel_data)
-		ntime = Cdo.ntime(input: @sel_data)[0]
-		stdname = Cdo.showstdname(input: @sel_data)[0]
+		@sel_data_ctl = cdo_run.gradsdes(input: @sel_data)
+		ntime = cdo_run.ntime(input: @sel_data)[0]
+		stdname = cdo_run.showstdname(input: @sel_data)[0]
 		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_mean.gs", "w")
@@ -363,7 +365,7 @@ class CordexController < ApplicationController
 
 		########## generate csv file ########################
 		@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
-		@sel_data_griddes = Cdo.griddes(input: @sel_data)
+		@sel_data_griddes = cdo_run.griddes(input: @sel_data)
 		@gridsize = @sel_data_griddes[4].split(" ")[-1].to_i
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_csv.gs", "w")
 		grads_gs.puts("reinit")
