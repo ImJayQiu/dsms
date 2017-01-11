@@ -13,6 +13,8 @@ class NexnasaController < ApplicationController
 
 	def daily_analysis
 
+		cdo = Cdo.new(debug: true, logging: true, logFile: 'cdo_commands_nexnasa.log')
+
 		################ date range ##################################
 
 		@sdate = params[:s_date].first.to_date
@@ -85,7 +87,7 @@ class NexnasaController < ApplicationController
 
 		#################### CDO operations  #########################
 
-		paramater = Cdo.showname(input: file)
+		paramater = cdo.showname(input: file)
 
 
 		############# cut file by selected date range ##################
@@ -99,19 +101,19 @@ class NexnasaController < ApplicationController
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
-		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
+		@sel_data = cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
 		##############################################################
 
 
 		################ Data from CDO ###########################
 
-		@dataset_infon = Cdo.info(input: @sel_data)
-		@var_name = Cdo.showname(input: @sel_data).first.to_s
-		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
+		@dataset_infon = cdo.info(input: @sel_data)
+		@var_name = cdo.showname(input: @sel_data).first.to_s
+		@var_std_name = cdo.showstdname(input: @sel_data).first.to_s
 
 		###########################################################
 
-		date = Cdo.showdate(input: @sel_data)
+		date = cdo.showdate(input: @sel_data)
 		@date = date.first.split(" ").to_a
 		@start_date_utc = DateTime.parse(@date.first)
 
@@ -149,9 +151,9 @@ class NexnasaController < ApplicationController
 		copy_cbar =	system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
 		#########################################################
 
-		@sel_data_ctl = Cdo.gradsdes(input: @sel_data)
-		ntime = Cdo.ntime(input: @sel_data)[0]
-		stdname = Cdo.showstdname(input: @sel_data)[0]
+		@sel_data_ctl = cdo.gradsdes(input: @sel_data)
+		ntime = cdo.ntime(input: @sel_data)[0]
+		stdname = cdo.showstdname(input: @sel_data)[0]
 		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_mean.gs", "w")
@@ -338,7 +340,7 @@ class NexnasaController < ApplicationController
 		grads_gs.close
 
 		################ generate csv file ####################
-		@sel_data_griddes = Cdo.griddes(input: @sel_data)
+		@sel_data_griddes = cdo.griddes(input: @sel_data)
 		@gridsize = @sel_data_griddes[4].split(" ")[-1].to_i
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_csv.gs", "w")
 		grads_gs.puts("reinit")

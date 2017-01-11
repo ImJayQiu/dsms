@@ -4,8 +4,9 @@
 #include NumRu
 
 require "thread"
-require 'thwait'
+require "thwait"
 require "cdo"
+
 #require "gsl"
 #require "rinruby"
 
@@ -29,7 +30,8 @@ class Cmip5sController < ApplicationController
 
 	def daily_analysis
 
-		cdo = Cdo.new
+		cdo_run = Cdo.new(debug: true, logging: true, logFile: 'log/cdo_commands_cmip5.log')
+
 		################ date range ##################################
 
 		@sdate = params[:s_date].first.to_date
@@ -116,10 +118,11 @@ class Cmip5sController < ApplicationController
 
 		#################### CDO operations  #########################
 
-		paramater = cdo.showname(input: file)
+
+		paramater = cdo_run.showname(input: file)
 
 		############ cut file by selected location ###################
-		#sel_lonlat = cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
+		#sel_lonlat = cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
 		###############################################################
 
 		############# cut file by selected date range ##################
@@ -135,19 +138,19 @@ class Cmip5sController < ApplicationController
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
-		@sel_data = cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
+		@sel_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
 		##############################################################
 
 
 		################ Data from CDO ###########################
 
-		@dataset_infon = cdo.info(input: @sel_data)
-		@var_name = cdo.showname(input: @sel_data).first.to_s
-		@var_std_name = cdo.showstdname(input: @sel_data).first.to_s
+		@dataset_infon = cdo_run.info(input: @sel_data)
+		@var_name = cdo_run.showname(input: @sel_data).first.to_s
+		@var_std_name = cdo_run.showstdname(input: @sel_data).first.to_s
 
 		###########################################################
 
-		date = cdo.showdate(input: @sel_data)
+		date = cdo_run.showdate(input: @sel_data)
 		@date = date.first.split(" ").to_a
 
 		#group max min mean
@@ -173,15 +176,15 @@ class Cmip5sController < ApplicationController
 			f.series(name: "Min", color: 'lightblue', data: @min_set, pointStart: @start_date_utc, pointInterval: 1.day)
 		end
 
-		@sel_file_path = root_path+@cdo_output_path.to_s
+		@sel_file_path = root_path+@cdo_run.output_path.to_s
 
 		##### to copy cbar.gs to output folder  #################
 		copy_cbar =	system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
 		#########################################################
 
-		@sel_data_ctl = cdo.gradsdes(input: @sel_data)
-		ntime = cdo.ntime(input: @sel_data)[0]
-		stdname = cdo.showstdname(input: @sel_data)[0]
+		@sel_data_ctl = cdo_run.gradsdes(input: @sel_data)
+		ntime = cdo_run.ntime(input: @sel_data)[0]
+		stdname = cdo_run.showstdname(input: @sel_data)[0]
 		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_mean.gs", "w")
@@ -388,7 +391,7 @@ class Cmip5sController < ApplicationController
 		################# plot grid done ############################
 
 		############### generate csv file ################
-		@sel_data_griddes = cdo.griddes(input: @sel_data)
+		@sel_data_griddes = cdo_run.griddes(input: @sel_data)
 		@gridsize = @sel_data_griddes[4].split(" ")[-1].to_i
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_csv.gs", "w")
 		grads_gs.puts("reinit")
@@ -501,35 +504,35 @@ class Cmip5sController < ApplicationController
 
 		output_file_name = "#{var}_#{mip}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
-		@cdo_output_path = output_dir.to_s + "/" + output_file_name
+		@cdo_run.output_path = output_dir.to_s + "/" + output_file_name
 
 		############# cut file by selected date range ##################
-		cdo_threads=[]
+		cdo_run.threads=[]
 
-		cdo_threads << Thread.new{
-			@f1_data = cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@cdo_output_path}_#{@m1}.nc", options:'-f nc4') rescue nil  
-			f1_ctl = cdo.gradsdes(input: @f1_data, output: f1_ctl, options:'-f ctl') rescue nil
+		cdo_run.threads << Thread.new{
+			@f1_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@cdo_run.output_path}_#{@m1}.nc", options:'-f nc4') rescue nil  
+			f1_ctl = cdo_run.gradsdes(input: @f1_data, output: f1_ctl, options:'-f ctl') rescue nil
 		}
 
-		cdo_threads << Thread.new{
-			@f2_data = cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@cdo_output_path}_#{@m2}.nc", options:'-f nc4') rescue nil  
-			f2_ctl = cdo.gradsdes(input: @f2_data, output: f2_ctl, options:'-f ctl') rescue nil
+		cdo_run.threads << Thread.new{
+			@f2_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@cdo_run.output_path}_#{@m2}.nc", options:'-f nc4') rescue nil  
+			f2_ctl = cdo_run.gradsdes(input: @f2_data, output: f2_ctl, options:'-f ctl') rescue nil
 		}
 
-		cdo_threads << Thread.new{
-			@f3_data = cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@cdo_output_path}_#{@m3}.nc", options:'-f nc4') rescue nil 
-			f3_ctl = cdo.gradsdes(input: @f3_data, output: f3_ctl, options:'-f ctl') rescue nil
+		cdo_run.threads << Thread.new{
+			@f3_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@cdo_run.output_path}_#{@m3}.nc", options:'-f nc4') rescue nil 
+			f3_ctl = cdo_run.gradsdes(input: @f3_data, output: f3_ctl, options:'-f ctl') rescue nil
 		}
 
-		cdo_threads << Thread.new{
-			@f4_data = cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@cdo_output_path}_#{@m4}.nc", options:'-f nc4') rescue nil  
-			f4_ctl = cdo.gradsdes(input: @f4_data, output: f4_ctl, options:'-f ctl') rescue nil
+		cdo_run.threads << Thread.new{
+			@f4_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@cdo_run.output_path}_#{@m4}.nc", options:'-f nc4') rescue nil  
+			f4_ctl = cdo_run.gradsdes(input: @f4_data, output: f4_ctl, options:'-f ctl') rescue nil
 		}
 
-		cdo_threads.each do |ct|
+		cdo_run.threads.each do |ct|
 			ct.join
 		end
-		ThreadsWait.all_waits(*cdo_threads)
+		ThreadsWait.all_waits(*cdo_run.threads)
 		##############################################################
 		#gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
@@ -544,11 +547,11 @@ class Cmip5sController < ApplicationController
 				m_title = @m4.to_s
 			end
 
-			mdate = cdo.showdate(input: data) rescue nil
+			mdate = cdo_run.showdate(input: data) rescue nil
 			date = mdate.first.split(" ").to_a rescue nil
-			ntime = cdo.ntime(input: data)[0] rescue nil
-			stdname = cdo.showstdname(input: data)[0] rescue nil
-			#data_ctl = cdo.gradsdes(input: data) rescue nil
+			ntime = cdo_run.ntime(input: data)[0] rescue nil
+			stdname = cdo_run.showstdname(input: data)[0] rescue nil
+			#data_ctl = cdo_run.gradsdes(input: data) rescue nil
 			#gs_name_m = "lon#{s_lon.to_i}_#{e_lon.to_i}lat#{s_lat.to_i}_#{e_lat.to_i}_#{date[0]}#{date[-1]}#{i+1}"
 			gs_name_m = "lon#{s_lon.to_i}_#{e_lon.to_i}_lat#{s_lat.to_i}_#{e_lat.to_i}_#{date[0].to_date.strftime('%Y%m%d') rescue nil}_#{date[-1].to_date.strftime('%Y%m%d') rescue nil}_#{i+1}"
 
