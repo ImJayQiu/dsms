@@ -3,9 +3,9 @@
 #require "numru/gphys"
 #include NumRu
 
-require "thread"
-require "thwait"
-require "cdo"
+require 'thread'
+require 'thwait'
+require 'cdo'
 
 #require "gsl"
 #require "rinruby"
@@ -120,6 +120,7 @@ class Cmip5sController < ApplicationController
 
 
 		paramater = cdo_run.showname(input: file)
+		#paramater = Cdo.showname(input: file)
 
 		############ cut file by selected location ###################
 		#sel_lonlat = cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file, output: sel_lonlat, options: '-f nc4')
