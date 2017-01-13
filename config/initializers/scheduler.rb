@@ -50,7 +50,7 @@ def ecmwf_check
 end
 
 
-scheduler.every '3600s' do
+scheduler.every '600s' do
 	mkdir()
 end
 
