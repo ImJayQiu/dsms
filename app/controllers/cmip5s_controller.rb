@@ -31,6 +31,7 @@ class Cmip5sController < ApplicationController
 	def daily_analysis
 
 		cdo_run = Cdo.new(debug: true)
+		#cdo_run = Cdo
 
 		################ date range ##################################
 

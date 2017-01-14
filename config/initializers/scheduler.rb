@@ -11,6 +11,7 @@ scheduler = Rufus::Scheduler.singleton
 @ecmwf_daily_dir = "#{@ecmwf_dir}/#{@year}/#{@month}/#{@day}"
 
 #@ens = ["R2D", "R2Y"] different levtype
+
 @ens = ["R1D", "R1E", "R1H", "R1L", "R2P", "R2U"]
 
 
@@ -29,7 +30,7 @@ end
 
 def ecmwf_check 
 
-	@ens.to_a.each do |ens|
+	@ens.each do |ens|
 
 		# 1.cp files of the day
 		%x[cp #{@ecmwf_source_dir}/#{ens}#{@month}#{@day}* #{@ecmwf_daily_dir}/#{ens}] 
@@ -45,16 +46,17 @@ def ecmwf_check
 
 		# 5.extract var
 		%x[bash -ic 'cdo -f nc4 splitvar #{@ecmwf_daily_dir}/#{ens}/all.nc #{@ecmwf_daily_dir}/#{ens}/var']
+
 	end
 
 end
 
 
-scheduler.every '600s' do
+scheduler.every '10s' do
 	mkdir()
 end
 
-scheduler.every '1800s' do
+scheduler.every '1200s' do
 	ecmwf_check()
 end
 

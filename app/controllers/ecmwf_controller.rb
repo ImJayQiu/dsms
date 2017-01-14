@@ -6,6 +6,7 @@ class EcmwfController < ApplicationController
 
 	def analysis 
 
+		#cdo_run = Cdo
 		cdo_run = Cdo.new(debug: true)
 
 		################ date ##################################
