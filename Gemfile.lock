@@ -200,7 +200,7 @@ DEPENDENCIES
   byebug
   cairo (~> 1.14.1)
   cancan
-  cdo (~> 1.2.7)
+  cdo
   chartkick
   coffee-rails (~> 4.1.0)
   d3-rails (~> 3.5.5)
