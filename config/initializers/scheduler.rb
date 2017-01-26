@@ -4,8 +4,6 @@ require 'rufus-scheduler'
 
 scheduler = Rufus::Scheduler.s
 
-@ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
-@ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
 
 #@ens = ["R2D", "R2Y"] different levtype
 
@@ -14,11 +12,13 @@ scheduler = Rufus::Scheduler.s
 
 def mkdir
 
+	ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
+
 	year = Time.now.year    # catch year 
 	month = Time.now.strftime("%m") # catch month 
 	day = Time.now.strftime("%d")   # catch day
 	time = Time.now         # catch day
-	ecmwf_daily_dir = "#{@ecmwf_dir}/#{year}/#{month}/#{day}"
+	ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
 
 
 	# mkdir if folder not exist
@@ -33,16 +33,22 @@ end
 
 def ecmwf_check
 
+	#### The original files location ##########
+	ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
+	
+	#### Where CDAAS normalize and save the files
+	ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
+
 	year = Time.now.year    # catch year 
 	month = Time.now.strftime("%m") # catch month 
 	day = Time.now.strftime("%d")   # catch day
 	time = Time.now         # catch day
-	ecmwf_daily_dir = "#{@ecmwf_dir}/#{year}/#{month}/#{day}"
+	ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
 
 	@ens.each do |ens|
 		Thread.new{
 			# 1.cp files of the day
-			system "cp #{@ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
+			system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
 
 			# 2.rm temp files
 			system "rm #{ecmwf_daily_dir}/#{ens}/*.temp"
@@ -59,9 +65,11 @@ def ecmwf_check
 	end
 end
 
+
 scheduler.every '20s' do
 	mkdir
 end
+
 
 scheduler.every '60m' do
 	ecmwf_check
