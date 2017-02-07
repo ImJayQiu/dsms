@@ -4,6 +4,9 @@ class EcmwfController < ApplicationController
 
 	end
 
+	def debug 
+	end
+
 	def analysis 
 
 		#cdo_run = Cdo
@@ -75,8 +78,8 @@ class EcmwfController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set mpdset hires")
 		@timestamps.first.split(" ").each_with_index do |t,i|
-			grads_gs.puts("draw title ECMWF #{var}|#{t}")
-				grads_gs.puts("draw string 2.8 0.2 Forcasting Date: #{t} By CDAAS RIMES.INT #{Time.now.year}")
+			grads_gs.puts("draw title ECMWF #{t} | #{var}")
+			grads_gs.puts("draw string 2.8 0.2 Forcasting Date: #{t} By CDAAS RIMES.INT #{Time.now.year}")
 			grads_gs.puts("set t #{i+1} " )
 			grads_gs.puts("d #{var}" )
 			grads_gs.puts("printim #{lon_lat}-#{i+1}.png white")
@@ -93,6 +96,57 @@ class EcmwfController < ApplicationController
 
 
 	end
+
+	def debug_result 
+
+		@ens = ['R1D', 'R1E', 'R1H', 'R1L', 'R2P', 'R2U', 'R2D', 'R2Y']
+
+		@date = params[:date].first.to_date
+
+		#### The original files location ##########
+		ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
+
+		#### Where CDAAS normalize and save the files
+		ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
+
+
+		#year = @date.year    # catch year 
+		year = @date.strftime("%Y") # catch year 
+		month = @date.strftime("%m") # catch month 
+		day = @date.strftime("%d")   # catch day
+		#time = Time.now         # catch day
+		ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
+
+
+		# mkdir if folder not exist
+		FileUtils::mkdir_p ecmwf_daily_dir unless File.directory?(ecmwf_daily_dir)
+
+		# mkdir 
+		@ens.each do |ens|
+			FileUtils::mkdir_p ecmwf_daily_dir + "/" + ens unless File.directory?(ecmwf_daily_dir + "/" + ens)
+		end
+
+
+		@ens.each do |ens|
+			Thread.new{
+				# 1.cp files of the day
+				system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
+
+				# 2.rm temp files
+				system "rm #{ecmwf_daily_dir}/#{ens}/*.temp"
+
+				# 3.merge files
+				system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}* #{ecmwf_daily_dir}/#{ens}/all.grib"
+
+				# 4.grib to nc
+				system "grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/all.nc #{ecmwf_daily_dir}/#{ens}/all.grib"
+
+				# 5.extract var
+				system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/all.nc #{ecmwf_daily_dir}/#{ens}/var"
+			}
+		end
+	end
+
 
 
 end

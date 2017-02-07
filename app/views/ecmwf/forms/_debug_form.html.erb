@@ -1,0 +1,44 @@
+<table>
+	<thead>
+		<tr>
+			<th>1.Select Variable Name</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			all
+		</td>
+	</tr>
+</table>
+
+
+<table>
+	<thead>
+		<tr>
+			<th>2.Select Forcasting Type</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>
+			all
+		</td>
+	</tr>
+</table>
+
+<%= render "layouts/partials/datepicker"%>
+
+<table>
+	<thead>
+		<tr>
+			<th>3.Select Date</th>
+		</tr>
+	</thead>
+
+	<tr>
+		<td>
+			<%= text_field :date, params[:date], id: "sel_date", value: Date.yesterday.to_s, required: true rescue nil %>
+		</td>
+	</tr>
+</table>
+
+

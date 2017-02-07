@@ -1,15 +1,13 @@
 Rails.application.routes.draw do
 
 
-  namespace :ecmwf do
-    resources :vars
-  end
 	namespace :ecmwf do
+		resources :vars
 		resources :types
-	end
-	resources :ecmwf do
 		collection do
 			get 'index'
+			get 'debug'
+			post 'debug_result'
 			post 'analysis'
 		end
 	end
