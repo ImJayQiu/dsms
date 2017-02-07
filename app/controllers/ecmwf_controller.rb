@@ -22,15 +22,15 @@ class EcmwfController < ApplicationController
 		s_lon = params[:s_lon].first.to_f
 		e_lon = params[:e_lon].first.to_f
 
-		lon_lat = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+		@lon_lat = lon_lat = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
 		##############################################################
 
 		############# paramaters  ################################
-		var = params[:part1].first.to_s
+		@var = var = params[:part1].first.to_s
 		mip = 'ECMWF' 
 		#model = params[:part3].first.to_s
-		type = params[:part4].first.to_s
+		@type = type = params[:part4].first.to_s
 
 		###########################################
 

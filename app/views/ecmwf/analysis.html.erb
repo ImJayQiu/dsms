@@ -16,12 +16,12 @@
 		<tr>
 			<% if can? :download, :nc %>
 			<td>
-				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
+				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", download: "#{@type}_#{@date}_#{@var}_#{@lon_lat}.nc", method: :get %>
 			</td>
 			<% end # if can? :download, :nc %>
 			<% if can? :download, :ctl %>
 			<td>
-				<%#= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
+				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
 			</td>
 			<% end # if can? :download, :ctl %>
 			<% if can? :download, :csv %>
