@@ -4,6 +4,9 @@ Rails.application.routes.draw do
 	namespace :ecmwf do
 		resources :vars
 		resources :types
+	end
+
+	resources :ecmwfs do
 		collection do
 			get 'index'
 			get 'debug'
