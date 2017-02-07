@@ -126,9 +126,11 @@ class EcmwfController < ApplicationController
 			FileUtils::mkdir_p ecmwf_daily_dir + "/" + ens unless File.directory?(ecmwf_daily_dir + "/" + ens)
 		end
 
+		# Thread tasks start
+		@tasks = []
 
 		@ens.each do |ens|
-			Thread.new{
+			@tasks << Thread.new{
 				# 1.cp files of the day
 				system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
 
@@ -145,6 +147,11 @@ class EcmwfController < ApplicationController
 				system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/all.nc #{ecmwf_daily_dir}/#{ens}/var"
 			}
 		end
+
+		@tasks.each do |t|
+			t.join
+		end
+
 	end
 
 
