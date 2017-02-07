@@ -11,25 +11,22 @@
 	</tr>
 </table>
 <p/>
-	<table>
-		<tbody>
-		<tr>
-			<% if can? :download, :nc %>
+<table>
+	<tbody>
+	<tr>
+		<% if can? :download, :nc %>
 			<td>
-				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", download: "#{@type}_#{@date}_#{@var}_#{@lon_lat}.nc", method: :get %>
-			</td>
-			<% end # if can? :download, :nc %>
-			<% if can? :download, :ctl %>
+			<%= link_to "Download NC", root_path+@cdo_output_path.to_s+".nc", download: "#{@type}_#{@date}_#{@var}_#{@lon_lat}.nc" %>
+		</td>
+		<% end # if can? :download, :nc %>
+		<% if can? :download, :ctl %>
 			<td>
-				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
-			</td>
-			<% end # if can? :download, :ctl %>
-			<% if can? :download, :csv %>
-			<td>
-				<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
-			</td>
+			<%= link_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", download: "#{@type}_#{@date}_#{@var}_#{@lon_lat}.ctl" %>
+		</td>
+		<% end # if can? :download, :ctl %>
+		<% if can? :download, :csv %>
 			<% end # if can? :download, :csv %>
-		</tr>
-		</tbody>
-	</table>
+	</tr>
+	</tbody>
+</table>
 
