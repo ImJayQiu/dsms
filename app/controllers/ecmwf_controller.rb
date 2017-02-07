@@ -136,6 +136,7 @@ class EcmwfController < ApplicationController
 
 				# 2.rm temp files
 				system "rm #{ecmwf_daily_dir}/#{ens}/*.temp"
+				system "rm #{ecmwf_daily_dir}/#{ens}/*.tmp"
 
 				# 3.merge files
 				system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}* #{ecmwf_daily_dir}/#{ens}/all.grib"
