@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 		resources :types
 	end
 
-	resources :ecmwfs do
+	resources :ecmwf do
 		collection do
 			get 'index'
 			get 'debug'
