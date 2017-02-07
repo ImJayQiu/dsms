@@ -58,7 +58,7 @@ class EcmwfController < ApplicationController
 
 		@cdo_output_path = output_dir.to_s + "/" + lon_lat 
 
-		@sel_data = cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: data_path, output: "public/#{@cdo_output_path}")
+		@sel_data = cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: data_path, output: "public/#{@cdo_output_path}.nc")
 		#########################################
 
 		@data = cdo_run.sinfon(input: @sel_data)
@@ -76,8 +76,8 @@ class EcmwfController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set mpdset hires")
 		@timestamps.first.split(" ").each_with_index do |t,i|
-			grads_gs.puts("draw title This is title bla bla bla")
-			grads_gs.puts("draw string 2.8 0.2 Forcasting Date: #{t} By CDAAS RIMES.INT #{Time.now.year}")
+			grads_gs.puts("draw title ECMWF #{var}|#{t}")
+				grads_gs.puts("draw string 2.8 0.2 Forcasting Date: #{t} By CDAAS RIMES.INT #{Time.now.year}")
 			grads_gs.puts("set t #{i+1} " )
 			grads_gs.puts("d #{var}" )
 			grads_gs.puts("printim #{lon_lat}-#{i+1}.png white")
