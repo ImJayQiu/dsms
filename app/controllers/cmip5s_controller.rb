@@ -414,7 +414,7 @@ class Cmip5sController < ApplicationController
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
 		@plot_grid_cmd = system("cd / && #{@go_dir} && #{@plot_grid} ") 
 		if can? :download, :csv
-			#@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
+			@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
 		end
 	end
 
