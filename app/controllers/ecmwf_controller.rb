@@ -71,7 +71,6 @@ class EcmwfController < ApplicationController
 		grads_gs = File.new("public/#{@cdo_output_path}.gs", "w")
 		grads_gs.puts("reinit")
 		grads_gs.puts("open #{lon_lat}.ctl")
-		grads_gs.puts("set grads off")
 		grads_gs.puts("draw title ECMWF #{type} #{var}")
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set mpdset hires")
@@ -82,6 +81,7 @@ class EcmwfController < ApplicationController
 			grads_gs.puts("d #{var}" )
 			grads_gs.puts("printim #{lon_lat}-#{i+1}.png white")
 			grads_gs.puts("clear")
+			grads_gs.puts("set grads off")
 		end
 		grads_gs.puts("quit")
 		grads_gs.close
