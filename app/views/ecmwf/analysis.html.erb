@@ -30,6 +30,6 @@
 	</tbody>
 </table>
 
-<% Dir["#{@cdo_output_path}/*"].each do |f| %>
+<% Dir["#{@sys_output_dir}/*"].each do |file| %>
 	<li><%= link_to 'Save', file[/\/.*/] %></li>
 <% end %>

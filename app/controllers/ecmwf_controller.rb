@@ -16,7 +16,7 @@ class EcmwfController < ApplicationController
 
 		@ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
 		@date = params[:date].first.to_date
-		date_folder = @date.strftime("/%Y/%m/%d/").to_s
+		date_folder = @date.strftime("%Y/%m/%d").to_s
 
 		############# Selected location  #############################
 
@@ -49,12 +49,12 @@ class EcmwfController < ApplicationController
 		### output folder and files name setting
 		output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{date_folder}/#{type}/#{var}/#{lon_lat}"
 		sys_output_pub = Rails.root.join("public")
-		sys_output_dir = Rails.root.join("public", output_dir)
+		@sys_output_dir = Rails.root.join("public", output_dir)
 
 		##########################################
 
 		### create output folder in public folder
-		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
+		FileUtils::mkdir_p @sys_output_dir.to_s unless File.directory?(@sys_output_dir)
 		##########################################
 
 		### cut data by selected lat lon 
@@ -89,7 +89,7 @@ class EcmwfController < ApplicationController
 		grads_gs.puts("quit")
 		grads_gs.close
 
-		@go_dir = "cd #{sys_output_dir.to_s}"
+		@go_dir = "cd #{@sys_output_dir.to_s}"
 		@plot_maps = "grads -lbc 'exec #{lon_lat}.gs'"
 		@plot_maps_cmd = system("cd / && #{@go_dir} && #{@plot_maps} ") 
 		@ani_maps_cmd = system("cd / && #{@go_dir} && convert -delay 100 '#{lon_lat}-%d.png[0-999]' #{lon_lat}_all.gif ") 
