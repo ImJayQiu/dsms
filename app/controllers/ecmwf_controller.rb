@@ -42,7 +42,7 @@ class EcmwfController < ApplicationController
 		###########################################
 
 		### location of raw data
-		folder_path = @ecmwf_dir.to_s + date_folder + type + '/' 
+		folder_path = @ecmwf_dir.to_s + '/' + date_folder + '/' + type + '/' 
 		data_path = folder_path + @data_file.to_s
 		###########################################
 
