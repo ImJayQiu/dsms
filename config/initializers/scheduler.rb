@@ -86,15 +86,15 @@ def cp_sesame
 
 end
 
-scheduler.every '20s' do
+scheduler.every '3h' do
 	mkdir
 end
 
-scheduler.every '60m' do
+scheduler.every '1h' do
 	ecmwf_check
 end
 
-scheduler.every '20s' do
+scheduler.every '3h' do
 	cp_sesame
 end
 
