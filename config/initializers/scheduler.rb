@@ -35,7 +35,7 @@ def ecmwf_check
 
 	#### The original files location ##########
 	ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
-	
+
 	#### Where CDAAS normalize and save the files
 	ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
 
@@ -66,16 +66,37 @@ def ecmwf_check
 	end
 end
 
+def cp_sesame
+
+	#source dir
+	ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
+
+	year = Time.now.year    # catch year 
+	month = Time.now.strftime("%m") # catch month 
+	day = Time.now.strftime("%d")   # catch day
+	time = Time.now         # catch day
+
+	ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
+
+	sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
+
+	FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
+	system "cp #{ecmwf_daily_dir}/R1D/all.nc #{sesame_dir}"
+	system "mv  #{sesame_dir}/all.nc #{sesame_dir}/#{day}#{month}#{year}.nc"
+
+end
 
 scheduler.every '20s' do
 	mkdir
 end
 
-
 scheduler.every '60m' do
 	ecmwf_check
 end
 
+scheduler.every '20s' do
+	cp_sesame
+end
 
 scheduler.stderr = File.open('log/scheduler.log', 'ab')
 
