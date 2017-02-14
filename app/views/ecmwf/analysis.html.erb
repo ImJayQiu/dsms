@@ -16,20 +16,20 @@
 	<tr>
 		<% if can? :download, :nc %>
 			<td>
-			<%= link_to "Download NC", @sys_output_dir+@output_name".nc", download: "#{@date}_#{@type}_#{@var}_#{@lon_lat}.nc" %>
-			<%= button_to "Download NC", @sys_output_dir+@output_name".nc", method: :get %>
+			<%= link_to "Download NC", @sys_output_dir+@output_name+".nc", download: "#{@date}_#{@type}_#{@var}_#{@lon_lat}.nc" %>
+			<%= button_to "Download NC", @sys_output_dir+@output_name+".nc", method: :get %>
 		</td>
 		<% end # if can? :download, :nc %>
 		<% if can? :download, :ctl %>
 			<td>
-			<%= link_to "Download CTL", @sys_output_dir+@output_name".ctl", download: "#{@date}_#{@type}_#{@var}_#{@lon_lat}.ctl" %>
-			<%= button_to "Download CTL", @sys_output_dir+@output_name".ctl", method: :get %>
+			<%= link_to "Download CTL", @sys_output_dir+@output_name+".ctl", download: "#{@date}_#{@type}_#{@var}_#{@lon_lat}.ctl" %>
+			<%= button_to "Download CTL", @sys_output_dir+@output_name+".ctl", method: :get %>
 		</td>
 		<% end # if can? :download, :ctl %>
 		<% if can? :download, :csv %>
 			<td>
-			<%= link_to "Download CSV", @sys_output_dir+@output_name".csv", download: "#{@date}_#{@type}_#{@var}_#{@lon_lat}.csv" %>
-			<%= button_to "Download CSV", @sys_output_dir+@output_name".csv", method: :get %>
+			<%= link_to "Download CSV", @sys_output_dir+@output_name+".csv", download: "#{@date}_#{@type}_#{@var}_#{@lon_lat}.csv" %>
+			<%= button_to "Download CSV", @sys_output_dir+@output_name+".csv", method: :get %>
 				</td>
 			<% end # if can? :download, :csv %>
 	</tr>
