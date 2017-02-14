@@ -50,7 +50,7 @@ class EcmwfController < ApplicationController
 		output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{date_folder}/#{type}/#{var}/#{lon_lat}/"
 		sys_output_pub = Rails.root.join("public")
 		@sys_output_dir = Rails.root.join("public", output_dir)
-		@cdaas_output_dir = 'public/' + output_dir.to_s
+		@cdaas_output_dir = output_dir.to_s
 		##########################################
 
 		### create output folder in public folder
