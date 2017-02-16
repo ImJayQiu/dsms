@@ -86,6 +86,21 @@ def cp_sesame
 
 end
 
+def clean
+
+	folder = Rails.root.join('public','tmp_nc')
+	files = Dir["#{folder}/**/**/**/**/**/**/*"]
+
+	files.each do |f|
+		if File.mtime(f) < 48.hours.ago 
+			File.delete(f) 
+		end 
+	end
+
+end
+
+#################### tasks list  ##################################################
+
 scheduler.every '3h' do
 	mkdir
 end
@@ -96,6 +111,10 @@ end
 
 scheduler.every '3h' do
 	cp_sesame
+end
+
+scheduler.every '6h' do
+	clean
 end
 
 scheduler.stderr = File.open('log/scheduler.log', 'ab')

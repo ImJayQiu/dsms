@@ -19,7 +19,8 @@
 				<% end %>
 
 					<% if user_signed_in? %>
-						<li><%= link_to "CMIP5 Daily Analysis", daily_cmip5s_path %></li>
+						<li><%= link_to "ECMWF Forcast", ecmwf_index_path, method: :get %></li>
+					<li><%= link_to "CMIP5 Daily Analysis", daily_cmip5s_path %></li>
 					<%if can? :analyze, :cordex %>
 						<li><%= link_to "CORDEX Daily Analysis", daily_cordex_index_path, method: :get %></li>
 				<% end %>
