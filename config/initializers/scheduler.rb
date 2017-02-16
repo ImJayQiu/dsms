@@ -109,7 +109,7 @@ scheduler.every '1h' do
 	ecmwf_check
 end
 
-scheduler.every '3h' do
+scheduler.every '190m' do
 	cp_sesame
 end
 
