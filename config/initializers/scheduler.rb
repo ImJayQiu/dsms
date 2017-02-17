@@ -89,10 +89,10 @@ end
 def clean
 
 	folder = Rails.root.join('public','tmp_nc')
-	files = Dir["#{folder}/**/**/**/**/**/**/*"]
+	files = Dir["#{folder}/**/"]
 
 	files.each do |f|
-		if File.mtime(f) < 48.hours.ago 
+		if File.mtime(f) < Time.now - 2.days 
 			File.delete(f) 
 		end 
 	end
@@ -105,15 +105,12 @@ scheduler.every '3h' do
 	mkdir
 end
 
-scheduler.every '1h' do
+scheduler.every '2h' do
 	ecmwf_check
-end
-
-scheduler.every '190m' do
 	cp_sesame
 end
 
-scheduler.every '6h' do
+scheduler.every '5m' do
 	clean
 end
 
