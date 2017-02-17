@@ -89,13 +89,14 @@ end
 def clean
 
 	folder = Rails.root.join('public','tmp_nc')
-	files = Dir["#{folder}/**/"]
+	files = Dir["#{folder}/**/*.*"]
 
 	files.each do |f|
-		if File.mtime(f) < Time.now - 2.days 
+		if File.mtime(f) < 2.days.ago 
 			File.delete(f) 
 		end 
 	end
+	Dir["#{folder}/**/**"].reverse_each { |d| Dir.rmdir d if (Dir.entries(d) - %w[ . .. ]).empty? }
 
 end
 
