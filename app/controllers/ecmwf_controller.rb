@@ -96,6 +96,7 @@ class EcmwfController < ApplicationController
 
 	end
 
+
 	def debug_result 
 
 		@ens = ['R1D', 'R1E', 'R1H', 'R1L', 'R2P', 'R2U', 'R2D', 'R2Y']
@@ -113,7 +114,7 @@ class EcmwfController < ApplicationController
 		year = @date.strftime("%Y") # catch year 
 		month = @date.strftime("%m") # catch month 
 		day = @date.strftime("%d")   # catch day
-		#time = Time.now         # catch day
+
 		ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
 
 
@@ -151,6 +152,16 @@ class EcmwfController < ApplicationController
 		@tasks.each do |t|
 			t.join
 		end
+
+
+		########### cp R1D to SESAME  ########################################
+
+		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
+
+		FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
+		system "cp #{ecmwf_daily_dir}/R1D/all.nc #{sesame_dir}"
+		system "mv  #{sesame_dir}/all.nc #{sesame_dir}/#{day}#{month}#{year}.nc"
+
 
 	end
 

@@ -92,7 +92,7 @@ def clean
 	files = Dir["#{folder}/**/*.*"]
 
 	files.each do |f|
-		if File.mtime(f) < 2.days.ago 
+		if File.mtime(f) < 4.days.ago 
 			File.delete(f) 
 		end 
 	end
@@ -111,7 +111,7 @@ scheduler.every '2h' do
 	cp_sesame
 end
 
-scheduler.every '5m' do
+scheduler.every '6h' do
 	clean
 end
 
