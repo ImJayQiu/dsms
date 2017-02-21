@@ -130,7 +130,11 @@ class EcmwfController < ApplicationController
 		@tasks = []
 
 		@ens.each do |ens|
+
 			@tasks << Thread.new{
+
+				c_file = ens.to_s + year.to_s + month.to_s + day.to_s 
+
 				# 1.cp files of the day
 				system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
 
@@ -139,14 +143,25 @@ class EcmwfController < ApplicationController
 				system "rm #{ecmwf_daily_dir}/#{ens}/*.tmp"
 
 				# 3.merge files
-				system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}* #{ecmwf_daily_dir}/#{ens}/all.grib"
+				system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}* #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
 
 				# 4.grib to nc
-				system "grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/all.nc #{ecmwf_daily_dir}/#{ens}/all.grib"
+				system "grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
 
 				# 5.extract var
-				system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/all.nc #{ecmwf_daily_dir}/#{ens}/var"
-			}
+				system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/var"
+
+				########### cp R1D to SESAME  ########################################
+				if ens == "R1D"
+
+					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
+
+					FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
+					system "cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}"
+					system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc"
+
+				end 
+			} # Thread end 
 		end
 
 		@tasks.each do |t|
@@ -154,17 +169,7 @@ class EcmwfController < ApplicationController
 		end
 
 
-		########### cp R1D to SESAME  ########################################
-
-		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
-
-		FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
-		system "cp #{ecmwf_daily_dir}/R1D/all.nc #{sesame_dir}"
-		system "mv  #{sesame_dir}/all.nc #{sesame_dir}/#{day}#{month}#{year}.nc"
-
-
 	end
-
 
 
 end
