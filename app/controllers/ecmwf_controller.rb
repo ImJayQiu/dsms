@@ -154,7 +154,7 @@ class EcmwfController < ApplicationController
 
 				########### cp R1D to SESAME  ########################################
 
-				if ens == "R1D".to_s
+				if ens.to_s == "R1D".to_s
 
 					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
 
