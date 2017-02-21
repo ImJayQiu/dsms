@@ -134,6 +134,8 @@ class EcmwfController < ApplicationController
 			@tasks << Thread.new{
 
 				c_file = ens.to_s + year.to_s + month.to_s + day.to_s 
+				# initial
+				system "rm #{ecmwf_daily_dir}/#{ens}/*"
 
 				# 1.cp files of the day
 				system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
@@ -157,7 +159,11 @@ class EcmwfController < ApplicationController
 					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
 
 					FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
+
+					system "rm #{sesame_dir}/*"
+
 					system "cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}"
+
 					system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc"
 
 				end 
