@@ -158,24 +158,21 @@ class EcmwfController < ApplicationController
 			} # Thread end 
 
 
-			if ens == 'R1D'
-
-				sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
-
-				FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
-
-				system "cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}" # copy file
-
-				system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # rename file
-
-			end 
-
-
 		end
 
 		@tasks.each do |t|
 			t.join
 		end
+
+		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
+
+		FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
+
+		system "cp #{ecmwf_daily_dir}/R1D/#{c_file}.nc #{sesame_dir}" # copy file
+
+		system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # rename file
+
+
 
 
 	end
