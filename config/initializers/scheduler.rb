@@ -44,9 +44,14 @@ def ecmwf_check
 	day = Time.now.strftime("%d")   # catch day
 	time = Time.now         # catch day
 	ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
-
+	
 	@ens.each do |ens|
+
 		Thread.new{
+
+			# combined file name 
+			c_file = ens.to_s + year.to_s + month.to_s + day.to_s 
+
 			# 1.cp files of the day
 			system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
 
@@ -55,13 +60,13 @@ def ecmwf_check
 			system "rm #{ecmwf_daily_dir}/#{ens}/*.tmp"
 
 			# 3.merge files
-			system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}* #{ecmwf_daily_dir}/#{ens}/all.grib"
+			system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}* #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
 
 			# 4.grib to nc
-			system "grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/all.nc #{ecmwf_daily_dir}/#{ens}/all.grib"
+			system "grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
 
 			# 5.extract var
-			system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/all.nc #{ecmwf_daily_dir}/#{ens}/var"
+			system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/var"
 		}
 	end
 end
@@ -80,9 +85,12 @@ def cp_sesame
 
 	sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
 
+	source_f = "R1D#{year}#{month}#{day}" # source file name 
+	des_f = "#{day}#{month}#{year}" # destination file name 
+
 	FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
-	system "cp #{ecmwf_daily_dir}/R1D/all.nc #{sesame_dir}"
-	system "mv  #{sesame_dir}/all.nc #{sesame_dir}/#{day}#{month}#{year}.nc"
+	system "cp #{ecmwf_daily_dir}/R1D/#{source_f}.nc #{sesame_dir}"
+	system "mv  #{sesame_dir}/#{source_f}.nc #{sesame_dir}/#{des_f}.nc"
 
 end
 
