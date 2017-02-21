@@ -129,9 +129,10 @@ class EcmwfController < ApplicationController
 		# Thread tasks start
 		@tasks = []
 
+		c_file = "#{year}#{month}#{day}#{ens}" 
+
 		@ens.each do |ens|
 
-			c_file = "#{year}#{month}#{day}#{ens}" 
 
 			@tasks << Thread.new{
 
