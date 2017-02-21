@@ -129,7 +129,7 @@ class EcmwfController < ApplicationController
 		# Thread tasks start
 		@tasks = []
 
-		@ens.each do |ens|
+		@ens.each_with_index do |ens,i|
 
 			@tasks << Thread.new{
 
@@ -154,7 +154,7 @@ class EcmwfController < ApplicationController
 
 				########### cp R1D to SESAME  ########################################
 
-				if ens.to_s == "R1D".to_s
+				if i == 0
 
 					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
 
