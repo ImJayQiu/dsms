@@ -153,8 +153,8 @@ class EcmwfController < ApplicationController
 
 
 				########### cp R1D to SESAME  ########################################
-				
-				if ens = "R1D"
+
+				if ens == "R1D".to_s
 
 					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
 
@@ -165,7 +165,9 @@ class EcmwfController < ApplicationController
 					system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # rename file
 
 				end 
+
 			} # Thread end 
+
 		end
 
 		@tasks.each do |t|
