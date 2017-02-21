@@ -151,8 +151,10 @@ class EcmwfController < ApplicationController
 				# 5.extract var
 				system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/var"
 
+
 				########### cp R1D to SESAME  ########################################
-				if ens == "R1D"
+				
+				if ens == 'R1D'
 
 					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
 
