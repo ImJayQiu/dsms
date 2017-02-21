@@ -129,13 +129,13 @@ class EcmwfController < ApplicationController
 		# Thread tasks start
 		@tasks = []
 
-		c_file = "#{year}#{month}#{day}#{ens}" 
 
 		@ens.each do |ens|
 
 
 			@tasks << Thread.new{
 
+				c_file = "#{year}#{month}#{day}#{ens}" 
 
 				# 1.cp files of the day
 				system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
@@ -165,11 +165,13 @@ class EcmwfController < ApplicationController
 			t.join
 		end
 
+		cc_file = "#{year}#{month}#{day}R1D" 
+
 		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
 
 		FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
 
-		system "cp #{ecmwf_daily_dir}/R1D/#{c_file}.nc #{sesame_dir}" # copy file
+		system "cp #{ecmwf_daily_dir}/R1D/#{cc_file}.nc #{sesame_dir}" # copy file
 
 		system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # rename file
 
