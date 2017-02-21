@@ -133,9 +133,7 @@ class EcmwfController < ApplicationController
 
 			@tasks << Thread.new{
 
-				c_file = ens.to_s + year.to_s + month.to_s + day.to_s 
-				# initial
-				system "rm #{ecmwf_daily_dir}/#{ens}/*"
+				c_file = "#{year}#{month}#{day}#{ens}" 
 
 				# 1.cp files of the day
 				system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
@@ -144,8 +142,8 @@ class EcmwfController < ApplicationController
 				system "rm #{ecmwf_daily_dir}/#{ens}/*.temp"
 				system "rm #{ecmwf_daily_dir}/#{ens}/*.tmp"
 
-				# 3.merge files
-				system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}* #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
+				# 3.merge files which named ens_m_d_y
+				system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
 
 				# 4.grib to nc
 				system "grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
@@ -156,15 +154,13 @@ class EcmwfController < ApplicationController
 				########### cp R1D to SESAME  ########################################
 				if ens == "R1D"
 
-					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
+					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
 
-					FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
+					FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
 
-					system "rm #{sesame_dir}/*"
+					system "cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}" # copy file
 
-					system "cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}"
-
-					system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc"
+					system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # rename file
 
 				end 
 			} # Thread end 
