@@ -131,9 +131,10 @@ class EcmwfController < ApplicationController
 
 		@ens.each do |ens|
 
+			c_file = "#{year}#{month}#{day}#{ens}" 
+
 			@tasks << Thread.new{
 
-				c_file = "#{year}#{month}#{day}#{ens}" 
 
 				# 1.cp files of the day
 				system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
