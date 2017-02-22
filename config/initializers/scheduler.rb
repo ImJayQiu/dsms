@@ -50,7 +50,7 @@ def ecmwf_check
 		Thread.new{
 
 			# combined file name 
-			c_file = ens.to_s + year.to_s + month.to_s + day.to_s 
+			c_file = year.to_s + month.to_s + day.to_s + ens.to_s 
 
 			# 1.cp files of the day
 			system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
@@ -86,6 +86,7 @@ def cp_sesame
 	sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
 
 	source_f = "#{year}#{month}#{day}R1D" # source file name 
+
 	des_f = "#{day}#{month}#{year}" # destination file name 
 
 	FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
