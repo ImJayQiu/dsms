@@ -121,7 +121,7 @@ class EcmwfController < ApplicationController
 		# mkdir if folder not exist
 		FileUtils::mkdir_p ecmwf_daily_dir unless File.directory?(ecmwf_daily_dir)
 
-		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
+		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}".to_s # folder location
 
 		FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
 
