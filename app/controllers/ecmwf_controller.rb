@@ -117,13 +117,8 @@ class EcmwfController < ApplicationController
 
 		ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
 
-
 		# mkdir if folder not exist
 		FileUtils::mkdir_p ecmwf_daily_dir unless File.directory?(ecmwf_daily_dir)
-
-		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}".to_s # folder location
-
-		FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
 
 
 		# mkdir 
@@ -158,6 +153,18 @@ class EcmwfController < ApplicationController
 				# 5.extract var
 				system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/var"
 
+				# 6. copy R1D to SESAME
+				if ens == 'R1D' 
+
+					sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}".to_s # 1. folder location
+
+					FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # 2. create folder
+
+					system "cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}" # 3. copy file
+
+					system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # 4. rename file
+
+				end
 
 				########### cp R1D to SESAME  ########################################
 
@@ -169,12 +176,6 @@ class EcmwfController < ApplicationController
 		@tasks.each do |t|
 			t.join
 		end
-
-		@cc_file = cc_file = "#{year}#{month}#{day}R1D" 
-
-		system "cp #{ecmwf_daily_dir}/R1D/#{cc_file}.nc #{sesame_dir}" # copy file
-
-		system "mv  #{sesame_dir}/#{cc_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # rename file
 
 
 	end
