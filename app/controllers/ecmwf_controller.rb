@@ -169,7 +169,7 @@ class EcmwfController < ApplicationController
 
 		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
 
-		FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
+		@mkdir = FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
 
 		system "cp #{ecmwf_daily_dir}/R1D/#{cc_file}.nc #{sesame_dir}" # copy file
 
