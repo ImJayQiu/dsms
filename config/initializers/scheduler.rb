@@ -85,7 +85,7 @@ def cp_sesame
 
 	sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}"
 
-	source_f = "R1D#{year}#{month}#{day}" # source file name 
+	source_f = "#{year}#{month}#{day}R1D" # source file name 
 	des_f = "#{day}#{month}#{year}" # destination file name 
 
 	FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir)
