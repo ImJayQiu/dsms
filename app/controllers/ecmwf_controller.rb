@@ -121,6 +121,11 @@ class EcmwfController < ApplicationController
 		# mkdir if folder not exist
 		FileUtils::mkdir_p ecmwf_daily_dir unless File.directory?(ecmwf_daily_dir)
 
+		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
+
+		FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
+
+
 		# mkdir 
 		@ens.each do |ens|
 			FileUtils::mkdir_p ecmwf_daily_dir + "/" + ens unless File.directory?(ecmwf_daily_dir + "/" + ens)
@@ -166,10 +171,6 @@ class EcmwfController < ApplicationController
 		end
 
 		@cc_file = cc_file = "#{year}#{month}#{day}R1D" 
-
-		sesame_dir = "/CLIMDATA/ECMWF/DET/SESAME/#{day}#{month}#{year}" # folder location
-
-		@mkdir = FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # create folder
 
 		system "cp #{ecmwf_daily_dir}/R1D/#{cc_file}.nc #{sesame_dir}" # copy file
 
