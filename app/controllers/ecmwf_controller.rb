@@ -173,9 +173,7 @@ class EcmwfController < ApplicationController
 
 		system "cp #{ecmwf_daily_dir}/R1D/#{cc_file}.nc #{sesame_dir}" # copy file
 
-		system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # rename file
-
-
+		system "mv  #{sesame_dir}/#{cc_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # rename file
 
 
 	end
