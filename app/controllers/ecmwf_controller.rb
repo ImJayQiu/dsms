@@ -104,8 +104,8 @@ class EcmwfController < ApplicationController
 		@date = params[:date].first.to_date
 
 		#### The original files location ##########
-		ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
-		#ecmwf_source_dir = '/CLIMDATA/ECMWF2016' 
+		#ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
+		ecmwf_source_dir = '/CLIMDATA/ECMWF2016' 
 
 		#### Where CDAAS normalize and save the files
 		ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
