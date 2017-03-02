@@ -128,31 +128,37 @@ class EcmwfController < ApplicationController
 		end
 
 		# Thread tasks start
-		@tasks = []
+		tasks = []
 
 
 		@ens.each do |ens|
 
 			c_file = "#{year}#{month}#{day}#{ens}" 
 
-			@tasks << Thread.new{
+			tasks << Thread.new{
 
 
 				# 1.cp files of the day
-				system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
+				#system "cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}"
+				`cp #{ecmwf_source_dir}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}`
 
 				# 2.rm temp files
-				system "rm #{ecmwf_daily_dir}/#{ens}/*.temp"
-				system "rm #{ecmwf_daily_dir}/#{ens}/*.tmp"
+				#system "rm #{ecmwf_daily_dir}/#{ens}/*.tmp"
+				#system "rm #{ecmwf_daily_dir}/#{ens}/*.temp"
+				`rm #{ecmwf_daily_dir}/#{ens}/*.tmp`
+				`rm #{ecmwf_daily_dir}/#{ens}/*.temp`
 
 				# 3.merge files which named ens_m_d_y
-				system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
+				#system "grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
+				`grib_copy #{ecmwf_daily_dir}/#{ens}/#{ens}#{month}#{day}* #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib`
 
 				# 4.grib to nc
-				system "grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
+				#system "grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib"
+				`grib_to_netcdf -k 3 -o #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/#{c_file}.grib`
 
 				# 5.extract var
-				system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/var"
+				#system "cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/var"
+				`cdo -f nc4 splitvar #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{ecmwf_daily_dir}/#{ens}/var`
 
 				# 6. copy R1D to SESAME
 				if ens == 'R1D' 
@@ -161,9 +167,11 @@ class EcmwfController < ApplicationController
 
 					FileUtils::mkdir_p sesame_dir unless File.directory?(sesame_dir) # 2. create folder
 
-					system "cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}" # 3. copy file
+					#system "cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}" # 3. copy file
+					`cp #{ecmwf_daily_dir}/#{ens}/#{c_file}.nc #{sesame_dir}` # 3. copy file
 
-					system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # 4. rename file
+					#system "mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc" # 4. rename file
+					`mv  #{sesame_dir}/#{c_file}.nc #{sesame_dir}/#{day}#{month}#{year}.nc` # 4. rename file
 
 				end
 
@@ -174,7 +182,7 @@ class EcmwfController < ApplicationController
 
 		end
 
-		@tasks.each do |t|
+		tasks.each do |t|
 			t.join
 		end
 
