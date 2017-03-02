@@ -115,7 +115,7 @@ scheduler.every '3h' do
 	mkdir
 end
 
-scheduler.every '2h' do
+scheduler.interval '2h' do
 	ecmwf_check
 	cp_sesame
 end
