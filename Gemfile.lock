@@ -79,7 +79,6 @@ GEM
       pkg-config
     globalid (0.3.6)
       activesupport (>= 4.1.0)
-    gsl (1.16.0.6)
     hash-deep-merge (0.1.1)
     i18n (0.7.0)
     jbuilder (2.4.0)
@@ -144,8 +143,6 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.5.0)
-    rb-gsl (1.16.0.6)
-      gsl
     rdoc (4.2.1)
       json (~> 1.4)
     responders (2.1.1)
@@ -215,7 +212,6 @@ DEPENDENCIES
   paperclip (~> 4.3)
   pkg-config (~> 1.1.6)
   rails (= 4.2.5)
-  rb-gsl (~> 1.16.0.4)
   rinruby (~> 2.0.3)
   ruby-fftw3 (~> 0.4.2)
   rubyzip

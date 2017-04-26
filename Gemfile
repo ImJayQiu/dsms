@@ -21,7 +21,7 @@ gem "chartkick"
 gem 'cdo', '~> 1.3.3'
 #gem 'cdo', '~> 1.3.2'
 #gem 'cdo', '~> 1.2.7'
-gem 'rb-gsl', '~> 1.16.0.4'
+#gem 'rb-gsl', '~> 1.16.0.4'
 
 #gem 'gsl', '~> 1.15.3'
 
