@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
 
+  namespace :settings do
+    resources :obs_models
+  end
 	namespace :ecmwf do
 		resources :vars
 		resources :types
@@ -22,7 +25,7 @@ Rails.application.routes.draw do
 	resources :obs do
 		collection do
 			get :obs
-			get :obs_analysis
+			post :obs_analysis
 		end
 	end
 
@@ -78,6 +81,7 @@ Rails.application.routes.draw do
 			post :ymonmean
 			post :lonlat
 			post :shape
+			post :ecmwf_level
 		end
 	end
 

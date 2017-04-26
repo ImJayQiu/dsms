@@ -1,19 +1,14 @@
-#require "narray"
-#require "numru/ggraph"
-#require "numru/gphys"
-#include NumRu
-
 require "cdo"
-#require "gsl"
-#require "rinruby"
 
 class ObsController < ApplicationController
 
+	def obs 
+	end
 
-	# GET /cmip5s
-	# GET /cmip5s.json
 
 	def obs_analysis
+
+		cdo_run = Cdo.new(debug: true)
 
 		################ date range ##################################
 
@@ -25,17 +20,16 @@ class ObsController < ApplicationController
 
 		############# File path and  name ################################
 		var = params[:part1].first.to_s
-		mip = 'day' 
+		mip = 'OBS' 
 		model = params[:part3].first.to_s
-		experiment = params[:part4].first.to_s
 
-		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
+		@file_name = var + '_' + mip +'_' + model + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
-		@experiment_path = Settings::Experiment.where(name: experiment).first.name
-		@model_path = Settings::Datamodel.where(name: model).first.foldername
+		@model_path = Settings::ObsModel.where(name: model).first.folder
 
-		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
+		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + @file_name.to_s
+
 		##############################################################
 
 		############# convert rate & unit ############################
@@ -67,20 +61,6 @@ class ObsController < ApplicationController
 		@lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
 		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
 
-		############### auto map size #################################
-		map_size = [360/(e_lat-s_lat),180/(e_lon-s_lon)].min.to_f
-		if map_size < 1
-			@map_size = 1
-		else
-			@map_size = map_size
-		end
-		################################################################
-
-		################## find centre point ###########################
-		c_lon = (e_lon - s_lon)/2 + s_lon
-		c_lat = (e_lat - s_lat)/2 + s_lat
-		@c_point = [c_lon,c_lat]
-		##############################################################
 
 		################ range of lon & lat ###########################
 		r_lat = s_lat..e_lat
@@ -101,57 +81,73 @@ class ObsController < ApplicationController
 
 		#################### CDO operations  #########################
 
-		paramater = Cdo.showname(input: file)
+		paramater = cdo_run.showname(input: file)
 
-		###############################################################
 
 		############# cut file by selected date range ##################
-		output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}/#{experiment}"
+		@output_dir = output_dir = "tmp_nc/#{current_user.id}/#{mip}/#{model}/#{var}"
 		sys_output_pub = Rails.root.join("public")
 		sys_output_dir = Rails.root.join("public", output_dir)
 
 		FileUtils::mkdir_p sys_output_dir.to_s unless File.directory?(sys_output_dir)
 
-		output_file_name = "#{var}_#{mip}_#{model}_#{experiment}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+		@output_file_name = output_file_name = "#{var}_#{mip}_#{model}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
-		@sel_data = Cdo.seldate([@sdate.to_datetime, @edate.to_datetime], input: Cdo.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
+		@sel_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: file), output: "public/#{@cdo_output_path}.nc", options:'-f nc4')
 		##############################################################
 
 
 		################ Data from CDO ###########################
 
-		@dataset_infon = Cdo.info(input: @sel_data)
-		@var_name = Cdo.showname(input: @sel_data).first.to_s
-		@var_std_name = Cdo.showstdname(input: @sel_data).first.to_s
+		@dataset_infon = cdo_run.info(input: @sel_data)
+		@var_name = cdo_run.showname(input: @sel_data).first.to_s
+		@var_std_name = cdo_run.showstdname(input: @sel_data).first.to_s
 
 		###########################################################
 
-		date = Cdo.showdate(input: @sel_data)
+		date = cdo_run.showdate(input: @sel_data)
 		@date = date.first.split(" ").to_a
+		@start_date_utc = DateTime.parse(@date.first)
 
 		#group max min mean
+
 		@max_set = [] 
 		@min_set = [] 
 		@mean_set = [] 
+
 		@dataset_infon.drop(1).each do |i|
-			@min_set << (i.split(" ")[8].to_f * @rate + @rate2).to_f.round(3)
-			@mean_set << (i.split(" ")[9].to_f * @rate + @rate2).to_f.round(3)
-			@max_set << (i.split(" ")[10].to_f * @rate + @rate2).to_f.round(3)
+			@min_set << i.split(" ")[8].to_f.round(3)
+			@mean_set << i.split(" ")[9].to_f.round(3)
+			@max_set << i.split(" ")[10].to_f.round(3)
 		end 
-		@max_h = Hash[@date.zip(@max_set)]
-		@mean_h = Hash[@date.zip(@mean_set)]
-		@min_h = Hash[@date.zip(@min_set)]
+
+		#		@max_h = Hash[@date.zip(@max_set)]
+		#		@mean_h = Hash[@date.zip(@mean_set)]
+		#		@min_h = Hash[@date.zip(@min_set)]
+
+
+		@chart = LazyHighCharts::HighChart.new('graph') do |f|
+			f.title(text: "Observation Data Analysis | #{model} ")
+			f.xAxis(type: 'line' )
+			f.yAxis [{title: {text: "#{@var_std_name.humanize} ( #{@unit} ) " }}]
+			f.tooltip(borderColor: 'gray', valueSuffix: @unit )
+			f.rangeSelector( selected: 4 ) 
+			f.series(name: "Max", color: 'indianred', data: @max_set, pointStart: @start_date_utc, pointInterval: 1.day)
+			f.series(name: "Mean", color: 'lightgreen', data: @mean_set,  pointStart: @start_date_utc, pointInterval: 1.day)
+			f.series(name: "Min", color: 'lightblue', data: @min_set, pointStart: @start_date_utc, pointInterval: 1.day)
+		end
+
 		@sel_file_path = root_path+@cdo_output_path.to_s
 
 		##### to copy cbar.gs to output folder  #################
 		copy_cbar =	system("cp #{sys_output_pub}/cbar.gs #{sys_output_dir}/cbar.gs ") 
 		#########################################################
 
-		@sel_data_ctl = Cdo.gradsdes(input: @sel_data)
-		ntime = Cdo.ntime(input: @sel_data)[0]
-		stdname = Cdo.showstdname(input: @sel_data)[0]
+		@sel_data_ctl = cdo_run.gradsdes(input: @sel_data)
+		ntime = cdo_run.ntime(input: @sel_data)[0]
+		stdname = cdo_run.showstdname(input: @sel_data)[0]
 		gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
 		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_mean.gs", "w")
@@ -161,7 +157,7 @@ class ObsController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
-		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@date[0]} -- #{@date[-1]} by CDAAS RIMES.INT #{Time.now.year}")
 
 		if @unit == "°C"
 			grads_gs.puts('set rgb 33 248 50 60')
@@ -238,9 +234,9 @@ class ObsController < ApplicationController
 		end
 
 		grads_gs.puts("set mpdset hires")
-		grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
+		grads_gs.puts("d ave(#{var},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} Mean ")
+		grads_gs.puts("draw title Observation #{@model_path.to_s} #{var.humanize} Mean ")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_mean.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
@@ -253,7 +249,7 @@ class ObsController < ApplicationController
 		grads_gs.puts("set gxout shaded")
 		grads_gs.puts("set font 1")
 		grads_gs.puts("set strsiz 0.12")
-		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
+		grads_gs.puts("draw string 1.8 0.1 Date Period: #{@date[0]} -- #{@date[-1]} by CDAAS RIMES.INT #{Time.now.year}")
 
 		if @unit == "°C"
 			grads_gs.puts('set rgb 33 248 50 60')
@@ -330,20 +326,34 @@ class ObsController < ApplicationController
 		end
 
 		grads_gs.puts("set mpdset hires")
-		grads_gs.puts("d max(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
+		grads_gs.puts("d max(#{var},t=1,t=#{ntime.to_s})")
 		grads_gs.puts("cbar.gs")
-		grads_gs.puts("draw title #{@model_path.to_s} Daily #{experiment.humanize} #{stdname.humanize} Max")
+		grads_gs.puts("draw title Observation #{@model_path.to_s} #{var.humanize} Max ")
 		grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_max.png png white")
 		grads_gs.puts("quit")
 		grads_gs.close
 
+		################ generate csv file ####################
+		@sel_data_griddes = cdo_run.griddes(input: @sel_data)
+		@gridsize = @sel_data_griddes[4].split(" ")[-1].to_i
+		grads_gs = File.new("#{sys_output_dir}/#{gs_name}_csv.gs", "w")
+		grads_gs.puts("reinit")
+		grads_gs.puts("open #{output_file_name}.ctl")
+		grads_gs.puts("set t 1 last")
+		grads_gs.puts("#{sys_output_pub}/fprintf.gs #{var}*#{@rate}+#{@rate2} #{output_file_name}.csv %1.2f #{@gridsize}") 
+		grads_gs.puts("!sed -i /Printing/d #{var}*#{@rate}+#{@rate2} #{output_file_name}.csv")
+		grads_gs.puts("quit")
+		grads_gs.close
+
+
 		@go_dir = "cd #{sys_output_dir.to_s}"
 		@plot_mean = "grads -lbc 'exec #{gs_name}_mean.gs'"
 		@plot_max = "grads -lbc 'exec #{gs_name}_max.gs'"
+		@output_csv = "grads -lbc 'exec #{gs_name}_csv.gs'"
 		@plot_mean_cmd = system("cd / && #{@go_dir} && #{@plot_mean} ") 
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
+		#@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
 	end
 
-
-
 end
+

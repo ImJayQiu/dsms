@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Listing Obs Models</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Folder</th>
+			<th colspan="3"></th>
+		</tr>
+	</thead>
+
+	<tbody>
+	<% @settings_obs_models.each do |settings_obs_model| %>
+		<tr>
+		<td><%= settings_obs_model.name %></td>
+		<td><%= settings_obs_model.folder %></td>
+		<td><%= button_to 'Show', settings_obs_model, method: :get %></td>
+		<% if can? :manage, :settings %>
+			<td><%= button_to 'Edit', edit_settings_obs_model_path(settings_obs_model), method: :get %></td>
+		<td><%= button_to 'Del', settings_obs_model, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<% end # if can? %>
+	</tr>
+<% end %>
+	</tbody>
+</table>
+
+<br>
+
+<% if can? :manage, :settings %>
+	<%= button_to 'New Obs Model', new_settings_obs_model_path, method: :get %>
+<% end # if can? %>

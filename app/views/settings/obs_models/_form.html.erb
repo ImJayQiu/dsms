@@ -1,0 +1,33 @@
+<%= form_for(@settings_obs_model) do |f| %>
+  <% if @settings_obs_model.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@settings_obs_model.errors.count, "error") %> prohibited this settings_obs_model from being saved:</h2>
+
+      <ul>
+      <% @settings_obs_model.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :folder %><br>
+    <%= f.text_field :folder %>
+  </div>
+  <div class="field">
+    <%= f.label :institute %><br>
+    <%= f.text_field :institute %>
+  </div>
+  <div class="field">
+    <%= f.label :remark %><br>
+    <%= f.text_field :remark %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

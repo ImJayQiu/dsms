@@ -1,7 +1,13 @@
 
 <p id="notice"><%= notice %></p>
 <h2>Data Analysis - Observation</h2>
-
+<p/>
+<%= @max_h %>
+<p/>
+<%= @mean_h %>
+<p/>
+<%= @min_h %>
+<p/>
 <table>
 	<tr>
 	</tr>
@@ -22,7 +28,7 @@
 </table>
 <p/>
 
-<%= render "cmip5s/graphs/daily" %>
+<%= high_stock("summary", @chart) %>
 <p/>
 <table>
 	<thead>
@@ -42,7 +48,7 @@
 	<table>
 		<tbody>
 		<tr>
-			<td>Variable: <%= @var_std_name.humanize %></td>
+			<td>Variable: <%= @var_name.humanize %></td>
 			<td>Date Range: <%= @sdate.strftime("%Y-%m-%d") %>--<%= @edate.strftime("%Y-%m-%d") %></td>
 		</tr>
 

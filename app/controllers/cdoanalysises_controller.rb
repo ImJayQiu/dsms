@@ -25,7 +25,6 @@ class CdoanalysisesController < ApplicationController
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 
-		#	file = File.join(Rails.root, @dataset)
 		@s_lonlat = cdo_run.remapnn(lon_lat, input: @dataset, options: '-f nc4')
 		@lonlat_info = cdo_run.outputtab(['date','value'],input: @s_lonlat)
 		@var_std_name = cdo_run.showstdname( input: @dataset)[0].to_s
@@ -36,10 +35,9 @@ class CdoanalysisesController < ApplicationController
 			@date_set << i.split(" ")[0]
 			@value_set << (i.split(" ")[1].to_f * @rate + @rate2).to_f.round(3)
 		end 
-		# @dv_h = Hash[@date_set.zip(@value_set)]
 
 		@chart = LazyHighCharts::HighChart.new('graph') do |f|
-			f.title(text: "NEX-NASA DAILY Analysis | #{@lon},#{@lat} ")
+			f.title(text: "Analysis | #{@lon},#{@lat} ")
 			f.subtitle(text: "#{@file_name}")
 			f.xAxis(categories: @date_set )
 			f.tooltip(valueSuffix: @unit )
@@ -63,11 +61,27 @@ class CdoanalysisesController < ApplicationController
 		@rate2 = params[:rate2].to_f
 		@unit = params[:unit]
 		@info = cdo_run.info(input: @dataset)
-
-
 	end
 
 
+	def ecmwf_level 
+		@level = params[:level].first.to_i
+
+		cdo_run = Cdo.new(debug: true)
+		
+		@sys_output_dir = params[:sys_output_dir]
+		@cdaas_output_dir = params[:cdaas_output_dir]
+		@output_name = params[:output_name]
+		
+		@dataset = params[:dataset]
+		@lon_r = params[:lon_r]
+		@lat_r = params[:lat_r]
+		@unit = cdo_run.showunit(input: @dataset).first.to_s
+		@sellevel = cdo_run.sellevel(@level, input: @dataset, output: @sys_output_dir + @output_name + "_L#{@level}.nc", options: "-f nc4")
+		@go_dir = "cd #{@sys_output_dir.to_s}"
+		@print_csv_cmd = system("cd / && #{@go_dir} && cdo outputtab,date,time,lon,lat,value #{@sellevel} > #{@output_name}_L#{@level}.csv ") 
+	
+	end
 
 	# specific_monthly_analysis 
 	def sma

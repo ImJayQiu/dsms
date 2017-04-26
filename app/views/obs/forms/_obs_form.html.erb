@@ -1,0 +1,54 @@
+<table>
+	<thead>
+		<tr>
+			<th>1.Select Variable Name</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select(:part1, params[:part1], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"}, required: true ) rescue nil %></td>
+	</tr>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>2.Select Model</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%= collection_select(:part3, params[:part3], Settings::ObsModel.all.order("name"), :name, :folder, {include_blank: "- Select Model -"}, required: true ) rescue nil %></td>
+	</tr>
+</table>
+
+<!--table>
+	<thead>
+		<tr>
+			<th>3.Select Experiment</th>
+		</tr>
+	</thead>
+	<tr>
+		<td><%#= collection_select(:part4, params[:part4], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"}, required: true ) rescue nil %></td>
+	</tr>
+</table -->
+
+<%= render "layouts/partials/datepicker"%>
+
+<table>
+	<thead>
+		<tr>
+			<th>3.Select Date</th>
+		</tr>
+	</thead>
+	
+	<tr>
+		<td>
+			<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Start Date", required: true rescue nil %>
+		</td>
+		<td>-</td>
+		<td>
+			<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "End Date", required: true rescue nil %>
+		</td>
+	</tr>
+</table>
+
+

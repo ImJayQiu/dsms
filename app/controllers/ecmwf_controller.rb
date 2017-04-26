@@ -25,6 +25,10 @@ class EcmwfController < ApplicationController
 		s_lon = params[:s_lon].first.to_f
 		e_lon = params[:e_lon].first.to_f
 
+		@lon_r = (s_lon.to_s + "--" + e_lon.to_s).to_s
+		@lat_r = (s_lat.to_s + "--" + e_lat.to_s).to_s
+
+
 		@lon_lat = lon_lat = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
 		##############################################################
@@ -64,6 +68,8 @@ class EcmwfController < ApplicationController
 
 		@data = cdo_run.sinfon(input: @sel_data)
 		@timestamps = cdo_run.showtimestamp(input: @sel_data)
+		levels = cdo_run.showlevel(input: @sel_data)
+		@levels = levels.first.split(" ").map(&:to_i).sort
 
 		### create 
 		@ctl_file = cdo_run.gradsdes(input: @sel_data)
@@ -104,8 +110,8 @@ class EcmwfController < ApplicationController
 		@date = params[:date].first.to_date
 
 		#### The original files location ##########
-		#ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
-		ecmwf_source_dir = '/CLIMDATA/ECMWF2015' 
+		ecmwf_source_dir = Settings::Datasetpath.where(name: "ECMWF").first.source
+		#ecmwf_source_dir = '/CLIMDATA/ECMWF2015' 
 
 		#### Where CDAAS normalize and save the files
 		ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path

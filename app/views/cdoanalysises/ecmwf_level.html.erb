@@ -1,0 +1,46 @@
+<h2>Information of Dataset</h2>
+<p/>
+<%= form_tag({controller: "cdoanalysises", action: "lonlat" }, target: '_blank', method: :post) do %>  
+	<table>
+	<tr>
+		<td colspan=5 >
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Select Specific Location :
+		</td>
+		<td>
+			<%= text_field_tag :lon, params[:lon], placeholder: "Lon: #{@lon_r}" rescue nil %>
+		</td>
+		<td>--</td>
+		<td>
+			<%= text_field_tag :lat, params[:lat], placeholder: "Lat: #{@lat_r}" rescue nil %>
+		</td>
+		<%= hidden_field_tag :dataset, @sellevel %>
+		<td>
+			<%= submit_tag "Submit", class: "submit" %>
+		</td>
+	</tr>
+</table>
+<% end %>
+
+<p/>
+
+<table>
+	<tr>
+		<td>
+			10 Days forcast (Level: <%= @level %>) 
+		</td>
+		<td>
+			<%= button_to "Download NC", root_path+@cdaas_output_dir.to_s+@output_name+"_L#{@level}.nc", method: :get %>
+		</td>
+		<td>
+			<%= button_to "Download CSV", root_path+@cdaas_output_dir.to_s+@output_name+"_L#{@level}.csv", method: :get %>
+		</td>
+	</tr>
+</table>
+
+	</div>
+</div>
+

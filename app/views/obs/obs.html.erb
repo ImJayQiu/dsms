@@ -5,13 +5,20 @@
 
 <p id="notice"><%= notice %></p>
 
-<h2>Data Analysis - Observation</h2>
+<h2>Observation Data Analysis </h2>
 
-<div id="pagewidth">
+<% if can? :analyze, :obs %>
+
+<%= form_tag({controller: "obs", action: "obs_analysis" }, method: :post) do %>  
+
+	<div id="pagewidth">
+
 	<div id="wrapper" class="clearfix">
 
-		<div id="maincol">
+		<div id="maincol" align=center>
+
 			<h3>Select Region</h3>
+
 			<table>
 				<tr></tr>
 				<tr><td>
@@ -19,9 +26,11 @@
 				</td></tr>
 			</table>
 
-			<p/>
 
-			<table id="result">
+			<%if can? :input, :location %>
+
+				<table id="result">
+
 				<tr>
 					<th colspan=5>Location Region</th>
 				</tr>
@@ -29,30 +38,78 @@
 				<tr>
 					<td>Lon.</td>
 					<td>W:</td>
-					<td><input type="text" class="slon" ></td>
+					<td>
+						<%= text_field :s_lon, params[:s_lon], class: "slon", required: true rescue nil %>
+					</td>
 					<td>E:</td>
-					<td><input type="text" class="elon" ></td>
+					<td>
+						<%= text_field :e_lon, params[:e_lon], class: "elon", required: true rescue nil %>
+					</td>
+				</tr>
+
+				<tr>
+					<td>Lat.</td>
+					<td>S:</td>
+					<td>
+						<%= text_field :s_lat, params[:s_lat], class: "slat", required: true rescue nil %>
+					</td>
+					<td>N:</td>
+					<td>
+						<%= text_field :e_lat, params[:e_lat], class: "elat", required: true rescue nil %>
+					</td>
+				</tr>
+			</table>
+
+		<% else %>
+
+				<table id="result">
+				<tr>
+					<th colspan=5>Location Region</th>
+				</tr>
+				<tr>
+					<td>Lon.</td>
+					<td>W:</td>
+					<td><input type="text" class="slon" DISABLED ></td>
+					<td>E:</td>
+					<td><input type="text" class="elon" DISABLED ></td>
 				</tr>
 				<tr>
 					<td>Lat.</td>
 					<td>S:</td>
-					<td><input type="text" class="slat" ></td>
+					<td><input type="text" class="slat" DISABLED></td>
 					<td>N:</td>
-					<td><input type="text" class="elat" ></td>
+					<td><input type="text" class="elat" DISABLED></td>
 				</tr>
 			</table>
+			<div id="result">
+				<%= hidden_field :s_lon, params[:s_lon], class: "slon" rescue nil %>
+				<%= hidden_field :e_lon, params[:e_lon], class: "elon" rescue nil %>
+				<%= hidden_field :s_lat, params[:s_lat], class: "slat" rescue nil %>
+				<%= hidden_field :e_lat, params[:e_lat], class: "elat" rescue nil %>
+			</div>
 
+			<% end # if can%>
 
 		</div>
 
 		<div id="leftcol">
 			<h3>Select Dataset</h3>
-			<%= render "cmip5s/forms/obs_form" %>
+			<%= render "obs/forms/obs_form" %>
 		</div>
 
 	</div>
 </div>
 
+
+<table>
+	<tr>
+		<td align=center>
+			<%= submit_tag "Submit & Analyze", class: "submit", :data => { :disable_with => 'Data processing, Please wait ...' } %>
+		</td>
+	</tr>
+</table>
+
+<% end #form %>
 
 
 
@@ -81,3 +138,10 @@ areaSelect.on("change", function() {
 areaSelect.addTo(map);
 </script>
 
+<% else %>
+	<p/>
+Permission Denied ! 
+<p/>
+Please upgrade your account to use this function !
+
+<% end %>
