@@ -47,7 +47,7 @@ class Cmip5sController < ApplicationController
 		model = params[:part3].first.to_s
 		experiment = params[:part4].first.to_s
 
-		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
+		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'world' + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
 		@experiment_path = Settings::Experiment.where(name: experiment).first.name
