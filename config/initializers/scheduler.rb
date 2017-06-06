@@ -41,11 +41,17 @@ def ecmwf_check
 
 	year = Time.now.year    # catch year 
 	month = Time.now.strftime("%m") # catch month 
-	day = Time.now.strftime("%d")   # catch day
 	time = Time.now         # catch day
-	ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
-	
+
 	@ens.each do |ens|
+
+		if ens = 'R1L'
+			day = '01'   # catch day
+		else
+			day = Time.now.strftime("%d")   # catch day
+		end
+
+		ecmwf_daily_dir = "#{ecmwf_dir}/#{year}/#{month}/#{day}"
 
 		Thread.new{
 
