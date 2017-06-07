@@ -45,7 +45,7 @@ def ecmwf_check
 
 	@ens.each do |ens|
 
-		if ens = 'R1L'
+		if ens == 'R1L'
 			day = '01'   # catch day
 		else
 			day = Time.now.strftime("%d")   # catch day
