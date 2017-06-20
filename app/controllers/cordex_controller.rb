@@ -34,7 +34,7 @@ class CordexController < ApplicationController
 		@experiment_path = Settings::Experiment.where(name: experiment).first.name
 		@model_path = Settings::CordexModel.where(name: model).first.folder
 
-		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s  +'/' + @file_name.to_s
+		file = @root_file_path.to_s + '/' + @model_path.to_s + '/' + var + '/' + @experiment_path.to_s + '/' + @file_name.to_s
 		##############################################################
 
 		############# convert rate & unit ############################
