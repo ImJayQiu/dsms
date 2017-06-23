@@ -598,7 +598,7 @@ class Cmip5sController < ApplicationController
 		#########################################################
 
 
-		output_file_name = "#{var}_#{mip}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+		output_file_name = "#{var}}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
@@ -606,22 +606,22 @@ class Cmip5sController < ApplicationController
 		cdo_threads=[]
 
 		cdo_threads << Thread.new{
-			@f1_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@cdo_output_path}_#{@m1}.nc", options:'-f nc4') rescue nil  
+			@f1_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@c1}_#{@m1}_#{@cdo_output_path}.nc", options:'-f nc4') rescue nil  
 			f1_ctl = cdo_run.gradsdes(input: @f1_data, output: f1_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f2_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@cdo_output_path}_#{@m2}.nc", options:'-f nc4') rescue nil  
+			@f2_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@c2}_#{@m2}_#{@cdo_output_path}.nc", options:'-f nc4') rescue nil  
 			f2_ctl = cdo_run.gradsdes(input: @f2_data, output: f2_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f3_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@cdo_output_path}_#{@m3}.nc", options:'-f nc4') rescue nil 
+			@f3_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@c3}_#{@m3}_#{@cdo_output_path}.nc", options:'-f nc4') rescue nil 
 			f3_ctl = cdo_run.gradsdes(input: @f3_data, output: f3_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f4_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@cdo_output_path}_#{@m4}.nc", options:'-f nc4') rescue nil  
+			@f4_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@c4}_#{@m4}_#{@cdo_output_path}.nc", options:'-f nc4') rescue nil  
 			f4_ctl = cdo_run.gradsdes(input: @f4_data, output: f4_ctl, options:'-f ctl') rescue nil
 		}
 
