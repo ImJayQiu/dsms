@@ -611,7 +611,7 @@ class Cmip5sController < ApplicationController
 		}
 
 		cdo_threads << Thread.new{
-			@f2_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/##{@cdo_output_path}_#{@c2}_#{@m2}.nc", options:'-f nc4') rescue nil  
+			@f2_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@cdo_output_path}_#{@c2}_#{@m2}.nc", options:'-f nc4') rescue nil  
 			f2_ctl = cdo_run.gradsdes(input: @f2_data) #, output: f2_ctl, options:'-f ctl') rescue nil
 		}
 
