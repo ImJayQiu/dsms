@@ -437,7 +437,7 @@ class Cmip5sController < ApplicationController
 
 		############# File path and  name ################################
 		var = params[:var].first.to_s
-		mip = "Mult_model"
+		mip = "mm"
 		exp = params[:exp].first.to_s
 
 		@c1 = c1 = params[:c1].first.to_s
@@ -499,27 +499,49 @@ class Cmip5sController < ApplicationController
 				mp = Settings::NexnasaModel.where(name: m).first.folder rescue nil
 			end
 =end
-			if c1 == "CMIP5"
-				@f1_name = var + '_day_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
-				@m1_path = Settings::Datamodel.where(name: m1).first.foldername rescue nil
-			elsif c1=="CORDEX-DAILY"
-				@f1_name = var + '_' + exp + '_' + m1 + '_' + 'day_rimes' + '.nc'
-				@m1_path = Settings::CordexModel.where(name: m1).first.folder rescue nil
-			elsif c1=="NEX-NASA-DAILY"
-				@f1_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m1 + '_' + 'rimes' + '.nc'
-				@m1_path = Settings::NexnasaModel.where(name: m1).first.folder rescue nil
-			end
+		if c1 == "CMIP5"
+			@f1_name = var + '_day_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
+			@m1_path = Settings::Datamodel.where(name: m1).first.foldername rescue nil
+		elsif c1=="CORDEX-DAILY"
+			@f1_name = var + '_' + exp + '_' + m1 + '_' + 'day_rimes' + '.nc'
+			@m1_path = Settings::CordexModel.where(name: m1).first.folder rescue nil
+		elsif c1=="NEX-NASA-DAILY"
+			@f1_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m1 + '_' + 'rimes' + '.nc'
+			@m1_path = Settings::NexnasaModel.where(name: m1).first.folder rescue nil
+		end
 
-			if c2 == "CMIP5"
-				@f2_name = var + '_day_' + m2 + '_' + exp + '_' + 'rimes' + '.nc'
-				@m2_path = Settings::Datamodel.where(name: m2).first.foldername rescue nil
-			elsif c2=="CORDEX-DAILY"
-				@f2_name = var + '_' + exp + '_' + m2 + '_' + 'day_rimes' + '.nc'
-				@m2_path = Settings::CordexModel.where(name: m2).first.folder rescue nil
-			elsif c2=="NEX-NASA-DAILY"
-				@f1_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m2 + '_' + 'rimes' + '.nc'
-				@m2_path = Settings::NexnasaModel.where(name: m2).first.folder rescue nil
-			end
+		if c2 == "CMIP5"
+			@f2_name = var + '_day_' + m2 + '_' + exp + '_' + 'rimes' + '.nc'
+			@m2_path = Settings::Datamodel.where(name: m2).first.foldername rescue nil
+		elsif c2=="CORDEX-DAILY"
+			@f2_name = var + '_' + exp + '_' + m2 + '_' + 'day_rimes' + '.nc'
+			@m2_path = Settings::CordexModel.where(name: m2).first.folder rescue nil
+		elsif c2=="NEX-NASA-DAILY"
+			@f2_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m2 + '_' + 'rimes' + '.nc'
+			@m2_path = Settings::NexnasaModel.where(name: m2).first.folder rescue nil
+		end
+
+		if c3 == "CMIP5"
+			@f3_name = var + '_day_' + m3 + '_' + exp + '_' + 'rimes' + '.nc'
+			@m3_path = Settings::Datamodel.where(name: m3).first.foldername rescue nil
+		elsif c3=="CORDEX-DAILY"
+			@f3_name = var + '_' + exp + '_' + m3 + '_' + 'day_rimes' + '.nc'
+			@m3_path = Settings::CordexModel.where(name: m3).first.folder rescue nil
+		elsif c3=="NEX-NASA-DAILY"
+			@f3_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m3 + '_' + 'rimes' + '.nc'
+			@m3_path = Settings::NexnasaModel.where(name: m3).first.folder rescue nil
+		end
+
+		if c4 == "CMIP5"
+			@f4_name = var + '_day_' + m4 + '_' + exp + '_' + 'rimes' + '.nc'
+			@m4_path = Settings::Datamodel.where(name: m4).first.foldername rescue nil
+		elsif c4=="CORDEX-DAILY"
+			@f4_name = var + '_' + exp + '_' + m4 + '_' + 'day_rimes' + '.nc'
+			@m4_path = Settings::CordexModel.where(name: m4).first.folder rescue nil
+		elsif c4=="NEX-NASA-DAILY"
+			@f4_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m4 + '_' + 'rimes' + '.nc'
+			@m4_path = Settings::NexnasaModel.where(name: m4).first.folder rescue nil
+		end
 
 
 
@@ -527,6 +549,7 @@ class Cmip5sController < ApplicationController
 		f2=@root_f2_path.to_s+'/'+@m2_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f2_name.to_s
 		f3=@root_f3_path.to_s+'/'+@m3_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f3_name.to_s
 		f4=@root_f4_path.to_s+'/'+@m4_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f4_name.to_s
+
 		##############################################################
 		#
 		############# convert rate & unit ############################
