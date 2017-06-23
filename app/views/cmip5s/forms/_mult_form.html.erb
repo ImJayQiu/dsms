@@ -8,7 +8,7 @@
 	var proName = $("#c<%=i%>").val(); 
 	$("#m<%=i%>").empty(); 
 	$("#m<%=i%>").append("<option disabled selected>-- Select Model --</option>"); 
-	if(proName == "day") 
+	if(proName == "CMIP5") 
 	{ 
 		$("#m<%=i%>").append(
 				<% Settings::Datamodel.all.each do |cmip|%>
@@ -17,7 +17,7 @@
 				"<option disabled></option>"
 				); 
 	} 
-	if(proName == "CODEX-DAILY") 
+	if(proName == "CORDEX-DAILY") 
 	{ 
 		$("#m<%=i%>").append(
 				<% Settings::CordexModel.all.each do |cordex|%>
@@ -58,8 +58,8 @@
 					<select id="c<%=i%>" name="c<%=i%>[]" onchange="select<%=i%>()"> 
 				<% end %>
 					<option value="" disabled selected>-- Select Category --</option> 
-					<option value="day">CMIP5</option> 
-					<option value="CODEX-DAILY">CODEX</option> 
+					<option value="CMIP5">CMIP5</option> 
+					<option value="CORDEX-DAILY">CODEX</option> 
 					<option value="NEX-NASA-DAILY">NEX-NASA</option> 
 				</select> 
 			</td> 

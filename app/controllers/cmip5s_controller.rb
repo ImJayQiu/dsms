@@ -437,10 +437,7 @@ class Cmip5sController < ApplicationController
 
 		############# File path and  name ################################
 		var = params[:var].first.to_s
-		#mip = params[:mip].first.to_s
-
-		mip = "day"
-
+		mip = "Mult_model"
 		exp = params[:exp].first.to_s
 
 		@c1 = c1 = params[:c1].first.to_s
@@ -454,31 +451,72 @@ class Cmip5sController < ApplicationController
 		@m4 = m4 = params[:m4].first.to_s
 
 
-		@f1_name = var + '_' + mip +'_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
-		@f2_name = var + '_' + mip +'_' + m2 + '_' + exp + '_' + 'rimes' + '.nc'
-		@f3_name = var + '_' + mip +'_' + m3 + '_' + exp + '_' + 'rimes' + '.nc'
-		@f4_name = var + '_' + mip +'_' + m4 + '_' + exp + '_' + 'rimes' + '.nc'
-
-		if c1 == "CMIP5"
+		#@f1_name = var + '_' + mip +'_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
+		#@f2_name = var + '_' + mip +'_' + m2 + '_' + exp + '_' + 'rimes' + '.nc'
+		#@f3_name = var + '_' + mip +'_' + m3 + '_' + exp + '_' + 'rimes' + '.nc'
+		#@f4_name = var + '_' + mip +'_' + m4 + '_' + exp + '_' + 'rimes' + '.nc'
 		#CMIP5 file name
-		@f1_name = var + '_' + mip +'_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
-		end
-		#nex-nasa file name
-		@file_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m1 + '_' + 'rimes' + '.nc'
+		#@cmip5_name = var + '_day_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
 		#cordex file name
-		@file_name = var + '_' + exp + '_' + m1 + '_' + 'day_rimes' + '.nc'
+		#@cordex_name = var + '_' + exp + '_' + m1 + '_' + 'day_rimes' + '.nc'
+		#nex-nasa file name
+		#@nexnasa_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m1 + '_' + 'rimes' + '.nc'
 
-		@root_file_path = Settings::Datasetpath.where(name: mip).first.path rescue nil
+		#@root_file_path = Settings::Datasetpath.where(name: mip).first.path rescue nil
+		#@m1_path = Settings::Datamodel.where(name: m1).first.foldername rescue nil
+		#@m2_path = Settings::Datamodel.where(name: m2).first.foldername rescue nil
+		#@m3_path = Settings::Datamodel.where(name: m3).first.foldername rescue nil
+		#@m4_path = Settings::Datamodel.where(name: m4).first.foldername rescue nil
+
+
 		@exp_path = Settings::Experiment.where(name: exp).first.name rescue nil
-		@m1_path = Settings::Datamodel.where(name: m1).first.foldername rescue nil
-		@m2_path = Settings::Datamodel.where(name: m2).first.foldername rescue nil
-		@m3_path = Settings::Datamodel.where(name: m3).first.foldername rescue nil
-		@m4_path = Settings::Datamodel.where(name: m4).first.foldername rescue nil
 
-		f1=@root_file_path.to_s+'/'+@m1_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f1_name.to_s
-		f2=@root_file_path.to_s+'/'+@m2_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f2_name.to_s
-		f3=@root_file_path.to_s+'/'+@m3_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f3_name.to_s
-		f4=@root_file_path.to_s+'/'+@m4_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f4_name.to_s
+		@root_f1_path = Settings::Datasetpath.where(name: c1).first.path rescue nil
+		@root_f2_path = Settings::Datasetpath.where(name: c2).first.path rescue nil
+		@root_f3_path = Settings::Datasetpath.where(name: c3).first.path rescue nil
+		@root_f4_path = Settings::Datasetpath.where(name: c4).first.path rescue nil
+
+		[1,2,3,4].each do |model|
+			if model==1
+				c=c1,m=m1,fn=@f1_name,mp=@m1_path
+			elsif model==2
+				c=c2,m=m2,fn=@f2_name,mp=@m2_path
+			elsif model==3
+				c=c3,m=m3,fn=@f3_name,mp=@m3_path
+			elsif model==4
+				c=c4,m=m4,fn=@f4_name,mp=@m4_path
+			end
+
+			if c == "CMIP5"
+				fn = var + '_day_' + m + '_' + exp + '_' + 'rimes' + '.nc'
+				mp = Settings::Datamodel.where(name: m).first.foldername rescue nil
+			elsif c=="CORDEX-DAILY"
+				fn = var + '_' + exp + '_' + m + '_' + 'day_rimes' + '.nc'
+				mp = Settings::CordexModel.where(name: m).first.folder rescue nil
+			elsif c=="NEX-NASA-DAILY"
+				fn = var + '_day_BCSD_' + exp + '_r1i1p1_' + m + '_' + 'rimes' + '.nc'
+				mp = Settings::NexnasaModel.where(name: m).first.folder rescue nil
+			end
+
+=begin
+			if c1 == "CMIP5"
+				@f1_name = var + '_day_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
+				@m1_path = Settings::Datamodel.where(name: m1).first.foldername rescue nil
+			elsif c1=="CORDEX-DAILY"
+				@f1_name = var + '_' + exp + '_' + m1 + '_' + 'day_rimes' + '.nc'
+				@m1_path = Settings::CordexModel.where(name: m1).first.folder rescue nil
+			elsif c1=="NEX-NASA-DAILY"
+				@f1_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m1 + '_' + 'rimes' + '.nc'
+				@m1_path = Settings::NexnasaModel.where(name: m1).first.folder rescue nil
+			end
+=end
+
+		end 
+
+		f1=@root_f1_path.to_s+'/'+@m1_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f1_name.to_s
+		f2=@root_f2_path.to_s+'/'+@m2_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f2_name.to_s
+		f3=@root_f3_path.to_s+'/'+@m3_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f3_name.to_s
+		f4=@root_f4_path.to_s+'/'+@m4_path.to_s+'/'+var+'/'+@exp_path.to_s+'/'+@f4_name.to_s
 		##############################################################
 		#
 		############# convert rate & unit ############################
