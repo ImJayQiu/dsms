@@ -28,6 +28,9 @@ class Cmip5sController < ApplicationController
 	def daily 
 	end
 
+	def mult 
+	end
+
 	def daily_analysis
 
 		cdo_run = Cdo.new(debug: true)
@@ -43,11 +46,11 @@ class Cmip5sController < ApplicationController
 
 		############# File path and  name ################################
 		var = params[:part1].first.to_s
-		mip = 'day' 
+		mip = 'CMIP5' 
 		model = params[:part3].first.to_s
 		experiment = params[:part4].first.to_s
 
-		@file_name = var + '_' + mip +'_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
+		@file_name = var + '_day_' + model + '_' + experiment + '_' + 'rimes' + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path
 		@experiment_path = Settings::Experiment.where(name: experiment).first.name
@@ -414,7 +417,7 @@ class Cmip5sController < ApplicationController
 		@plot_max_cmd = system("cd / && #{@go_dir} && #{@plot_max} ") 
 		@plot_grid_cmd = system("cd / && #{@go_dir} && #{@plot_grid} ") 
 		if can? :download, :csv
-			@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
+			#	@output_csv_cmd = system("cd / && #{@go_dir} && #{@output_csv} ") 
 		end
 	end
 
@@ -435,17 +438,35 @@ class Cmip5sController < ApplicationController
 		############# File path and  name ################################
 		var = params[:var].first.to_s
 		#mip = params[:mip].first.to_s
+
 		mip = "day"
+
+		exp = params[:exp].first.to_s
+
+		@c1 = c1 = params[:c1].first.to_s
+		@c2 = c2 = params[:c2].first.to_s
+		@c3 = c3 = params[:c3].first.to_s
+		@c4 = c4 = params[:c4].first.to_s
+
 		@m1 = m1 = params[:m1].first.to_s
 		@m2 = m2 = params[:m2].first.to_s
 		@m3 = m3 = params[:m3].first.to_s
 		@m4 = m4 = params[:m4].first.to_s
-		exp = params[:exp].first.to_s
+
 
 		@f1_name = var + '_' + mip +'_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
 		@f2_name = var + '_' + mip +'_' + m2 + '_' + exp + '_' + 'rimes' + '.nc'
 		@f3_name = var + '_' + mip +'_' + m3 + '_' + exp + '_' + 'rimes' + '.nc'
 		@f4_name = var + '_' + mip +'_' + m4 + '_' + exp + '_' + 'rimes' + '.nc'
+
+		if c1 == "CMIP5"
+		#CMIP5 file name
+		@f1_name = var + '_' + mip +'_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
+		end
+		#nex-nasa file name
+		@file_name = var + '_day_BCSD_' + exp + '_r1i1p1_' + m1 + '_' + 'rimes' + '.nc'
+		#cordex file name
+		@file_name = var + '_' + exp + '_' + m1 + '_' + 'day_rimes' + '.nc'
 
 		@root_file_path = Settings::Datasetpath.where(name: mip).first.path rescue nil
 		@exp_path = Settings::Experiment.where(name: exp).first.name rescue nil

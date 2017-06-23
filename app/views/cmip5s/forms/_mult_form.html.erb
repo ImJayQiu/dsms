@@ -1,63 +1,144 @@
+<script type="text/javascript"> 
+/** 
+ * 
+ */ 
+	<% [1,2,3,4].each do |i| %>
+	function select<%=i%>() 
+{ 
+	var proName = $("#c<%=i%>").val(); 
+	$("#m<%=i%>").empty(); 
+	$("#m<%=i%>").append("<option disabled selected>-- Select Model --</option>"); 
+	if(proName == "day") 
+	{ 
+		$("#m<%=i%>").append(
+				<% Settings::Datamodel.all.each do |cmip|%>
+					"<option value='<%= cmip.foldername %>' > <%= cmip.name %> </option>"+
+				<% end %>
+				"<option disabled></option>"
+				); 
+	} 
+	if(proName == "CODEX-DAILY") 
+	{ 
+		$("#m<%=i%>").append(
+				<% Settings::CordexModel.all.each do |cordex|%>
+					"<option value='<%= cordex.folder %>' > <%= cordex.name %> </option>"+
+				<% end %>
+				"<option disabled></option>"
+				); 
+	} 
+	if(proName == "NEX-NASA-DAILY") 
+	{ 
+		$("#m<%=i%>").append(
+				<% Settings::NexnasaModel.all.each do |nasa|%>
+					"<option value='<%= nasa.folder %>' > <%= nasa.name %> </option>"+
+				<% end %>
+				"<option disabled></option>"
+				); 
+	} 
+} 
+<% end %>
+</script> 
 
-	<table>
+
+<table id="tab"> 
 	<thead>
 		<tr>
 			<th colspan=4>1.Select Models</th>
 		</tr>
 	</thead>
-	<tr>
-		<td>Model-1:</td>
-		<td><%= collection_select(:m1, params[:m1], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 1 -"}, required: true ) rescue nil %></td>
-		<td>Model-2:</td>
-		<td><%= collection_select(:m2, params[:m2], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 2 -"} ) rescue nil %></td>
-	</tr>
-	<tr>
-	</tr>
-	<tr>
-		<td>Model-3:</td>
-		<td><%= collection_select(:m3, params[:m3], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 3 -"} ) rescue nil %></td>
-		<td>Model-4:</td>
-		<td><%= collection_select(:m4, params[:m4], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 4 -"} ) rescue nil %></td>
-	</tr>
-</table>
 
-<table>
-	<thead>
-		<tr>
-			<th>2.Select MIP</th>
-			<th>3.Select Variable Name</th>
-			<th>4.Select Experiment</th>
-		</tr>
-	</thead>
-	<tr>
-		<td>CMIP5 Daily<%#= collection_select(:mip, params[:mip], Settings::Mip.all.order("name"), :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></td>
-		<td><%= collection_select(:var, params[:var], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"}, required: true) rescue nil %></td>
-		<td><%= collection_select(:exp, params[:exp], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"}, required: true) rescue nil %></td>
-	</tr>
-</table>
+	<% [1,2,3,4].each do |i| %>
 
-<%= render "layouts/partials/datepicker"%>
+		<tr> 
+		<td >Model-<%=i%>:</td>
+		<td> 
+			<% if i == 1||2 %>
+				<select required="required" id="c<%=i%>" name="c<%=i%>[]" onchange="select<%=i%>()"> 
+			<% else %>
+					<select id="c<%=i%>" name="c<%=i%>[]" onchange="select<%=i%>()"> 
+				<% end %>
+					<option value="" disabled selected>-- Select Category --</option> 
+					<option value="day">CMIP5</option> 
+					<option value="CODEX-DAILY">CODEX</option> 
+					<option value="NEX-NASA-DAILY">NEX-NASA</option> 
+				</select> 
+			</td> 
+			<td> 
+				<% if i == 1||2 %>
+					<select required="required" id="m<%=i%>" name="m<%=i%>[]" > 
+				<% else %>
+						<select id="m<%=i%>" name="m<%=i%>[]" > 
+					<% end %>
+						<option value="" disabled selected> -- Select Model --</option> 
+					</select> 
+				</td> 
+			</tr> 
 
-<table>
-	<thead>
-		<tr>
-			<th colspan=2>4.Select Date Range</th>
-		</tr>
-	</thead>
+		<% end %>
 
-	<tr>
-		<td>
-			<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Start Date", required: true rescue nil %>
-		</td>
-		<td>
-			<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "End Date", required: true rescue nil %>
-		</td>
-	</tr>
+		</table> 
 
 
-</table>
 
-<!--table>
+		<table>
+			<thead>
+				<tr>
+					<th colspan=4>1.Select Models</th>
+				</tr>
+			</thead>
+			<tr>
+				<td>Model-1:</td>
+				<td><%#= collection_select(:m1, params[:m1], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 1 -"}, required: true ) rescue nil %></td>
+				<td>Model-2:</td>
+				<td><%#= collection_select(:m2, params[:m2], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 2 -"} ) rescue nil %></td>
+			</tr>
+			<tr>
+			</tr>
+			<tr>
+				<td>Model-3:</td>
+				<td><%#= collection_select(:m3, params[:m3], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 3 -"} ) rescue nil %></td>
+				<td>Model-4:</td>
+				<td><%#= collection_select(:m4, params[:m4], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 4 -"} ) rescue nil %></td>
+			</tr>
+		</table>
+
+		<table>
+			<thead>
+				<tr>
+					<th>2.Select MIP</th>
+					<th>3.Select Variable Name</th>
+					<th>4.Select Experiment</th>
+				</tr>
+			</thead>
+			<tr>
+				<td>Daily Data<%#= collection_select(:mip, params[:mip], Settings::Mip.all.order("name"), :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></td>
+				<td><%= collection_select(:var, params[:var], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"}, required: true) rescue nil %></td>
+				<td><%= collection_select(:exp, params[:exp], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"}, required: true) rescue nil %></td>
+			</tr>
+		</table>
+
+		<%= render "layouts/partials/datepicker"%>
+
+		<table>
+			<thead>
+				<tr>
+					<th colspan=2>4.Select Date Range</th>
+				</tr>
+			</thead>
+
+			<tr>
+				<td>
+					<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Start Date", required: true rescue nil %>
+				</td>
+				<td>
+					<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "End Date", required: true rescue nil %>
+				</td>
+			</tr>
+
+
+		</table>
+
+		<!--table>
 	<thead>
 		<tr>
 			<th colspan=6>5.Select Months</th>
@@ -65,12 +146,12 @@
 	</thead>
 	<tr>
 		<%# ["Jan.","Feb.","Mar.","Apr.","May","June"].each_with_index do |m,i|%>
-			<td><%#= check_box_tag "months[#{i+1}]", i+1, name: 'months[]' %><%#= label_tag "months[#{i+1}]", " #{i+1}-#{m}", checked: false  %></td>
+   <td><%#= check_box_tag "months[#{i+1}]", i+1, name: 'months[]' %><%#= label_tag "months[#{i+1}]", " #{i+1}-#{m}", checked: false  %></td>
 	<%# end %>
 	</tr>
 	<tr>
 		<%# ["July","Aug.","Sep.","Oct.","Nov.","Dec."].each_with_index do |m,i|%>
-			<td><%#= check_box_tag "months[#{i+7}]", i+7, name: 'months[]' %><%#= label_tag "months[#{i+7}]", " #{i+7}-#{m}" %></td>
+   <td><%#= check_box_tag "months[#{i+7}]", i+7, name: 'months[]' %><%#= label_tag "months[#{i+7}]", " #{i+7}-#{m}" %></td>
 	<%# end %>
 	</tr>
 </table -->
