@@ -50,8 +50,8 @@
 	<% [1,2,3,4].each do |i| %>
 
 		<tr> 
-		<td >Model-<%=i%>:</td>
-		<td> 
+		<td style="width:20%;" align="center">Model-<%=i%>:</td>
+		<td style="width:30%;" align="center"> 
 			<select id="c<%=i%>" name="c<%=i%>[]" onchange="select<%=i%>()"> 
 				<option value="" disabled selected>-- Select Category --</option> 
 				<option value="CMIP5">CMIP5</option> 
@@ -59,7 +59,7 @@
 				<option value="NEX-NASA-DAILY">NEX-NASA</option> 
 			</select> 
 		</td> 
-		<td> 
+		<td style="width:50%;" align="center"> 
 			<select id="m<%=i%>" name="m<%=i%>[]" > 
 				<option value="" disabled selected> -- Select Model --</option> 
 			</select> 
@@ -70,29 +70,6 @@
 
 </table> 
 
-
-
-<table>
-	<thead>
-		<tr>
-			<th colspan=4>1.Select Models</th>
-		</tr>
-	</thead>
-	<tr>
-		<td>Model-1:</td>
-		<td><%#= collection_select(:m1, params[:m1], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 1 -"}, required: true ) rescue nil %></td>
-		<td>Model-2:</td>
-		<td><%#= collection_select(:m2, params[:m2], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 2 -"} ) rescue nil %></td>
-	</tr>
-	<tr>
-	</tr>
-	<tr>
-		<td>Model-3:</td>
-		<td><%#= collection_select(:m3, params[:m3], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 3 -"} ) rescue nil %></td>
-		<td>Model-4:</td>
-		<td><%#= collection_select(:m4, params[:m4], Settings::Datamodel.all.order("name"), :name, :foldername, {include_blank: "- Select Model 4 -"} ) rescue nil %></td>
-	</tr>
-</table>
 
 <table>
 	<thead>

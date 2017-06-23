@@ -440,15 +440,15 @@ class Cmip5sController < ApplicationController
 		mip = "mm"
 		exp = params[:exp].first.to_s
 
-		@c1 = c1 = params[:c1].first.to_s
-		@c2 = c2 = params[:c2].first.to_s
-		@c3 = c3 = params[:c3].first.to_s
-		@c4 = c4 = params[:c4].first.to_s
+		@c1 = c1 = params[:c1].first.to_s rescue nil
+		@c2 = c2 = params[:c2].first.to_s rescue nil
+		@c3 = c3 = params[:c3].first.to_s rescue nil
+		@c4 = c4 = params[:c4].first.to_s rescue nil
 
-		@m1 = m1 = params[:m1].first.to_s
-		@m2 = m2 = params[:m2].first.to_s
-		@m3 = m3 = params[:m3].first.to_s
-		@m4 = m4 = params[:m4].first.to_s
+		@m1 = m1 = params[:m1].first.to_s rescue nil
+		@m2 = m2 = params[:m2].first.to_s rescue nil
+		@m3 = m3 = params[:m3].first.to_s rescue nil
+		@m4 = m4 = params[:m4].first.to_s rescue nil
 
 
 		#@f1_name = var + '_' + mip +'_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
@@ -598,7 +598,7 @@ class Cmip5sController < ApplicationController
 		#########################################################
 
 
-		output_file_name = "#{var}}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
+		output_file_name = "#{var}_#{exp}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}_lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}"
 
 		@cdo_output_path = output_dir.to_s + "/" + output_file_name
 
@@ -606,22 +606,22 @@ class Cmip5sController < ApplicationController
 		cdo_threads=[]
 
 		cdo_threads << Thread.new{
-			@f1_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@c1}_#{@m1}_#{@cdo_output_path}.nc", options:'-f nc4') rescue nil  
+			@f1_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f1), output:"public/#{@cdo_output_path}_#{@c1}_#{@m1}.nc", options:'-f nc4') rescue nil  
 			f1_ctl = cdo_run.gradsdes(input: @f1_data, output: f1_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f2_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/#{@c2}_#{@m2}_#{@cdo_output_path}.nc", options:'-f nc4') rescue nil  
+			@f2_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f2), output:"public/##{@cdo_output_path}_#{@c2}_#{@m2}.nc", options:'-f nc4') rescue nil  
 			f2_ctl = cdo_run.gradsdes(input: @f2_data, output: f2_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f3_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@c3}_#{@m3}_#{@cdo_output_path}.nc", options:'-f nc4') rescue nil 
+			@f3_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f3), output:"public/#{@cdo_output_path}_#{@c3}_#{@m3}.nc", options:'-f nc4') rescue nil 
 			f3_ctl = cdo_run.gradsdes(input: @f3_data, output: f3_ctl, options:'-f ctl') rescue nil
 		}
 
 		cdo_threads << Thread.new{
-			@f4_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@c4}_#{@m4}_#{@cdo_output_path}.nc", options:'-f nc4') rescue nil  
+			@f4_data = cdo_run.seldate([@sdate.to_datetime, @edate.to_datetime], input: cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: f4), output:"public/#{@cdo_output_path}_#{@c4}_#{@m4}.nc", options:'-f nc4') rescue nil  
 			f4_ctl = cdo_run.gradsdes(input: @f4_data, output: f4_ctl, options:'-f ctl') rescue nil
 		}
 
@@ -630,35 +630,35 @@ class Cmip5sController < ApplicationController
 		end
 		ThreadsWait.all_waits(*cdo_threads)
 		##############################################################
-		#gs_name = "lon_#{s_lon.to_i}_#{e_lon.to_i}_lat_#{s_lat.to_i}_#{e_lat.to_i}_#{@sdate.strftime('%Y%m%d')}_#{@edate.strftime('%Y%m%d')}"
 
 		[@f1_data,@f2_data,@f3_data,@f4_data].each_with_index do |data,i|
 			if i+1==1
 				m_title = @m1.to_s
+				c_title = @c1.to_s
 			elsif i+1==2
 				m_title = @m2.to_s
+				c_title = @c2.to_s
 			elsif i+1==3
 				m_title = @m3.to_s
+				c_title = @c3.to_s
 			elsif i+1==4
 				m_title = @m4.to_s
+				c_title = @c4.to_s
 			end
 
 			mdate = cdo_run.showdate(input: data) rescue nil
 			date = mdate.first.split(" ").to_a rescue nil
 			ntime = cdo_run.ntime(input: data)[0] rescue nil
 			stdname = cdo_run.showstdname(input: data)[0] rescue nil
-			#data_ctl = cdo_run.gradsdes(input: data) rescue nil
-			#gs_name_m = "lon#{s_lon.to_i}_#{e_lon.to_i}lat#{s_lat.to_i}_#{e_lat.to_i}_#{date[0]}#{date[-1]}#{i+1}"
 			gs_name_m = "lon#{s_lon.to_i}_#{e_lon.to_i}_lat#{s_lat.to_i}_#{e_lat.to_i}_#{date[0].to_date.strftime('%Y%m%d') rescue nil}_#{date[-1].to_date.strftime('%Y%m%d') rescue nil}_#{i+1}"
 
 			grads_gs = File.new("#{sys_output_dir}/#{gs_name_m}.gs", "w")
 			grads_gs.puts("reinit")
-			grads_gs.puts("open #{output_file_name}_#{m_title}.ctl")
+			grads_gs.puts("open #{output_file_name}_#{c_title}_#{m_title}.ctl")
 			grads_gs.puts("set grads off")
 			grads_gs.puts("set gxout shaded")
 			grads_gs.puts("set font 1")
 			grads_gs.puts("set strsiz 0.12")
-			#grads_gs.puts("draw string 1.8 0.1 Date Period: #{@sdate.strftime('%Y-%m-%d')} -- #{@edate.strftime('%Y-%m-%d')} by CDAAS RIMES.INT #{Time.now.year}")
 			grads_gs.puts("draw string 1.8 0.1 Date Period: #{date[0]} -- #{date[-1]} by CDAAS RIMES.INT #{Time.now.year}") rescue nil 
 
 			if @unit == "°C"
@@ -737,8 +737,8 @@ class Cmip5sController < ApplicationController
 			grads_gs.puts("set mpdset hires")
 			grads_gs.puts("d ave(#{var}*#{@rate}+#{@rate2},t=1,t=#{ntime.to_s})")
 			grads_gs.puts("cbar.gs")
-			grads_gs.puts("draw title #{m_title} Daily #{exp.humanize} #{stdname.humanize}") rescue nil
-			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{m_title}.png png white") rescue nil
+			grads_gs.puts("draw title #{c_title} #{m_title} #{exp.humanize} #{stdname.humanize}") rescue nil
+			grads_gs.puts("printim #{output_file_name}_sel_lonlat_grads_#{c_title}_#{m_title}.png png white") rescue nil
 			grads_gs.puts("quit")
 			grads_gs.close
 
