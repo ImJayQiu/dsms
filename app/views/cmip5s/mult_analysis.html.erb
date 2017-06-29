@@ -7,83 +7,113 @@
 	<table>
 	<tr>
 		<td style="width:50%;" align="center" colspan=3>
-		<% if @m1.nil? %>
-			No file selected !
+			<% if @m1.nil? %>
+				No file selected !
 		<% else %>
-			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c1.to_s}_#{@m1.to_s}.png" %> target = "_blank" >
+				<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c1.to_s}_#{@m1.to_s}.png" %> target = "_blank" >
 				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c1.to_s}_#{@m1.to_s}.png", width: "100%" rescue nil %>
 			</a>
 		<% end %>
 		</td>
 
 		<td style="width:50%;" align="center" colspan=3>
-			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c2.to_s}_#{@m2.to_s}.png" %> target = "_blank" >
+			<% if @m2.nil? %>
+				No file selected !
+		<% else %>
+				<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c2.to_s}_#{@m2.to_s}.png" %> target = "_blank" >
 				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c2.to_s}_#{@m2.to_s}.png", width: "100%" rescue nil %>
 			</a>
+		<% end %>
 		</td>
 	</tr>
+
 	<tr>
-		<td>Download:</td>
+		<% if @m1.nil? %>
+			<td style="width:50%;" align="center" colspan=3></td>
+	<% else %>
+			<td>Download:</td>
 		<% if can? :download, :nc %>
 			<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@c1}_#{@m1}.nc", method: :get %></td>
 		<% end # if can? :download, :nc %>
 		<% if can? :download, :ctl %>
 			<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@c1}_#{@m1}.ctl", method: :get %></td>
 		<% end # if can? :download, :ctl %>
-		<td>Download:</td>
+		<% end # if @m1.nil %>
+
+		<% if @m2.nil? %>
+			<td style="width:50%;" align="center" colspan=3></td>
+	<% else %>
+			<td>Download:</td>
 		<% if can? :download, :nc %>
 			<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@c2}_#{@m2}.nc", method: :get %></td>
 		<% end # if can? :download, :nc %>
 		<% if can? :download, :ctl %>
 			<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@c2}_#{@m2}.ctl", method: :get %></td>
 		<% end # if can? :download, :ctl %>
+		<% end # if @m2.nil? %>
 	</tr>
 	<tr>
 		<td style="width:50%;" align="center" colspan=3>
-			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c3.to_s}_#{@m3.to_s}.png" %> target = "_blank" >
+			<% if @m3.nil? %>
+				No file selected !
+		<% else %>
+				<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c3.to_s}_#{@m3.to_s}.png" %> target = "_blank" >
 				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c3.to_s}_#{@m3.to_s}.png", width: "100%" rescue nil %>
 			</a>
+			<% end # if @m3.nil? %>
 		</td>
 
 		<td style="width:50%;" align="center" colspan=3>
-			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c4.to_s}_#{@m4.to_s}.png" %> target = "_blank" >
+			<% if @m4.nil? %>
+				No file selected !
+		<% else %>
+				<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c4.to_s}_#{@m4.to_s}.png" %> target = "_blank" >
 				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c4.to_s}_#{@m4.to_s}.png", width: "100%" rescue nil %>
 			</a>
+			<% end #if @m4.nil? %>
 		</td>
 	</tr>
 	<tr>
-		<td>Download:</td>
-		<% if can? :download, :nc %>
-			<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@c3}_#{@m3}.nc", method: :get %></td>
-		<% end # if can? :download, :nc %>
-		<% if can? :download, :ctl %>
-			<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@c3}_#{@m3}.ctl", method: :get %></td>
-		<% end # if can? :download, :nc %>
-		<td>Download:</td>
-		<% if can? :download, :nc %>
-			<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@c4}_#{@m4}.nc", method: :get %></td>
-		<% end # if can? :download, :nc %>
-		<% if can? :download, :ctl %>
-			<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@c4}_#{@m4}.ctl", method: :get %></td>
-		<% end # if can? :download, :nc %>
-	</tr>
+		<% if @m3.nil? %>
+			<td style="width:50%;" align="center" colspan=3>
+		<% else %>
+				<td>Download:</td>
+			<% if can? :download, :nc %>
+				<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@c3}_#{@m3}.nc", method: :get %></td>
+			<% end # if can? :download, :nc %>
+			<% if can? :download, :ctl %>
+				<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@c3}_#{@m3}.ctl", method: :get %></td>
+			<% end # if can? :download, :nc %>
+			<% end # if @m3.nil? %>
 
-</table>
-<p/>
+			<% if @m4.nil? %>
+				<td style="width:50%;" align="center" colspan=3>
+			<% else %>
+					<td>Download:</td>
+				<% if can? :download, :nc %>
+					<td><%= button_to "NC file", root_path+@cdo_output_path.to_s+"_#{@c4}_#{@m4}.nc", method: :get %></td>
+				<% end # if can? :download, :nc %>
+				<% if can? :download, :ctl %>
+					<td><%= button_to "CTL file", root_path+@cdo_output_path.to_s+"_#{@c4}_#{@m4}.ctl", method: :get %></td>
+				<% end # if can? :download, :nc %>
+				<% end # if @m4.nil? %>
+			</tr>
 
-<%#= render "cmip5s/graphs/mult_models" %>
-<p/>
-<p/>
+		</table>
+		<p/>
+
+		<p/>
+		<p/>
 
 
-</div>
-<p/>
+	</div>
+	<p/>
 
 
 <% else %>
-<p/>
-Permission Denied ! 
-<p/>
-Please upgrade your account to use this function !
+		<p/>
+	Permission Denied ! 
+	<p/>
+	Please upgrade your account to use this function !
 
 <% end %>
