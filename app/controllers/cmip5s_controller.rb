@@ -501,7 +501,7 @@ class Cmip5sController < ApplicationController
 =end
 		if c1 == "CMIP5"
 			@f1_name = var + '_day_' + m1 + '_' + exp + '_' + 'rimes' + '.nc'
-			@m1_path = Settings::Datamodel.where(name: m1).first.foldername 
+			@m1_path = Settings::Datamodel.where(name: m1).first.foldername rescue nil 
 		elsif c1=="CORDEX-DAILY"
 			@f1_name = var + '_' + exp + '_' + m1 + '_' + 'day_rimes' + '.nc'
 			@m1_path = Settings::CordexModel.where(name: m1).first.folder rescue nil
