@@ -4,9 +4,9 @@ This is for ECMWF
 	<tr align=center>
 
 		<%= form_tag({controller: "cdoanalysises", action: "ecmwf_level" }, target: '_blank' , method: :post) do %>  
-			<td>Select Level :</td>
+			<td>Select Ensemble :</td>
 		<td>
-			<%= select(:level, params[:level] , @levels.map {|l| [l,l] }, {include_blank: "- Select Level -"}, required: true ) rescue nil %>
+			<%= select(:level, params[:level] , @levels.map {|l| [l,l] }, {include_blank: "- Select Ensemble -"}, required: true ) rescue nil %>
 			<%= hidden_field_tag :dataset, @sel_data  %>
 			<%= hidden_field_tag :sys_output_dir, @sys_output_dir %>
 			<%= hidden_field_tag :cdaas_output_dir, @cdaas_output_dir %>
