@@ -7,9 +7,13 @@
 	<table>
 	<tr>
 		<td style="width:50%;" align="center" colspan=3>
+		<% if @m1.nil? %>
+			No file selected !
+		<% else %>
 			<a href= <%= root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c1.to_s}_#{@m1.to_s}.png" %> target = "_blank" >
 				<%= image_tag root_path+"#{@cdo_output_path}_sel_lonlat_grads_#{@c1.to_s}_#{@m1.to_s}.png", width: "100%" rescue nil %>
 			</a>
+		<% end %>
 		</td>
 
 		<td style="width:50%;" align="center" colspan=3>
