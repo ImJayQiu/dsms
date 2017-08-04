@@ -15,8 +15,8 @@ class EcmwfController < ApplicationController
 		################ date ##################################
 
 		@ecmwf_dir = Settings::Datasetpath.where(name: "ECMWF").first.path
-		@date = params[:date].first.to_date
-		date_folder = @date.strftime("%Y/%m/%d").to_s
+		date = params[:date].first.to_date
+		date_folder = date.strftime("%Y/%m/%d").to_s
 
 		############# Selected location  #############################
 
@@ -35,8 +35,16 @@ class EcmwfController < ApplicationController
 
 		############# paramaters  ################################
 		@var = var = params[:part1].first.to_s
+
 		mip = 'ECMWF' 
+
 		@type = type = params[:part4].first.to_s
+
+		if @type == "R1L"
+			@date = date.beginning_of_month 
+		else
+			@date = date
+		end
 
 		@output_name = @date.strftime("%Y_%m_%d") + '_' + mip + '_' + type + '_' + var + '_' + lon_lat 
 		###########################################
@@ -63,42 +71,55 @@ class EcmwfController < ApplicationController
 
 		### cut data by selected lat lon 
 
-		@sel_data = cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: data_path, output: "#{@sys_output_dir + @output_name}.nc")
+		@sel_data = cdo_run.sellonlatbox([s_lon,e_lon,s_lat,e_lat], input: data_path, output: "#{@sys_output_dir + @output_name}.nc") rescue nil
+
 		#########################################
 
-		@data = cdo_run.sinfon(input: @sel_data)
-		@timestamps = cdo_run.showtimestamp(input: @sel_data)
-		levels = cdo_run.showlevel(input: @sel_data)
-		@levels = levels.first.split(" ").map(&:to_i).sort
+		if @sel_data.nil?
+			@status = "Sorry, the requested data is under preparation. Please try again later.<br/>
+			<p>
+			<font size=2 color=red>
+			* 10 Days Forcast : Update daily at around 16:00. <br/>
+			* 15 Days Forcast : Update daily at around 18:00. <br/>
+			* Seasonal Forcast : Update monthly at around 10th.
+			</font>"
+		else
 
-		### create 
-		@ctl_file = cdo_run.gradsdes(input: @sel_data)
-		#############################################
+			@data = cdo_run.sinfon(input: @sel_data) rescue nil
+			@timestamps = cdo_run.showtimestamp(input: @sel_data) rescue nil
+			levels = cdo_run.showlevel(input: @sel_data) rescue nil
+			@levels = levels.first.split(" ").map(&:to_i).sort rescue nil
 
-		grads_gs = File.new("#{@sys_output_dir + lon_lat}.gs", "w")
-		grads_gs.puts("reinit")
-		grads_gs.puts("open #{@output_name}.ctl")
-		grads_gs.puts("draw title ECMWF #{type} #{var}")
-		grads_gs.puts("set gxout shaded")
-		grads_gs.puts("set mpdset hires")
-		@timestamps.first.split(" ").each_with_index do |t,i|
-			grads_gs.puts("draw title ECMWF #{t} | #{var}")
-			grads_gs.puts("draw string 2.8 0.2 Forcasting Date: #{t} By CDAAS RIMES.INT #{Time.now.year}")
-			grads_gs.puts("set t #{i+1} " )
-			grads_gs.puts("d #{var}" )
-			grads_gs.puts("printim #{@output_name}-#{i+1}.png white")
-			grads_gs.puts("clear")
-			grads_gs.puts("set grads off")
-		end
-		grads_gs.puts("quit")
-		grads_gs.close
+			### create 
+			@ctl_file = cdo_run.gradsdes(input: @sel_data) rescue nil
+			#############################################
 
-		@go_dir = "cd #{@sys_output_dir.to_s}"
-		@plot_maps = "grads -lbc 'exec #{lon_lat}.gs'"
-		@plot_maps_cmd = system("cd / && #{@go_dir} && #{@plot_maps} ") 
-		@print_csv_cmd = system("cd / && #{@go_dir} && cdo outputtab,date,time,lon,lat,value #{@sel_data} > #{@output_name}.csv ") 
-		@ani_maps_cmd = system("cd / && #{@go_dir} && convert -delay 100 '#{@output_name}-%d.png[0-999]' #{@output_name}_all.gif ") 
+			grads_gs = File.new("#{@sys_output_dir + lon_lat}.gs", "w")
+			grads_gs.puts("reinit")
+			grads_gs.puts("open #{@output_name}.ctl")
+			grads_gs.puts("draw title ECMWF #{type} #{var}")
+			grads_gs.puts("set gxout shaded")
+			grads_gs.puts("set mpdset hires")
+			@timestamps.first.split(" ").each_with_index do |t,i|
+				grads_gs.puts("draw title ECMWF #{t} | #{var}")
+				grads_gs.puts("draw string 2.8 0.2 Forcasting Date: #{t} By CDAAS RIMES.INT #{Time.now.year}")
+				grads_gs.puts("set t #{i+1} " )
+				grads_gs.puts("d #{var}" )
+				grads_gs.puts("printim #{@output_name}-#{i+1}.png white")
+				grads_gs.puts("clear")
+				grads_gs.puts("set grads off")
+			end
+			grads_gs.puts("quit")
+			grads_gs.close
 
+			@go_dir = "cd #{@sys_output_dir.to_s}"
+			@plot_maps = "grads -lbc 'exec #{lon_lat}.gs'"
+			@plot_maps_cmd = system("cd / && #{@go_dir} && #{@plot_maps} ") 
+			@print_csv_cmd = system("cd / && #{@go_dir} && cdo outputtab,date,time,lon,lat,value #{@sel_data} > #{@output_name}.csv ") 
+			@ani_maps_cmd = system("cd / && #{@go_dir} && convert -delay 100 '#{@output_name}-%d.png[0-999]' #{@output_name}_all.gif ") 
+
+			@status = ""
+			end # if data nil 
 
 	end
 

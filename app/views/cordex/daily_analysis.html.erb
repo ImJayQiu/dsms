@@ -55,32 +55,28 @@
 			<td>Longitude Range: <%= @lon_r %></td>
 			<td>Latitude Range: <%= @lat_r %></td>
 		</tr>
-		<tr>
+
+		<% if can? :download, :nc %>
+			<tr>
 			<td>
-				<% if can? :download, :nc %>
-					<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
-				<% end # if can? :download, :nc %>
+				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
 			</td>
 
 			<td>
-				<% if can? :download, :ctl %>
-					<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
-				<% end # if can? :download, :ctl %>
-			</td>
-
-			<td>
-				<% if can? :download, :csv %>
-					<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
-				<% end #if can? :download, :csv %>
+				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
 			</td>
 
 		</tr>
+		<% end # if can? :download, :nc %>
+
 		</tbody>
 	</table>
 </div>
 
 <p/>
-<table>
+
+<% if can? :analyze, :dataset %>
+	<table>
 	<thead>
 		<tr>
 			<th>Dataset Analysis Operations</th>
@@ -108,6 +104,8 @@
 			</td>
 		</tr>
 	</table>
+	<% end # if can? :analyze, :dataset %>
+
 </div>
 <p/>
 

@@ -1,60 +1,60 @@
-<h2>Sign up</h2>
-
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %>
-    <% if @validatable %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
-
 <div class="inner">
 	<h2>CDAAS.RIMES<br/>Sign Up</h2>
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
-		<div align=center>
+	<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+		<%= devise_error_messages! %>
+	<div align=center>
+		<div class="6u 12u$(xsmall)">
+			<%= f.text_field :username, autofocus: true, placeholder: "* Username", required: true %>
+		</div>
+
+		<p/>
 
 		<div class="6u 12u$(xsmall)">
-			<%= f.email_field :email, autofocus: true, placeholder: "Email" %>
+			<%= f.email_field :email, autofocus: true, placeholder: "* Email", required: true %>
+		</div>
+
+		<p/>
+
+		<div class="6u 12u$(xsmall)">
+			<%= f.text_field :country, autofocus: true, placeholder: "* Country", required: true %>
+		</div>
+
+		<p/>
+
+		<div class="6u 12u$(xsmall)">
+			<%= f.text_field :organization, autofocus: true, placeholder: "* Organization", required: true %>
+		</div>
+
+		<p/>
+
+		<div class="6u 12u$(xsmall)">
+			<%= f.text_field :research_int, autofocus: true, placeholder: "* Research Interesting", required: true %>
 		</div>
 
 		<p/>
 
 		<div class="6u$ 12u$(xsmall)">
-			<%= f.password_field :password, autocomplete: "off", placeholder: "Password (6 characters minimum)" %>
+			<% if @validatable %>
+				<%= f.password_field :password, autocomplete: "off", placeholder: "* Password (#{@minimum_password_length} characters minimum)" %>
+		<% else %> 
+				<%= f.password_field :password, autocomplete: "off", placeholder: "* Password" %>
+		<% end %>
 		</div>
 
 		<p/>
 
 		<div class="6u$ 12u$(xsmall)">
-			<%= f.password_field :password_confirmation, autocomplete: "off", placeholder: "Password (6 characters minimum)" %>
+			<% if @validatable %>
+				<%= f.password_field :password_confirmation, autocomplete: "off", placeholder: "* Confirm Password (#{@minimum_password_length} characters minimum)" %>
+		<% else %> 
+				<%= f.password_field :password_confirmation, autocomplete: "off", placeholder: "* Confirm Password" %>
+		<% end %>
 		</div>
 		<p/>
 		<div class="6u$ 12u$(xsmall)">
-			<%= f.submit "Log in" %>
+			<%= f.submit "Sign Up" %>
 		</div>
+		<p/>
 	</div>
 <% end %>
-	<%= render "users/shared/links" %>
 </div>
-

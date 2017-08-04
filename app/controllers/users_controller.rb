@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
 	# GET /users
 	# GET /users.json
+
 	def index
 		@users = User.order(id: :desc).paginate(:page => params[:page], :per_page => 20)
 	end
@@ -53,6 +54,7 @@ class UsersController < ApplicationController
 
 	# DELETE /users/1
 	# DELETE /users/1.json
+
 	def destroy
 		@user.destroy
 		respond_to do |format|
@@ -71,6 +73,7 @@ class UsersController < ApplicationController
 
 	# Never trust parameters from the scary internet, only allow the white list through.
 	def user_params
-		params.require(:user).permit(:username,:email,:role,:encrypted_password,:research_int,:organization,:country)
+		params.require(:user).permit(:username, :email, :role, :password, :password_confirmation, :research_int, :organization, :country)
 	end
+
 end

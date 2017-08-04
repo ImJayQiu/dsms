@@ -9,6 +9,7 @@ class Ability
 			can :manage, :all
 		end
 
+=begin
 		if user.role == "super"
 			can :manage, :setting
 			can :manage, :root_path
@@ -21,18 +22,20 @@ class Ability
 			can :download, :ctl
 			can :download, :csv
 		end
+=end
 
 		if user.role == "expert"
 			can :analyze, :cordex
 			can :analyze, :nexnasa
 			can :analyze, :multmodels
+			can :analyze, :dataset
 			can :input, :location
 			can :download, :nc
 			can :download, :ctl
 			can :download, :csv
 		end
 
-		if user.role == "normal"
+		if user.role == "PM"
 			can :analyze, :cordex
 			can :analyze, :nexnasa
 			can :analyze, :multmodels

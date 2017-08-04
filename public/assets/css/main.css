@@ -1412,8 +1412,8 @@ body.is-loading *, body.is-loading *:before, body.is-loading *:after {
 }
 
 body, input, select, textarea {
-/*	color: #fff; */
-	color: #333; 
+/*	color: #333; */
+	color: #fff; 
 	font-family: "Open Sans", Helvetica, sans-serif;
 	font-size: 15pt;
 	font-weight: 400;

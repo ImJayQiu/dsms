@@ -100,7 +100,9 @@ Rails.application.routes.draw do
 			get 'debug'
 		end
 	end
-	devise_for :users #, controllers: { sessions: "users/sessions" }
+
+	devise_for :users, :controllers => {:registrations => "users/registrations"}
+
 	resources :users
 
 	# The priority is based upon order of creation: first created -> highest priority.

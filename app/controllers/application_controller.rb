@@ -2,10 +2,8 @@ class ApplicationController < ActionController::Base
 
 
 	before_action :authenticate_user!
-	before_action :configure_permitted_parameters, if: :devise_controller?
-
+	before_action :configure_permitted_parameters , if: :devise_controller?
 	layout "main"
-
 
 	rescue_from CanCan::AccessDenied do |exception|
 		redirect_to root_url, :alert => exception.message
@@ -30,7 +28,7 @@ class ApplicationController < ActionController::Base
 						 :email, 
 						 :role,
 						 :password, 
-						 :encrypted_password,
+						 :password_confirmation,
 						 :research_int,
 						 :organization,
 						 :country) }
@@ -42,7 +40,7 @@ class ApplicationController < ActionController::Base
 						 :role,
 						 :current_password,
 						 :password, 
-						 :encrypted_password,
+						 :password_confirmation,
 						 :research_int,
 						 :organization,
 						 :country) }

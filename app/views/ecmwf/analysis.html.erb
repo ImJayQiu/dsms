@@ -1,5 +1,5 @@
 <p id="notice"><%= notice %></p>
-<h2>ECMWF Forcasting</h2>
+<h2>ECMWF Forcasting <%= @date %></h2>
 
 
 <table>
@@ -7,39 +7,50 @@
 	</tr>
 	<tr>
 		<td style="width:50%;" align="center">
-			<a href= <%= root_url + @cdaas_output_dir.to_s + @output_name.to_s + "_all.gif" %> target = "_blank" >
+
+			<% if @sel_data.nil? %>
+
+				<%= @status.html_safe %>
+
+		<% else %>
+
+				<a href= <%= root_url + @cdaas_output_dir.to_s + @output_name.to_s + "_all.gif" %> target = "_blank" >
 				<%= image_tag root_url + @cdaas_output_dir.to_s + @output_name.to_s + "_all.gif" , width: "50%" %>
 				<br/>Click image to enlarge
 			</a>
+
+			<% end # if @sel_data.nil? %>
+
 		</td>
 	</tr>
 </table>
+
 <p/>
-<table>
+
+<% if can? :download, :nc %>
+	<table>
 	<tbody>
 	<tr>
-		<% if can? :download, :nc %>
-			<td>
+		<td>
 			<%= button_to "Download NC", root_url + @cdaas_output_dir.to_s+@output_name.to_s+".nc", method: :get %>
 		</td>
-		<% end # if can? :download, :nc %>
-		<% if can? :download, :ctl %>
-			<td>
+		<td>
 			<%= button_to "Download CTL", root_url + @cdaas_output_dir.to_s+@output_name.to_s+".ctl", method: :get %>
 		</td>
-		<% end # if can? :download, :ctl %>
-		<% if can? :download, :csv %>
-			<td>
+		<td>
 			<%= button_to "Download CSV", root_url + @cdaas_output_dir.to_s+@output_name.to_s+".csv", method: :get %>
 		</td>
-		<% end # if can? :download, :csv %>
 	</tr>
 	</tbody>
 </table>
+<% end # if can? :download, :nc %>
 
 
 <p/>
-<table>
+
+<% if can? :analyze, :dataset %>
+
+	<table>
 	<thead>
 		<tr>
 			<th>Dataset Analysis Operations</th>
@@ -67,5 +78,8 @@
 			</td>
 		</tr>
 	</table>
+
+	<% end # if can? :analyze, :dataset %>
+
 </div>
 <p/>

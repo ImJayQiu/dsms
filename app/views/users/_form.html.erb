@@ -18,11 +18,11 @@
 
 	<tr>
 		<td>User Name:</td>
-		<td><%= f.text_field :username, required: true  %></td>
+		<td><%= f.text_field :username, required: true, disabled: true  %></td>
 	</tr>
 	<tr>
 		<td>E-Mail:</td>
-		<td><%= f.text_field :email, required: true  %></td>
+		<td><%= f.text_field :email, required: true, disabled: true  %></td>
 	</tr>
 	<tr>
 		<td>Research Interesting:</td>
@@ -40,15 +40,17 @@
 		<td>Role:</td>
 		<td><%= f.collection_select :role, Common::ROLES, :to_s, :humanize, prompt: "-Select-" %></td>
 	</tr>
-	<tr>
+
+	<!-- tr>
 		<td>New Password</td>
-		<td><%= f.password_field :password, autofocus: true, autocomplete: "off" %></td>
+		<td><%#= f.password_field :password, autofocus: true, autocomplete: "off" %></td>
 	</tr>
 
 	<tr>
 		<td>Confirm New Password</td>
-		<td><%= f.password_field :password_confirmation, autocomplete: "off" %></td>
-	</tr>
+		<td><%#= f.password_field :password_confirmation, autocomplete: "off" %></td>
+	</tr -->
+
 
 </table>
 

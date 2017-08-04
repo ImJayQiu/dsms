@@ -27,7 +27,8 @@
 		</td>
 	</tr>
 
-	<tr>
+	<% if can? :download, :nc %>
+		<tr>
 		<% if @m1.nil? %>
 			<td style="width:50%;" align="center" colspan=3></td>
 	<% else %>
@@ -52,6 +53,8 @@
 		<% end # if can? :download, :ctl %>
 		<% end # if @m2.nil? %>
 	</tr>
+	<% end # if can? :download, :nc %>
+
 	<tr>
 		<td style="width:50%;" align="center" colspan=3>
 			<% if @m3.nil? %>
@@ -73,7 +76,10 @@
 			<% end #if @m4.nil? %>
 		</td>
 	</tr>
-	<tr>
+
+	<% if can? :download, :nc %>
+
+		<tr>
 		<% if @m3.nil? %>
 			<td style="width:50%;" align="center" colspan=3>
 		<% else %>
@@ -98,6 +104,7 @@
 				<% end # if can? :download, :nc %>
 				<% end # if @m4.nil? %>
 			</tr>
+			<% end # if can? :download, :nc %>
 
 		</table>
 		<p/>

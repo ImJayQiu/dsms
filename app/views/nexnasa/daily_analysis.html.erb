@@ -77,7 +77,8 @@
 
 <p/>
 
-<table>
+<% if can? :analyze, :dataset %>
+	<table>
 	<thead>
 		<tr>
 			<th>Dataset Analysis Operations</th>
@@ -104,6 +105,7 @@
 			</td>
 		</tr>
 	</table>
+	<% end # if can? :analyze, :dataset %>
 
 </div>
 

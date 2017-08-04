@@ -1,7 +1,15 @@
 <p id="notice"><%= notice %></p>
 <h2>CMIP5 Data Analysis - Daily</h2>
 
-<table>
+<% if @sel_data.nil? %>
+
+	<table><tr><td>
+			<%= @status.html_safe %>
+</td></tr></table>
+
+<% else %>
+
+	<table>
 	<tr>
 	</tr>
 	<tr>
@@ -27,6 +35,7 @@
 		-->
 	</tr>
 </table>
+
 <p/>
 
 <%= high_stock("summary", @chart) %>
@@ -61,33 +70,25 @@
 		</tbody>
 	</table>
 
-	<table>
+	<% if can? :download, :nc %>
+		<table>
 		<tr align=center>
-
-			<% if can? :download, :nc %>
-				<td>
+			<td>
 				<%= button_to "Download NC", root_path+@cdo_output_path.to_s+".nc", method: :get %>
 			</td>
-			<% end # if can? :download, :nc %>
-			<% if can? :download, :ctl %>
-				<td>
+			<td>
 				<%= button_to "Download CTL", root_path+@cdo_output_path.to_s+".ctl", method: :get %>
 			</td>
-			<% end # if can? :download, :ctl %>
-			<% if can? :download, :csv %>
-				<!--
-			<td>
-				<%#= button_to "Download CSV", root_path+@cdo_output_path.to_s+".csv", method: :get %>
-			</td>
-			-->
-			<% end # if can? :download, :csv %>
 		</tr>
 	</table>
+	<% end # if can? :download, :nc %>
 
 </div>
 
 <p/>
-<table>
+
+<% if can? :analyze, :dataset %>
+	<table>
 	<thead>
 		<tr>
 			<th>Dataset Analysis Operations</th>
@@ -115,7 +116,10 @@
 			</td>
 		</tr>
 	</table>
+	<% end # if can? :analyze, :dataset %>
+
 </div>
 <p/>
 
+<% end # if @sel_data.nil? %>
 

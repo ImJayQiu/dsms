@@ -23,6 +23,7 @@ class SiteController < ApplicationController
 	end
 
 	def home
+		#UserNotifier.send_signup_email.deliver_now
 		@news = News.order(id: :desc).first(5)
 		@about = News.order(id: :desc).last(1)
 		if current_user.role.blank?

@@ -1,39 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
 
-<%if can? :manage, :users%>
-
-	<p id="notice"><%= notice %></p>
-
+<h2>
+	A new user signing up
+<h2>
+	
 <p>
 <strong>User Name:</strong>
 <%= @user.username %>
 </p>
+
 <p>
 <strong>Email:</strong>
 <%= @user.email %>
 </p>
+
 <p>
 <strong>Country:</strong>
 <%= @user.country %>
 </p>
+
 <p>
 <strong>Organization:</strong>
 <%= @user.organization %>
 </p>
+
 <p>
 <strong>Research Interesting:</strong>
 <%= @user.research_int %>
 </p>
-<p>
-<strong>Role:</strong>
-<%= @user.role %>
-</p>
 
+</body>
+</html>
 
-<table>
-	<tr>
-		<td><%= button_to 'Edit', edit_user_path(@user), method: :get %></td>
-		<td><%= button_to 'Back', users_path, method: :get %></td>
-	</tr>
-</table>
-
-<% end %>
