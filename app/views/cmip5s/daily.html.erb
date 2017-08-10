@@ -7,6 +7,19 @@
 
 <h2>CMIP5 Data Analysis - Daily</h2>
 
+<%if can? :see, :description %>
+	<p/>
+	Coupled Model Intercomparison Project Phase 5 (CMIP5) promotes a standard set of model simulations in order to:
+	<p/>
+	<ul>
+		<li> evaluate how realistic the models are in simulating the recent past</li>
+		<li> provide projections of future climate change on two time scales, near term (out to about 2035) and long term (out to 2100 and beyond)</li>
+		<li> understand some of the factors responsible for differences in model projections, including quantifying some key feedbacks such as those involving clouds and the carbon cycle</li>
+	</ul>
+<hr>
+<p/>
+<% end #if can? :see, :description %>
+
 <%= form_tag({controller: "cmip5s", action: "daily_analysis" }, method: :post) do %>  
 
 	<div id="pagewidth">

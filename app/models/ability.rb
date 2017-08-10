@@ -7,6 +7,7 @@ class Ability
 		user ||= User.new # guest user (not logged in)
 		if user.role == "admin"
 			can :manage, :all
+			cannot :see, :description 
 		end
 
 =begin
@@ -39,6 +40,7 @@ class Ability
 			can :analyze, :cordex
 			can :analyze, :nexnasa
 			can :analyze, :multmodels
+			can :see, :description 
 		end
 
 		#

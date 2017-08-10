@@ -7,6 +7,13 @@
 
 <h2>ECMWF Analysis</h2>
 
+<% if can? :see, :description %>
+<p/>
+The European Centre for Medium-Range Weather Forecasts, ECMWF, is an independent intergovernmental organisation supported by most of the nations of Europe and is based at Shinfield Park, Reading, United Kingdom. It operates one of the largest supercomputer complexes in Europe and the world's largest archive of numerical weather prediction data. The Centre is considering an offer from the Italian Government to move ECMWF's data centre to Bologna, Italy. The new site, a former tobacco factory, would be redesigned by the architecture firm gmp.
+<hr>
+<p/>
+<% end # if can? :see, :description %>
+
 <%= form_tag({controller: "ecmwf", action: "analysis" }, method: :post) do %>  
 
 	<div id="pagewidth">

@@ -7,6 +7,15 @@
 
 <h2>CORDEX Data Analysis - Daily</h2>
 
+<% if can? :see, :description %>
+<p/>
+About CORDEX
+<p/>
+The Coordinated Regional Downscaling Experiment (CORDEX) program was recently established by the World Climate Research Program (WCRP). The aim of CORDEX is to develop an international coordinated framework for generating improved regional climate change projections worldwide. Results from the CORDEX analysis will be used as input to the IPCC Fifth Assessment Report as well as to meet the growing demand for high-resolution downscaled projections to inform climate change impact and adaptation studies.
+<hr>
+<p/>
+<%end #if can? :see, :description %>
+
 <%if can? :analyze, :cordex %>
 
 	<%= form_tag({controller: "cordex", action: "daily_analysis" }, method: :post) do %>  

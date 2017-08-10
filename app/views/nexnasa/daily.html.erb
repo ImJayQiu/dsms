@@ -7,6 +7,16 @@
 
 <h2>NEX-NASA Data Analysis - Daily</h2>
 
+<% if can? :see, :description %>
+<p/>
+NASA Earth Exchange (NEX)
+<p/>
+NEX is a platform for scientific collaboration, knowledge sharing and research for the Earth science community.
+
+<hr>
+<p/>
+<% end # if can? :see, :description %>
+
 <% if can? :analyze, :nexnasa %>
 
 <%= form_tag({controller: "nexnasa", action: "daily_analysis" }, method: :post) do %>  
