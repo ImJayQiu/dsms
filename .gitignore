@@ -12,5 +12,6 @@
 !/log/.keep
 /tmp
 /config/app_environment_variables.rb
+/config/database.yml
 /public/tmp_m_nc/*
 /public/tmp_nc/*
