@@ -1,7 +1,9 @@
 <script type="text/javascript"> 
+
 /** 
- * 
- */ 
+ * Dynamic menu 
+ **/ 
+
 	<% [1,2,3,4].each do |i| %>
 	function select<%=i%>() 
 { 
@@ -51,7 +53,7 @@
 
 		<tr> 
 		<td style="width:20%;" align="center">Model-<%=i%>:</td>
-		<td style="width:30%;" align="center"> 
+		<td style="width:20%;" align="center"> 
 			<select id="c<%=i%>" name="c<%=i%>[]" onchange="select<%=i%>()"> 
 				<option value="" disabled selected>-- Select Category --</option> 
 				<option value="CMIP5">CMIP5</option> 
@@ -59,7 +61,11 @@
 				<option value="NEX-NASA-DAILY">NEX-NASA</option> 
 			</select> 
 		</td> 
-		<td style="width:50%;" align="center"> 
+		<td style="width:20%;" align="center">
+			<%= collection_select("exp#{i}", params["exp#{i}"], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"}, required: true) rescue nil %>
+	</td> 
+
+		<td style="width:40%;" align="center"> 
 			<select id="m<%=i%>" name="m<%=i%>[]" > 
 				<option value="" disabled selected> -- Select Model --</option> 
 			</select> 
@@ -80,7 +86,7 @@
 		</tr>
 	</thead>
 	<tr>
-		<td>Daily Data<%#= collection_select(:mip, params[:mip], Settings::Mip.all.order("name"), :name, :name, {include_blank: "- Select MIP -"} ) rescue nil %></td>
+		<td>Daily Data</td>
 		<td><%= collection_select(:var, params[:var], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"}, required: true) rescue nil %></td>
 		<td><%= collection_select(:exp, params[:exp], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"}, required: true) rescue nil %></td>
 	</tr>
