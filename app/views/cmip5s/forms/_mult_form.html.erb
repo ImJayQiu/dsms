@@ -10,6 +10,8 @@
 	var proName = $("#c<%=i%>").val(); 
 	$("#m<%=i%>").empty(); 
 	$("#m<%=i%>").append("<option disabled selected>-- Select Model --</option>"); 
+	$("#exp<%=i%>").empty(); 
+	$("#exp<%=i%>").append("<option disabled selected>-- Select Experiment --</option>"); 
 	if(proName == "CMIP5") 
 	{ 
 		$("#m<%=i%>").append(
@@ -18,6 +20,13 @@
 				<% end %>
 				"<option disabled></option>"
 				); 
+		$("#exp<%=i%>").append(
+				<% Settings::Experiment.all.order("fullname").each do |exp| %>
+					"<option value='<%= exp.name %>' > <%= exp.fullname %> </option>"+
+				<% end %>
+				"<option disabled></option>"
+				); 
+
 	} 
 	if(proName == "CORDEX-DAILY") 
 	{ 
@@ -27,12 +36,24 @@
 				<% end %>
 				"<option disabled></option>"
 				); 
+		$("#exp<%=i%>").append(
+				<% Settings::Experiment.all.order("fullname").each do |exp| %>
+					"<option value='<%= exp.name %>' > <%= exp.fullname %> </option>"+
+				<% end %>
+				"<option disabled></option>"
+				); 
 	} 
 	if(proName == "NEX-NASA-DAILY") 
 	{ 
 		$("#m<%=i%>").append(
 				<% Settings::NexnasaModel.all.each do |nasa|%>
 					"<option value='<%= nasa.folder %>' > <%= nasa.name %> </option>"+
+				<% end %>
+				"<option disabled></option>"
+				); 
+		$("#exp<%=i%>").append(
+				<% Settings::Experiment.all.order("fullname").each do |exp| %>
+					"<option value='<%= exp.name %>' > <%= exp.fullname %> </option>"+
 				<% end %>
 				"<option disabled></option>"
 				); 
@@ -62,8 +83,10 @@
 			</select> 
 		</td> 
 		<td style="width:20%;" align="center">
-			<%= collection_select("exp#{i}", params["exp#{i}"], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"}, required: true) rescue nil %>
-	</td> 
+			<select id="exp<%=i%>" name="exp<%=i%>[]" > 
+				<option value="" disabled selected> -- Select Experiment --</option> 
+			</select> 
+		</td> 
 
 		<td style="width:40%;" align="center"> 
 			<select id="m<%=i%>" name="m<%=i%>[]" > 
@@ -77,23 +100,30 @@
 </table> 
 
 
+<%= render "layouts/partials/datepicker"%>
+
 <table>
 	<thead>
 		<tr>
-			<th>2.Select MIP</th>
-			<th>3.Select Variable Name</th>
-			<th>4.Select Experiment</th>
+			<th>2.Select Variable Name</th>
+			<th colspan=2>3.Select Date Range</th>
 		</tr>
 	</thead>
 	<tr>
-		<td>Daily Data</td>
-		<td><%= collection_select(:var, params[:var], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"}, required: true) rescue nil %></td>
-		<td><%= collection_select(:exp, params[:exp], Settings::Experiment.all.order("fullname"), :name, :fullname, {include_blank: "- Select Experiment -"}, required: true) rescue nil %></td>
+		<td>
+			<%= collection_select(:var, params[:var], Settings::Variable.all.order("name"), :name, :name, {include_blank: "- Select Variable -"}, required: true) rescue nil %>
+		</td>
+		<td>
+			<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Start Date", required: true rescue nil %>
+		</td>
+		<td>
+			<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "End Date", required: true rescue nil %>
+		</td>
 	</tr>
 </table>
 
-<%= render "layouts/partials/datepicker"%>
 
+<!--table>
 <table>
 	<thead>
 		<tr>
@@ -103,15 +133,15 @@
 
 	<tr>
 		<td>
-			<%= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Start Date", required: true rescue nil %>
+			<%#= text_field :s_date, params[:s_date], id: "s_date", placeholder: "Start Date", required: true rescue nil %>
 		</td>
 		<td>
-			<%= text_field :e_date, params[:e_date], id: "e_date", placeholder: "End Date", required: true rescue nil %>
+			<%#= text_field :e_date, params[:e_date], id: "e_date", placeholder: "End Date", required: true rescue nil %>
 		</td>
 	</tr>
 
 
-</table>
+</table -->
 
 <!--table>
 	<thead>
