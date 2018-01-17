@@ -3,6 +3,8 @@ require "thwait"
 require "cdo"
 
 class NexnasaController < ApplicationController
+	
+	skip_before_filter :authenticate_user!, :except => [:daily]
 
 	def daily 
 	end
