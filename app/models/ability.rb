@@ -43,6 +43,14 @@ class Ability
 			can :see, :description 
 		end
 
+		if user.role.nil?
+			can :analyze, :cordex
+			can :analyze, :nexnasa
+			can :analyze, :multmodels
+			can :see, :description 
+		end
+
+
 		#
 		# The first argument to `can` is the action you are giving the user 
 		# permission to do.
