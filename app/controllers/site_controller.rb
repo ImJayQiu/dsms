@@ -13,6 +13,9 @@ class SiteController < ApplicationController
 	def index
 	end
 
+	def main 
+	end
+
 	def srilanka 
 	end
 

@@ -92,6 +92,7 @@ Rails.application.routes.draw do
 	resources :site do
 		collection do
 			get 'index'
+			get 'main'
 			get 'pakistan'
 			get 'myanmar'
 			get 'srilanka'
