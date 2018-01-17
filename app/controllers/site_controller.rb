@@ -17,8 +17,10 @@ class SiteController < ApplicationController
 		#UserNotifier.send_signup_email.deliver_now
 		@news = News.order(id: :desc).first(5)
 		@about = News.order(id: :desc).last(1)
-		@welcome_user = "Hi! Dear Guest, welcome to RIMES Climate data analysis system. You are now registered as a user with limited privileges and can use only a few of the functionalities. In case you want to upgrade your account to a ADVANCED USER please post us an request. We will consider and upon approved will provide you with full access. "
+		@welcome_user = "Hi! Dear Guest, welcome to RIMES Climate data analysis system. You are now visit as a user with limited privileges and can use only a few of the functionalities. In case you want to upgrade your account to a ADVANCED USER please regist an account of CDAAS then post us an request. We will consider and upon approved will provide you with full access. "
 	end
+
+
 
 	def srilanka 
 	end

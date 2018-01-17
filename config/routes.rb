@@ -88,6 +88,7 @@ Rails.application.routes.draw do
 	get '/pakistan', to: 'site#pakistan'
 	get '/myanmar', to: 'site#myanmar'
 	get '/srilanka', to: 'site#srilanka'
+	get '/main', to: 'site#main'
 
 	resources :site do
 		collection do
