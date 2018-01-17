@@ -11,7 +11,8 @@ require 'cdo'
 #require "rinruby"
 
 class Cmip5sController < ApplicationController
-	skip_before_filter :authenticate_user!, :except => [:daily, :mult]
+
+	skip_before_filter :authenticate_user!, :except => [:daily_analysis, :mult_analysis]
 
 	before_action :set_cmip5, only: [:show, :edit, :update, :destroy]
 

@@ -4,7 +4,7 @@ require "cdo"
 
 class NexnasaController < ApplicationController
 	
-	skip_before_filter :authenticate_user!, :except => [:daily]
+	skip_before_filter :authenticate_user!, :except => [:daily_analysis]
 
 	def daily 
 	end

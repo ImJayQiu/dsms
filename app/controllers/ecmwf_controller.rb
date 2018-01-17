@@ -1,6 +1,6 @@
 class EcmwfController < ApplicationController
 
-	skip_before_filter :authenticate_user!, :except => [:index]
+	skip_before_filter :authenticate_user!, :except => [:analysis, :debug, :debug_result]
 
 	def index
 

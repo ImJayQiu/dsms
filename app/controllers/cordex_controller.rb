@@ -5,7 +5,7 @@ require "cdo"
 class CordexController < ApplicationController
 
 
-	skip_before_filter :authenticate_user!, :except => [:daily]
+	skip_before_filter :authenticate_user!, :except => [:daily_analysis]
 
 
 	def daily 
