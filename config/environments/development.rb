@@ -45,14 +45,14 @@ Rails.application.configure do
 	#ENV['GMAIL_USERNAME'],
 	#ENV['GMAIL_PASSWORD'],
 	config.log_level = :debug
-	config.action_mailer.default_url_options = {:host => 'localhost:2015'}
+	config.action_mailer.default_url_options = {:host => 'cdaas.rimes.int'}
 	config.action_mailer.delivery_method = :smtp
 	config.action_mailer.smtp_settings = {
 		address:              'smtp.gmail.com',
 		port:                 587,
 		domain:               'mail.google.com',
-		user_name:            ENV["CDAAS_USERNAME"], #'cdaas@rimes.int',
-		password:             ENV["CDAAS_PASSWORD"], #'E=j27qarAdmin', 
+		user_name:            ENV["CDAAS_USERNAME"],
+		password:             ENV["CDAAS_PASSWORD"],
 		authentication:       :plain,
 		enable_starttls_auto: true  }
 end
