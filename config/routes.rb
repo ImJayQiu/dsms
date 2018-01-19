@@ -162,5 +162,5 @@ Rails.application.routes.draw do
 	#     resources :products
 	#   end
 
-	root 'site#index'
+	root 'site#main'
 end
