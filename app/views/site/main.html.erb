@@ -1,77 +1,78 @@
 ﻿<table>
 <tr>
 <td>
-	<%= @welcome_user %>
-	</td>
+<%= @welcome_user %>
+</td>
+</tr>
+</table>
+
+<table>
+<tr></tr>
+<% @about.each do |news| %>
+	<tr>
+	<td width=80%><h3><%= news.title %></h3></td>
+	<% if can? :manage, :all %>
+			   <td width=20%>	
+			   <%= button_to 'Edit', edit_news_path(news), method: :get %>
+			   </td>
+		   <% end %>
+
+		   <tr></tr>
+		   <tr>
+			   <td colspan=2><%= simple_format(news.content) %></td>
+		   </tr>
+	   <% end %>
+</table>
+
+<table class=alt>
+	<tr align = center>
+		<td>
+			<%= image_tag root_path+"images/ecmwf.jpg" rescue nil %><br/>
+			<%= link_to "ECMWF".html_safe, ecmwf_index_path, method: :get %>
+		</td>
+		<td>
+			<%= image_tag root_path+"images/cmip5.jpg" rescue nil %><br/>
+			<%= link_to "CMIP5".html_safe, daily_cmip5s_path, method: :get %>
+			<%= link_to "CMIP5".html_safe, daily_cmip5s_path, method: :get %>
+		</td>
+		<td>
+			<%= image_tag root_path+"images/cordex.jpg" rescue nil %><br/>
+			<%= link_to "CORDEX".html_safe, daily_cordex_index_path, method: :get %>
+		</td>
+		<td>
+			<%= image_tag root_path+"images/nex.jpg" rescue nil %><br/>
+			<%= link_to "NEX-NASA".html_safe, daily_nexnasa_index_path, method: :get %>
+		</td>
+		<td>
+			<%= image_tag root_path+"images/mult.jpg" rescue nil %><br/>
+			<%= link_to "Mult-Models".html_safe, mult_cmip5s_path, method: :get %>
+		</td>
 	</tr>
-	</table>
+</table>
 
-	<table>
-	<tr></tr>
-	<% @about.each do |news| %>
+<p></p>
+
+<h2>News & Update notes</h2>
+
+<table>
+	<thead>
 		<tr>
-		<td width=80%><h3><%= news.title %></h3></td>
-		<% if can? :manage, :all %>
-				   <td width=20%>	
-				   <%= button_to 'Edit', edit_news_path(news), method: :get %>
-				   </td>
-			   <% end %>
+			<th>Date</th>
+			<th>Title</th>
+			<th>Version</th>
+			<th>Operation</th>
+		</tr>
+	</thead>
 
-				   <tr></tr>
-				   <tr>
-					   <td colspan=2><%= simple_format(news.content) %></td>
-				   </tr>
-			   <% end %>
-			   </table>
-
-			   <table class=alt>
-				   <tr align = center>
-					   <td>
-						   <%= image_tag root_path+"images/ecmwf.jpg" rescue nil %><br/>
-						   <%= link_to "ECMWF<br/>Forcasting".html_safe, ecmwf_index_path, method: :get %>
-					   </td>
-					   <td>
-						   <%= image_tag root_path+"images/cmip5.jpg" rescue nil %><br/>
-						   <%= link_to "CMIP5<br/>Daily Analysis".html_safe, daily_cmip5s_path, method: :get %>
-					   </td>
-						   <td>
-						   <%= image_tag root_path+"images/cordex.jpg" rescue nil %><br/>
-						   <%= link_to "CORDEX<br/>Daily Analysis".html_safe, daily_cordex_index_path, method: :get %>
-					   </td>
-						   <td>
-						   <%= image_tag root_path+"images/nex.jpg" rescue nil %><br/>
-						   <%= link_to "NEX-NASA<br/>Daily Analysis".html_safe, daily_nexnasa_index_path, method: :get %>
-					   </td>
-						   <td>
-						   <%= image_tag root_path+"images/mult.jpg" rescue nil %><br/>
-						   <%= link_to "Mult-Models<br/>Analysis".html_safe, mult_cmip5s_path, method: :get %>
-					   </td>
-				   </tr>
-			   </table>
-
-			   <p></p>
-
-			   <h2>News & Update notes</h2>
-
-			   <table>
-				   <thead>
-					   <tr>
-						   <th>Date</th>
-						   <th>Title</th>
-						   <th>Version</th>
-						   <th>Operation</th>
-					   </tr>
-				   </thead>
-
-				   <tbody>
-				   <% @news.each do |news| %>
-					   <tr>
-					   <td><%= news.date.strftime("%Y-%m-%d") %></td>
-					   <td><%= news.title %></td>
-					   <td><%= news.version %></td>
-					   <td><%= button_to 'Show', news, method: :get %></td>
-				   </tr>
-			   <% end %>
-				   </tbody>
-			   </table>
+	<tbody>
+		<% @news.each do |news| %>
+			<tr>
+				<td><%= news.date.strftime("%Y-%m-%d") %></td>
+				<td><%= news.title %></td>
+				<td><%= news.version %></td>
+				<td><%= button_to 'Show', news, method: :get %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
 
